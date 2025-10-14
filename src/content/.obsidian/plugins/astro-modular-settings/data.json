@@ -1,8 +1,7 @@
 {
   "runWizardOnStartup": true,
-  "doNotShowWizardAgain": false,
   "currentTemplate": "standard",
-  "currentTheme": "oxygen",
+  "currentTheme": "atom",
   "contentOrganization": "file-based",
   "features": {
     "commandPalette": true,
@@ -10,6 +9,35 @@
     "readingTime": true,
     "linkedMentions": true,
     "comments": true
+  },
+  "typography": {
+    "headingFont": "Inter",
+    "proseFont": "Inter",
+    "monoFont": "JetBrains Mono",
+    "fontSource": "local",
+    "customFonts": {
+      "heading": "",
+      "prose": "",
+      "mono": ""
+    }
+  },
+  "optionalFeatures": {
+    "profilePicture": {
+      "enabled": false,
+      "image": "/profile.jpg",
+      "alt": "Profile picture",
+      "size": "md",
+      "url": "",
+      "placement": "footer",
+      "style": "circle"
+    },
+    "comments": {
+      "enabled": false,
+      "provider": "giscus"
+    }
+  },
+  "deployment": {
+    "platform": "netlify"
   },
   "pluginConfig": {
     "obsidianSettings": {
@@ -23,5 +51,6 @@
     "imageInserterSettings": {
       "insertFormat": "[[attachments/{image-url}]]"
     }
-  }
+  },
+  "doNotShowWizardAgain": false
 }
