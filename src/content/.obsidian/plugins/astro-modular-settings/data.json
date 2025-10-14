@@ -1,7 +1,7 @@
 {
   "runWizardOnStartup": true,
   "currentTemplate": "standard",
-  "currentTheme": "atom",
+  "currentTheme": "oxygen",
   "contentOrganization": "file-based",
   "features": {
     "commandPalette": true,
