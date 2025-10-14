@@ -297,7 +297,7 @@ export const siteConfig: SiteConfig = {
       linkedMentionsCompact: false,
     },
     graphView: {
-      enabled: true,
+    enabled: true,
       showInSidebar: true,
       showInCommandPalette: true,
       maxNodes: 100,
