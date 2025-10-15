@@ -13,5 +13,7 @@
   "pixabayApiKey": "",
   "insertBackLink": false,
   "pexelsApiKey": "",
-  "insertReferral": true
+  "insertReferral": true,
+  "insertFormat": "[[attachments/{image-url}]]",
+  "valueFormat": "[[{image-url}]]"
 }
