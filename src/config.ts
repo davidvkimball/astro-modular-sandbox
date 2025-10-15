@@ -128,7 +128,7 @@ export interface SiteConfig {
       showOrphanedPosts: boolean;
     };
     postNavigation: boolean;
-    showPostCardCoverImages: "all" | "latest" | "home" | "posts" | "featured-and-posts" | "none";
+    showPostCardCoverImages: "all" | "featured" | "home" | "posts" | "featured-and-posts" | "none";
     postCardAspectRatio: AspectRatio;
     customPostCardAspectRatio?: string;
     comments: {
@@ -288,10 +288,10 @@ export const siteConfig: SiteConfig = {
   // Post Options
   postOptions: {
     postsPerPage: 6,
-    readingTime: true, // Show readingTime // Show readingTime // Show readingTime
-    wordCount: true, // Show wordCount // Show wordCount // Show wordCount
-    tableOfContents: true, // Show tableOfContents // Show tableOfContents // Show tableOfContents
-    tags: true, // Show tags // Show tags // Show tags
+    readingTime: true, // Show readingTime // Show readingTime // Show readingTime // Show readingTime // Show readingTime // Show readingTime
+    wordCount: true, // Show wordCount // Show wordCount // Show wordCount // Show wordCount // Show wordCount // Show wordCount
+    tableOfContents: true, // Show tableOfContents // Show tableOfContents // Show tableOfContents // Show tableOfContents // Show tableOfContents // Show tableOfContents
+    tags: true, // Show tags // Show tags // Show tags // Show tags // Show tags // Show tags
     linkedMentions: {
       enabled: true,
       linkedMentionsCompact: false,
@@ -303,7 +303,7 @@ export const siteConfig: SiteConfig = {
       maxNodes: 100,
       showOrphanedPosts: true,
     },
-    postNavigation: true, // Show postNavigation // Show postNavigation // Show postNavigation
+    postNavigation: true, // Show postNavigation // Show postNavigation // Show postNavigation // Show postNavigation // Show postNavigation // Show postNavigation
     showPostCardCoverImages: "featured-and-posts", // "all" | "latest" | "home" | "posts" | "featured-and-posts" | "none"
     postCardAspectRatio: "og", // "16:9" | "4:3" | "3:2" | "og" | "square" | "golden" | "custom"
     customPostCardAspectRatio: "2.5/1", // Only used when postCardAspectRatio is "custom" (e.g., "2.5/1")
@@ -527,7 +527,7 @@ function validateSiteConfig(config: SiteConfig): { isValid: boolean; errors: str
   }
 
   // Cover image options validation
-  const validCoverImageOptions = ['all', 'latest', 'home', 'posts', 'latest-and-posts', 'none'];
+  const validCoverImageOptions = ['all', 'featured', 'home', 'posts', 'featured-and-posts', 'none'];
   if (!validCoverImageOptions.includes(config.postOptions.showPostCardCoverImages)) {
     errors.push(`postOptions.showPostCardCoverImages must be one of: ${validCoverImageOptions.join(', ')}`);
   }
