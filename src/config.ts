@@ -288,10 +288,10 @@ export const siteConfig: SiteConfig = {
   // Post Options
   postOptions: {
     postsPerPage: 6,
-    readingTime: true, // Show readingTime // Show readingTime // Show readingTime // Show readingTime // Show readingTime // Show readingTime
-    wordCount: true, // Show wordCount // Show wordCount // Show wordCount // Show wordCount // Show wordCount // Show wordCount
-    tableOfContents: true, // Show tableOfContents // Show tableOfContents // Show tableOfContents // Show tableOfContents // Show tableOfContents // Show tableOfContents
-    tags: true, // Show tags // Show tags // Show tags // Show tags // Show tags // Show tags
+    readingTime: true, // Show readingTime
+    wordCount: true, // Show wordCount
+    tableOfContents: true, // Show tableOfContents
+    tags: true, // Show tags
     linkedMentions: {
       enabled: true,
       linkedMentionsCompact: false,
@@ -303,7 +303,7 @@ export const siteConfig: SiteConfig = {
       maxNodes: 100,
       showOrphanedPosts: true,
     },
-    postNavigation: true, // Show postNavigation // Show postNavigation // Show postNavigation // Show postNavigation // Show postNavigation // Show postNavigation
+    postNavigation: true, // Show postNavigation
     showPostCardCoverImages: "featured-and-posts", // "all" | "latest" | "home" | "posts" | "featured-and-posts" | "none"
     postCardAspectRatio: "og", // "16:9" | "4:3" | "3:2" | "og" | "square" | "golden" | "custom"
     customPostCardAspectRatio: "2.5/1", // Only used when postCardAspectRatio is "custom" (e.g., "2.5/1")
