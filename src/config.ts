@@ -207,7 +207,7 @@ export const siteConfig: SiteConfig = {
     placeholder: "Search posts",
     search: {
       posts: true,
-      pages: true,
+      pages: false,
       projects: false,
       docs: false,
     },
