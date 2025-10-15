@@ -3,12 +3,60 @@
   "currentTemplate": "standard",
   "currentTheme": "oxygen",
   "contentOrganization": "file-based",
+  "siteInfo": {
+    "site": "https://astro-modular.netlify.app",
+    "title": "Astro Modular Sandbox",
+    "description": "Test website.",
+    "author": "John Smith",
+    "language": "en"
+  },
+  "navigation": {
+    "pages": [
+      {
+        "title": "Posts",
+        "url": "/posts"
+      },
+      {
+        "title": "About",
+        "url": "/about"
+      },
+      {
+        "title": "Privacy Policy",
+        "url": "/privacy-policy"
+      }
+    ],
+    "social": [
+      {
+        "title": "LinkedIn",
+        "url": "https://linkedin.com/in/davidvkimball",
+        "icon": "linkedin"
+      },
+      {
+        "title": "X",
+        "url": "https://x.com/davidvkimball",
+        "icon": "x-twitter"
+      },
+      {
+        "title": "GitHub",
+        "url": "https://github.com/davidvkimball",
+        "icon": "github"
+      }
+    ]
+  },
   "features": {
     "commandPalette": true,
     "tableOfContents": true,
     "readingTime": true,
     "linkedMentions": true,
-    "comments": true
+    "comments": false,
+    "graphView": true,
+    "postNavigation": true,
+    "scrollToTop": true,
+    "darkModeToggleButton": "both",
+    "showSocialIconsInFooter": true,
+    "showPostCardCoverImages": "featured-and-posts",
+    "postCardAspectRatio": "og",
+    "linkedMentionsCompact": false
   },
   "typography": {
     "headingFont": "Inter",
@@ -26,10 +74,10 @@
       "enabled": false,
       "image": "/profile.jpg",
       "alt": "Profile picture",
-      "size": "md",
-      "url": "",
+      "size": "sm",
       "placement": "footer",
-      "style": "circle"
+      "style": "square",
+      "url": ""
     },
     "comments": {
       "enabled": false,
@@ -51,6 +99,5 @@
     "imageInserterSettings": {
       "insertFormat": "[[attachments/{image-url}]]"
     }
-  },
-  "doNotShowWizardAgain": false
+  }
 }

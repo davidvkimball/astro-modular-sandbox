@@ -169,10 +169,15 @@ export interface SiteConfig {
 // ═══════════════════════════════════════════════════════════════════════════════
 export const siteConfig: SiteConfig = {
   // Site Information
+  // [CONFIG:SITE_URL]
   site: "https://astro-modular.netlify.app",
-  title: "Astro Modular",
-  description: "A flexible blog theme designed for Obsidian users.",
-  author: "David V. Kimball",
+  // [CONFIG:SITE_TITLE]
+  title: "Astro Modular Sandbox",
+  // [CONFIG:SITE_DESCRIPTION]
+  description: "Test website.",
+  // [CONFIG:SITE_AUTHOR]
+  author: "John Smith",
+  // [CONFIG:SITE_LANGUAGE]
   language: "en",
 
   // Global Settings
@@ -246,19 +251,19 @@ export const siteConfig: SiteConfig = {
   // Profile Picture
   profilePicture: {
     // [CONFIG:PROFILE_PICTURE_ENABLED]
-    enabled: false, 
+    enabled: true, 
     // [CONFIG:PROFILE_PICTURE_IMAGE]
     image: "/profile.jpg", // Path to your profile image (place in public/ directory)
     // [CONFIG:PROFILE_PICTURE_ALT]
     alt: "Profile picture",
     // [CONFIG:PROFILE_PICTURE_SIZE]
-    size: "md", // "sm" (32px), "md" (48px), or "lg" (64px) - only affects footer placement
+    size: "sm", // "sm" (32px), "md" (48px), or "lg" (64px) - only affects footer placement
     // [CONFIG:PROFILE_PICTURE_URL]
-    url: "/about", // Optional
+    url: "", // Optional
     // [CONFIG:PROFILE_PICTURE_PLACEMENT]
     placement: "footer", // "footer" or "header"
     // [CONFIG:PROFILE_PICTURE_STYLE]
-    style: "circle", // "circle", "square", or "none"
+    style: "square", // "circle", "square", or "none"
   },
 
   // Navigation
@@ -269,14 +274,19 @@ export const siteConfig: SiteConfig = {
     style: "traditional", // 'minimal' or 'traditional'
     // [CONFIG:NAVIGATION_SHOW_MOBILE_MENU]
     showMobileMenu: true,
+    // [CONFIG:NAVIGATION_PAGES]
     pages: [
       { title: "Posts", url: "/posts" },
-      { title: "Projects", url: "/projects" },
-      { title: "Docs", url: "/docs" },
       { title: "About", url: "/about" },
-      { title: "GitHub", url: "https://github.com/davidvkimball/astro-modular" },
+      { title: "Privacy Policy", url: "/privacy-policy" },
     ],
+    // [CONFIG:NAVIGATION_SOCIAL]
     social: [
+      {
+        title: "LinkedIn",
+        url: "https://linkedin.com/in/davidvkimball",
+        icon: "linkedin",
+      },
       {
         title: "X",
         url: "https://x.com/davidvkimball",
