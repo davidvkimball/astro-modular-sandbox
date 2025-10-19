@@ -172,11 +172,11 @@ export const siteConfig: SiteConfig = {
   // [CONFIG:SITE_URL]
   site: "https://astro-modular.netlify.app",
   // [CONFIG:SITE_TITLE]
-  title: "Astro Modular Sandbox",
+  title: "Astro Modular",
   // [CONFIG:SITE_DESCRIPTION]
-  description: "Test website.",
+  description: "A flexible blog theme designed for Obsidian users.",
   // [CONFIG:SITE_AUTHOR]
-  author: "John Smith",
+  author: "David V. Kimball",
   // [CONFIG:SITE_LANGUAGE]
   language: "en",
 
@@ -257,13 +257,13 @@ export const siteConfig: SiteConfig = {
     // [CONFIG:PROFILE_PICTURE_ALT]
     alt: "Profile picture",
     // [CONFIG:PROFILE_PICTURE_SIZE]
-    size: "sm", // "sm" (32px), "md" (48px), or "lg" (64px) - only affects footer placement
+    size: "md", // "sm" (32px), "md" (48px), or "lg" (64px) - only affects footer placement
     // [CONFIG:PROFILE_PICTURE_URL]
-    url: "", // Optional
+    url: "/about", // Optional
     // [CONFIG:PROFILE_PICTURE_PLACEMENT]
     placement: "footer", // "footer" or "header"
     // [CONFIG:PROFILE_PICTURE_STYLE]
-    style: "square", // "circle", "square", or "none"
+    style: "circle", // "circle", "square", or "none"
   },
 
   // Navigation
@@ -277,16 +277,13 @@ export const siteConfig: SiteConfig = {
     // [CONFIG:NAVIGATION_PAGES]
     pages: [
       { title: "Posts", url: "/posts" },
+      { title: "Projects", url: "/projects" },
+      { title: "Docs", url: "/docs" },
       { title: "About", url: "/about" },
-      { title: "Privacy Policy", url: "/privacy-policy" },
+      { title: "GitHub", url: "https://github.com/davidvkimball/astro-modular" },
     ],
     // [CONFIG:NAVIGATION_SOCIAL]
     social: [
-      {
-        title: "LinkedIn",
-        url: "https://linkedin.com/in/davidvkimball",
-        icon: "linkedin",
-      },
       {
         title: "X",
         url: "https://x.com/davidvkimball",

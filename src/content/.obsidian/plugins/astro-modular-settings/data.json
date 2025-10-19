@@ -5,9 +5,9 @@
   "contentOrganization": "file-based",
   "siteInfo": {
     "site": "https://astro-modular.netlify.app",
-    "title": "Astro Modular Sandbox",
-    "description": "Test website.",
-    "author": "John Smith",
+    "title": "Astro Modular",
+    "description": "A flexible blog theme designed for Obsidian users.",
+    "author": "David V. Kimball",
     "language": "en"
   },
   "navigation": {
@@ -17,20 +17,23 @@
         "url": "/posts"
       },
       {
+        "title": "Projects",
+        "url": "/projects"
+      },
+      {
+        "title": "Docs",
+        "url": "/docs"
+      },
+      {
         "title": "About",
         "url": "/about"
       },
       {
-        "title": "Privacy Policy",
-        "url": "/privacy-policy"
+        "title": "GitHub",
+        "url": "https://github.com/davidvkimball/astro-modular"
       }
     ],
     "social": [
-      {
-        "title": "LinkedIn",
-        "url": "https://linkedin.com/in/davidvkimball",
-        "icon": "linkedin"
-      },
       {
         "title": "X",
         "url": "https://x.com/davidvkimball",
@@ -74,10 +77,9 @@
       "enabled": false,
       "image": "/profile.jpg",
       "alt": "Profile picture",
-      "size": "sm",
+      "size": "md",
       "placement": "footer",
-      "style": "square",
-      "url": ""
+      "style": "circle"
     },
     "comments": {
       "enabled": false,
