@@ -52,15 +52,12 @@
     "readingTime": true,
     "linkedMentions": true,
     "linkedMentionsCompact": false,
-    "comments": false,
     "graphView": true,
     "postNavigation": true,
     "scrollToTop": true,
-    "darkModeToggleButton": "both",
     "showSocialIconsInFooter": true,
-    "showPostCardCoverImages": "featured-and-posts",
-    "postCardAspectRatio": "og",
-    "profilePicture": false
+    "profilePicture": false,
+    "comments": false
   },
   "typography": {
     "headingFont": "Inter",
