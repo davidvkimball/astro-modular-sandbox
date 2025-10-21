@@ -57,7 +57,14 @@
     "scrollToTop": true,
     "showSocialIconsInFooter": true,
     "profilePicture": false,
-    "comments": false
+    "comments": false,
+    "featureButton": "mode",
+    "quickActions": {
+      "enabled": true,
+      "toggleMode": true,
+      "graphView": true,
+      "changeTheme": true
+    }
   },
   "typography": {
     "headingFont": "Inter",
@@ -107,11 +114,10 @@
       "subfolderName": "attachments"
     },
     "astroComposerSettings": {
-      "creationMode": "file",
+      "creationMode": "file-based",
       "indexFileName": "index"
     },
     "imageInserterSettings": {
-      "valueFormat": "[[attachments/{image-url}]]",
       "insertFormat": "[[attachments/{image-url}]]"
     }
   },

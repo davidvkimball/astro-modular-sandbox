@@ -39,7 +39,7 @@ export interface SiteConfig {
     showSocialIconsInFooter: boolean;
   };
   scrollToTop: boolean;
-    darkModeToggleButton: "navigation" | "commandPalette" | "both";
+  featureButton: "mode" | "graph" | "theme" | "none";
   seo: {
     defaultOgImageAlt: string;
   };
@@ -62,6 +62,12 @@ export interface SiteConfig {
       quickActions: boolean;
       pages: boolean;
       social: boolean;
+    };
+    quickActions: {
+      enabled: boolean;
+      toggleMode: boolean;
+      graphView: boolean;
+      changeTheme: boolean;
     };
   };
   
@@ -210,8 +216,8 @@ export const siteConfig: SiteConfig = {
   },
   // [CONFIG:SCROLL_TO_TOP]
   scrollToTop: true,
-  // [CONFIG:DARK_MODE_TOGGLE_BUTTON]
-  darkModeToggleButton: "both", // "navigation" | "commandPalette" | "both"
+  // [CONFIG:FEATURE_BUTTON]
+  featureButton: "mode", // "mode" | "graph" | "theme" | "none"
   seo: {
     defaultOgImageAlt: "Astro Modular logo.", // Alt text for the default Open Graph image, public/open-graph.png
   },
@@ -245,6 +251,16 @@ export const siteConfig: SiteConfig = {
       pages: true,
       // [CONFIG:COMMAND_PALETTE_SECTIONS_SOCIAL]
       social: true,
+    },
+    quickActions: {
+      // [CONFIG:COMMAND_PALETTE_QUICK_ACTIONS_ENABLED]
+      enabled: true,
+      // [CONFIG:COMMAND_PALETTE_QUICK_ACTIONS_TOGGLE_MODE]
+      toggleMode: true,
+      // [CONFIG:COMMAND_PALETTE_QUICK_ACTIONS_GRAPH_VIEW]
+      graphView: true,
+      // [CONFIG:COMMAND_PALETTE_QUICK_ACTIONS_CHANGE_THEME]
+      changeTheme: true,
     },
   },
 
