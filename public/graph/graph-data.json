@@ -14,7 +14,7 @@
       "title": "Formatting Reference",
       "slug": "formatting-reference",
       "date": "2025-09-08T00:00:00.000Z",
-      "connections": 4
+      "connections": 6
     },
     {
       "id": "getting-started",
@@ -22,7 +22,23 @@
       "title": "Getting Started",
       "slug": "getting-started",
       "date": "2025-09-06T00:00:00.000Z",
-      "connections": 2
+      "connections": 3
+    },
+    {
+      "id": "mermaid-diagram-test",
+      "type": "post",
+      "title": "Mermaid Diagram Test",
+      "slug": "mermaid-diagram-test",
+      "date": "2025-09-07T00:00:00.000Z",
+      "connections": 0
+    },
+    {
+      "id": "sample-folder-based-post",
+      "type": "post",
+      "title": "Sample Folder-Based Post",
+      "slug": "sample-folder-based-post",
+      "date": "2025-09-09T00:00:00.000Z",
+      "connections": 0
     }
   ],
   "connections": [
@@ -38,7 +54,22 @@
     },
     {
       "source": "formatting-reference",
+      "target": "sample-folder-based-post",
+      "type": "link"
+    },
+    {
+      "source": "formatting-reference",
       "target": "astro-suite-obsidian-vault-guide-astro-modular",
+      "type": "link"
+    },
+    {
+      "source": "formatting-reference",
+      "target": "mermaid-diagram-test",
+      "type": "link"
+    },
+    {
+      "source": "getting-started",
+      "target": "sample-folder-based-post",
       "type": "link"
     },
     {
@@ -53,10 +84,10 @@
     }
   ],
   "metadata": {
-    "generated": "2025-10-21T04:13:38.814Z",
-    "totalPosts": 3,
-    "totalConnections": 5,
+    "generated": "2025-10-21T20:02:11.445Z",
+    "totalPosts": 5,
+    "totalConnections": 8,
     "maxNodesApplied": false,
-    "originalNodeCount": 3
+    "originalNodeCount": 5
   }
 }

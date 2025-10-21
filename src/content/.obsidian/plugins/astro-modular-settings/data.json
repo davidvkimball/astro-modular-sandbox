@@ -2,6 +2,26 @@
   "runWizardOnStartup": true,
   "currentTemplate": "standard",
   "currentTheme": "oxygen",
+  "customThemeFile": "custom",
+  "availableThemes": [
+    "oxygen",
+    "minimal",
+    "atom",
+    "ayu",
+    "catppuccin",
+    "charcoal",
+    "dracula",
+    "everforest",
+    "flexoki",
+    "gruvbox",
+    "macos",
+    "nord",
+    "obsidian",
+    "rose-pine",
+    "sky",
+    "solarized",
+    "things"
+  ],
   "contentOrganization": "file-based",
   "siteInfo": {
     "site": "https://astro-modular.netlify.app",
@@ -10,7 +30,21 @@
     "author": "David V. Kimball",
     "language": "en"
   },
+  "layout": {
+    "contentWidth": "45rem"
+  },
+  "footer": {
+    "enabled": true,
+    "content": "© 2025 {author}. Built with the <a href=\"https://github.com/davidvkimball/astro-modular\" target=\"_blank\">Astro Modular</a> theme.",
+    "showSocialIconsInFooter": true
+  },
+  "seo": {
+    "defaultOgImageAlt": "Astro Modular logo."
+  },
   "navigation": {
+    "showNavigation": true,
+    "style": "traditional",
+    "showMobileMenu": true,
     "pages": [
       {
         "title": "Posts",
@@ -46,19 +80,102 @@
       }
     ]
   },
+  "commandPalette": {
+    "enabled": true,
+    "shortcut": "ctrl+K",
+    "placeholder": "Search posts",
+    "search": {
+      "posts": true,
+      "pages": false,
+      "projects": false,
+      "docs": false
+    },
+    "sections": {
+      "quickActions": true,
+      "pages": true,
+      "social": true
+    },
+    "quickActions": {
+      "enabled": true,
+      "toggleMode": true,
+      "graphView": true,
+      "changeTheme": true
+    }
+  },
+  "homeOptions": {
+    "featuredPost": {
+      "enabled": true,
+      "type": "latest",
+      "slug": "getting-started"
+    },
+    "recentPosts": {
+      "enabled": true,
+      "count": 7
+    },
+    "projects": {
+      "enabled": true,
+      "count": 2
+    },
+    "docs": {
+      "enabled": true,
+      "count": 3
+    },
+    "blurb": {
+      "placement": "below"
+    }
+  },
+  "postOptions": {
+    "postsPerPage": 6,
+    "readingTime": true,
+    "wordCount": true,
+    "tableOfContents": true,
+    "tags": true,
+    "linkedMentions": {
+      "enabled": true,
+      "linkedMentionsCompact": false
+    },
+    "graphView": {
+      "enabled": true,
+      "showInSidebar": true,
+      "maxNodes": 100,
+      "showOrphanedPosts": true
+    },
+    "postNavigation": true,
+    "showPostCardCoverImages": "featured-and-posts",
+    "postCardAspectRatio": "og",
+    "customPostCardAspectRatio": "2.5/1",
+    "comments": {
+      "enabled": false,
+      "provider": "giscus",
+      "repo": "davidvkimball/astro-modular",
+      "repoId": "R_kgDOPllfKw",
+      "category": "General",
+      "categoryId": "DIC_kwDOPllfK84CvUpx",
+      "mapping": "pathname",
+      "strict": "0",
+      "reactions": "1",
+      "metadata": "0",
+      "inputPosition": "bottom",
+      "theme": "preferred_color_scheme",
+      "lang": "en",
+      "loading": "lazy"
+    }
+  },
   "features": {
     "commandPalette": true,
     "tableOfContents": true,
     "readingTime": true,
     "linkedMentions": true,
     "linkedMentionsCompact": false,
+    "comments": false,
     "graphView": true,
     "postNavigation": true,
     "scrollToTop": true,
-    "showSocialIconsInFooter": true,
-    "profilePicture": false,
-    "comments": false,
     "featureButton": "mode",
+    "showSocialIconsInFooter": true,
+    "showPostCardCoverImages": "featured-and-posts",
+    "postCardAspectRatio": "og",
+    "profilePicture": false,
     "quickActions": {
       "enabled": true,
       "toggleMode": true,
@@ -71,6 +188,7 @@
     "proseFont": "Inter",
     "monoFont": "JetBrains Mono",
     "fontSource": "local",
+    "fontDisplay": "swap",
     "customFonts": {
       "heading": "",
       "prose": "",
@@ -114,10 +232,11 @@
       "subfolderName": "attachments"
     },
     "astroComposerSettings": {
-      "creationMode": "file-based",
+      "creationMode": "file",
       "indexFileName": "index"
     },
     "imageInserterSettings": {
+      "valueFormat": "[[attachments/{image-url}]]",
       "insertFormat": "[[attachments/{image-url}]]"
     }
   },

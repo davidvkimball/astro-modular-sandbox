@@ -21,6 +21,7 @@ export interface SiteConfig {
   // Global Settings
   theme: "minimal" | "oxygen" | "atom" | "ayu" | "catppuccin" | "charcoal" | "dracula" | "everforest" | "flexoki" | "gruvbox" | "macos" | "nord" | "obsidian" | "rose-pine" | "sky" | "solarized" | "things" | "custom";
   customThemeFile?: string; // Filename in src/themes/custom/ (e.g., "my-cool-theme" for my-cool-theme.ts)
+  availableThemes: "all" | Array<"minimal" | "oxygen" | "atom" | "ayu" | "catppuccin" | "charcoal" | "dracula" | "everforest" | "flexoki" | "gruvbox" | "macos" | "nord" | "obsidian" | "rose-pine" | "sky" | "solarized" | "things" | "custom">; // Control which themes users can select
   fonts: {
     source: "local" | "cdn";
     families: {
@@ -129,7 +130,6 @@ export interface SiteConfig {
     graphView: {
       enabled: boolean;
       showInSidebar: boolean;
-      showInCommandPalette: boolean;
       maxNodes: number;
       showOrphanedPosts: boolean;
     };
@@ -189,7 +189,10 @@ export const siteConfig: SiteConfig = {
   // Global Settings
   // [CONFIG:THEME]
   theme: "oxygen", // Available themes: "minimal" | "oxygen" | "atom" | "ayu" | "catppuccin" | "charcoal" | "dracula" | "everforest" | "flexoki" | "gruvbox" | "macos" | "nord" | "obsidian" | "rose-pine" | "sky" | "solarized" | "things" | "custom"
+  // [CONFIG:CUSTOM_THEME_FILE]
   customThemeFile: "custom", // Only used if theme is set to "custom" above. Filename in src/themes/custom/ (without .ts extension)
+  // [CONFIG:AVAILABLE_THEMES]
+  availableThemes: "all", // "all" to show all themes, or array of theme names like ["oxygen", "minimal", "nord", "dracula"] to limit choices
   fonts: {
     // [CONFIG:FONT_SOURCE]
     source: "local", // "local" for self-hosted @fontsource fonts, "cdn" for Google Fonts CDN
@@ -201,6 +204,7 @@ export const siteConfig: SiteConfig = {
       // [CONFIG:FONT_MONO]
       mono: "JetBrains Mono", // Monospace font family
     },
+    // [CONFIG:FONT_DISPLAY]
     display: "swap", // Font display strategy: "swap" (recommended), "fallback", or "optional"
   },
   layout: {
@@ -210,6 +214,7 @@ export const siteConfig: SiteConfig = {
   footer: {
     // [CONFIG:FOOTER_ENABLED]
     enabled: true,
+    // [CONFIG:FOOTER_CONTENT]
     content: `© 2025 {author}. Built with the <a href="https://github.com/davidvkimball/astro-modular" target="_blank">Astro Modular</a> theme.`,
     // [CONFIG:FOOTER_SHOW_SOCIAL_ICONS]
     showSocialIconsInFooter: true,
@@ -219,6 +224,7 @@ export const siteConfig: SiteConfig = {
   // [CONFIG:FEATURE_BUTTON]
   featureButton: "mode", // "mode" | "graph" | "theme" | "none"
   seo: {
+    // [CONFIG:SEO_DEFAULT_OG_IMAGE_ALT]
     defaultOgImageAlt: "Astro Modular logo.", // Alt text for the default Open Graph image, public/open-graph.png
   },
   deployment: {
@@ -374,12 +380,10 @@ export const siteConfig: SiteConfig = {
       linkedMentionsCompact: false,
     },
     graphView: {
-    // [CONFIG:POST_OPTIONS_GRAPH_VIEW_ENABLED]
-    enabled: true,
+      // [CONFIG:POST_OPTIONS_GRAPH_VIEW_ENABLED]
+      enabled: true,
       // [CONFIG:POST_OPTIONS_GRAPH_VIEW_SHOW_IN_SIDEBAR]
       showInSidebar: true,
-      // [CONFIG:POST_OPTIONS_GRAPH_VIEW_SHOW_IN_COMMAND_PALETTE]
-      showInCommandPalette: true,
       // [CONFIG:POST_OPTIONS_GRAPH_VIEW_MAX_NODES]
       maxNodes: 100,
       // [CONFIG:POST_OPTIONS_GRAPH_VIEW_SHOW_ORPHANED_POSTS]
