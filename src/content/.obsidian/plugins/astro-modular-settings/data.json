@@ -3,25 +3,6 @@
   "currentTemplate": "standard",
   "currentTheme": "oxygen",
   "customThemeFile": "custom",
-  "availableThemes": [
-    "oxygen",
-    "minimal",
-    "atom",
-    "ayu",
-    "catppuccin",
-    "charcoal",
-    "dracula",
-    "everforest",
-    "flexoki",
-    "gruvbox",
-    "macos",
-    "nord",
-    "obsidian",
-    "rose-pine",
-    "sky",
-    "solarized",
-    "things"
-  ],
   "contentOrganization": "file-based",
   "siteInfo": {
     "site": "https://astro-modular.netlify.app",
@@ -32,6 +13,10 @@
   },
   "layout": {
     "contentWidth": "45rem"
+  },
+  "tableOfContents": {
+    "enabled": true,
+    "depth": 4
   },
   "footer": {
     "enabled": true,
@@ -128,7 +113,6 @@
     "postsPerPage": 6,
     "readingTime": true,
     "wordCount": true,
-    "tableOfContents": true,
     "tags": true,
     "linkedMentions": {
       "enabled": true,
@@ -163,7 +147,6 @@
   },
   "features": {
     "commandPalette": true,
-    "tableOfContents": true,
     "readingTime": true,
     "linkedMentions": true,
     "linkedMentionsCompact": false,
@@ -243,5 +226,6 @@
   "optionalContentTypes": {
     "projects": true,
     "docs": true
-  }
+  },
+  "availableThemes": "all"
 }

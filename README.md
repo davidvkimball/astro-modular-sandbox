@@ -2,9 +2,9 @@
 
 A flexible blog theme designed for Obsidian users. 
 
-<img width="1920" height="1080" alt="Astro Modular with the Oxygen theme applied, homepage." src="https://github.com/user-attachments/assets/ec62b1d0-8cc6-4481-aaee-038fdf9168ea" />
+<img width="1600" height="900" alt="Astro Modular theme shown off in 3 screenshots, with the left screenshot showing the homepage, the top right showing the bottom of a post, and the bottom right showing a minimal homepage." src="https://github.com/user-attachments/assets/612b2171-d141-412b-a891-5b1caa1447b8" />
 
-<img width="1920" height="1080" alt="Astro Modular Obsidian vault." src="https://github.com/user-attachments/assets/5a47699b-5cb0-4d52-a15f-82c92d7e79a2" />
+<img width="1920" height="1080" alt="Astro Modular Obsidian vault." src="https://github.com/user-attachments/assets/f87be126-b6dc-4367-82bc-511ab73f5a07" />
 
 
 ## Stats
@@ -18,8 +18,6 @@ A flexible blog theme designed for Obsidian users.
 [![Netlify Status](https://api.netlify.com/api/v1/badges/3f849f7a-71e6-463b-84af-01c523012348/deploy-status)](https://app.netlify.com/sites/astro-modular/deploys)
 [![GitHub last commit](https://img.shields.io/github/last-commit/davidvkimball/astro-modular)](https://github.com/davidvkimball/astro-modular)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/davidvkimball/astro-modular)](https://github.com/davidvkimball/astro-modular)
-[![Obsidian Compatible](https://img.shields.io/badge/Obsidian-Compatible-7C3AED?logo=obsidian&logoColor=white)](https://obsidian.md/)
-[![Markdown Support](https://img.shields.io/badge/Markdown-Extended-000000?logo=markdown&logoColor=white)](https://daringfireball.net/projects/markdown/)
 
 ### Tech Stack
 [![Astro](https://img.shields.io/badge/Astro-5.13.4-FF5D01?logo=astro&logoColor=white)](https://astro.build/)
@@ -27,6 +25,8 @@ A flexible blog theme designed for Obsidian users.
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-8+-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![Obsidian 1.10.0+](https://img.shields.io/badge/Obsidian-1.10.0+-7C3AED?logo=obsidian&logoColor=white)](https://obsidian.md/)
+[![Markdown Extended](https://img.shields.io/badge/Markdown-Extended-000000?logo=markdown&logoColor=white)](https://daringfireball.net/projects/markdown/)
 
 ## Why Astro Modular?
 
