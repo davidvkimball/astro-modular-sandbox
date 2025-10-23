@@ -43,6 +43,8 @@ export interface SiteConfig {
     content: string;
     showSocialIconsInFooter: boolean;
   };
+  // [CONFIG:HIDE_SCROLL_BAR]
+  hideScrollBar: boolean;
   scrollToTop: boolean;
   featureButton: "mode" | "graph" | "theme" | "none";
   seo: {
@@ -228,6 +230,8 @@ export const siteConfig: SiteConfig = {
     // [CONFIG:FOOTER_SHOW_SOCIAL_ICONS]
     showSocialIconsInFooter: true,
   },
+  //[CONFIG:HIDE_SCROLL_BAR]
+  hideScrollBar: false,
   // [CONFIG:SCROLL_TO_TOP]
   scrollToTop: true,
   // [CONFIG:FEATURE_BUTTON]
@@ -406,17 +410,17 @@ export const siteConfig: SiteConfig = {
     customPostCardAspectRatio: "2.5/1", // Only used when postCardAspectRatio is "custom" (e.g., "2.5/1")
     comments: {
       // [CONFIG:POST_OPTIONS_COMMENTS_ENABLED]
-      enabled: true,
+      enabled: false,
       // [CONFIG:POST_OPTIONS_COMMENTS_PROVIDER]
       provider: "giscus",
       // [CONFIG:POST_OPTIONS_COMMENTS_REPO]
-      repo: "davidvkimball/astro-modular-sandbox",
+      repo: "davidvkimball/astro-modular",
       // [CONFIG:POST_OPTIONS_COMMENTS_REPO_ID]
-      repoId: "R_kgDOQCanIQ",
+      repoId: "R_kgDOPllfKw",
       // [CONFIG:POST_OPTIONS_COMMENTS_CATEGORY]
       category: "General",
       // [CONFIG:POST_OPTIONS_COMMENTS_CATEGORY_ID]
-      categoryId: "DIC_kwDOQCanIc4Cw8vj",
+      categoryId: "DIC_kwDOPllfK84CvUpx",
       // [CONFIG:POST_OPTIONS_COMMENTS_MAPPING]
       mapping: "pathname",
       // [CONFIG:POST_OPTIONS_COMMENTS_STRICT]

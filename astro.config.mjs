@@ -35,7 +35,10 @@ export default defineConfig({
   '/contact-us': '/contact',
   '/privacy': '/privacy-policy',
   '/posts/astro-suite-vault-modular-guide': '/posts/astro-suite-obsidian-vault-guide-astro-modular',
-  '/projects/obsidian-astro-composer': '/projects/astro-composer'
+  '/projects/obsidian-astro-composer': '/projects/astro-composer',
+  '/docs/api-reference': '/docs/api',
+  '/docs/astro-modular-configuration': '/docs/configuration',
+  '/docs/sourcetree-and-git': '/docs/sourcetree-and-git-setup'
 },
   image: {
     service: {

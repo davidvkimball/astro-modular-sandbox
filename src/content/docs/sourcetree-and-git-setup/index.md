@@ -1,11 +1,11 @@
 ---
 title: SourceTree and Git Setup
 description: Complete guide to setting up SourceTree and Git for your Astro Modular blog
-category: Setup
+category: Optional Software
 order: 2
 version: 1.0.0
 lastModified: 2024-01-15
-image: "[[sourcetree.png]]"
+image: sourcetree.png
 imageAlt:
 hideCoverImage: false
 hideTOC: false
@@ -14,8 +14,6 @@ featured: false
 aliases:
   - sourcetree-and-git
 ---
-## SourceTree and Git Setup Guide
-
 This comprehensive guide will walk you through setting up SourceTree and Git for your Astro Modular blog, enabling seamless version control and deployment workflows.
 
 ## Prerequisites
