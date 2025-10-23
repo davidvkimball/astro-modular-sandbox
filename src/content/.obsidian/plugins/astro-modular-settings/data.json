@@ -1,14 +1,14 @@
 {
   "runWizardOnStartup": true,
-  "currentTemplate": "custom",
-  "currentTheme": "oxygen",
+  "currentTemplate": "standard",
+  "currentTheme": "flexoki",
   "customThemeFile": "custom",
   "contentOrganization": "file-based",
   "siteInfo": {
-    "site": "https://astro-modular.netlify.app",
-    "title": "Astro Modular",
-    "description": "A flexible blog theme designed for Obsidian users.",
-    "author": "David V. Kimball",
+    "site": "https://astro-modular-sandbox.netlify.app",
+    "title": "Astro Modular Sandbox",
+    "description": "A sandbox designed for Obsidian users.",
+    "author": "David V. Sandbox",
     "language": "en"
   },
   "layout": {
@@ -36,20 +36,8 @@
         "url": "/posts"
       },
       {
-        "title": "Projects",
-        "url": "/projects"
-      },
-      {
-        "title": "Docs",
-        "url": "/docs"
-      },
-      {
         "title": "About",
         "url": "/about"
-      },
-      {
-        "title": "GitHub",
-        "url": "https://github.com/davidvkimball/astro-modular"
       }
     ],
     "social": [
@@ -57,11 +45,6 @@
         "title": "X",
         "url": "https://x.com/davidvkimball",
         "icon": "x-twitter"
-      },
-      {
-        "title": "GitHub",
-        "url": "https://github.com/davidvkimball",
-        "icon": "github"
       }
     ]
   },
@@ -151,16 +134,14 @@
     "readingTime": true,
     "linkedMentions": true,
     "linkedMentionsCompact": false,
-    "comments": false,
     "graphView": true,
     "postNavigation": true,
     "hideScrollBar": false,
     "scrollToTop": true,
-    "featureButton": "mode",
     "showSocialIconsInFooter": true,
-    "showPostCardCoverImages": "featured-and-posts",
-    "postCardAspectRatio": "og",
     "profilePicture": false,
+    "comments": false,
+    "featureButton": "mode",
     "quickActions": {
       "enabled": true,
       "toggleMode": true,
@@ -186,8 +167,8 @@
       "enabled": false,
       "image": "/profile.jpg",
       "alt": "Profile picture",
-      "size": "md",
-      "url": "/about",
+      "size": "sm",
+      "url": "",
       "placement": "footer",
       "style": "circle"
     },
