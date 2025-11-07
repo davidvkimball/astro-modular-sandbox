@@ -1,15 +1,24 @@
 {
   "runWizardOnStartup": true,
   "currentTemplate": "standard",
-  "currentTheme": "flexoki",
+  "currentTheme": "oxygen",
   "customThemeFile": "custom",
-  "contentOrganization": "file-based",
+  "contentOrganization": "folder-based",
+  "themeColors": {
+    "mode": "simple",
+    "simpleColors": {
+      "accent": "#5865f2",
+      "background": "#1e1e1e"
+    }
+  },
   "siteInfo": {
-    "site": "https://astro-modular-sandbox.netlify.app",
-    "title": "Astro Modular Sandbox",
-    "description": "A sandbox designed for Obsidian users.",
-    "author": "David V. Sandbox",
-    "language": "en"
+    "site": "https://astro-modular.netlify.app",
+    "title": "Astro Modular",
+    "description": "A flexible blog theme designed for Obsidian users.",
+    "author": "David V. Kimball",
+    "language": "en",
+    "faviconThemeAdaptive": true,
+    "defaultOgImageAlt": "Astro Modular logo."
   },
   "layout": {
     "contentWidth": "45rem"
@@ -36,8 +45,20 @@
         "url": "/posts"
       },
       {
+        "title": "Projects",
+        "url": "/projects"
+      },
+      {
+        "title": "Docs",
+        "url": "/docs"
+      },
+      {
         "title": "About",
         "url": "/about"
+      },
+      {
+        "title": "GitHub",
+        "url": "https://github.com/davidvkimball/astro-modular"
       }
     ],
     "social": [
@@ -45,6 +66,11 @@
         "title": "X",
         "url": "https://x.com/davidvkimball",
         "icon": "x-twitter"
+      },
+      {
+        "title": "GitHub",
+        "url": "https://github.com/davidvkimball",
+        "icon": "github"
       }
     ]
   },
@@ -114,11 +140,11 @@
     "comments": {
       "enabled": false,
       "provider": "giscus",
-      "rawScript": "<script src=\"https://giscus.app/client.js\"\n        data-repo=\"davidvkimball/astro-modular-sandbox\"\n        data-repo-id=\"R_kgDOQCanIQ\"\n        data-category=\"General\"\n        data-category-id=\"DIC_kwDOQCanIc4Cw8vj\"\n        data-mapping=\"pathname\"\n        data-strict=\"0\"\n        data-reactions-enabled=\"1\"\n        data-emit-metadata=\"0\"\n        data-input-position=\"bottom\"\n        data-theme=\"preferred_color_scheme\"\n        data-lang=\"en\"\n        data-loading=\"lazy\"\n        crossorigin=\"anonymous\"\n        async>\n</script>",
-      "repo": "davidvkimball/astro-modular-sandbox",
-      "repoId": "R_kgDOQCanIQ",
+      "rawScript": "",
+      "repo": "davidvkimball/astro-modular",
+      "repoId": "R_kgDOPllfKw",
       "category": "General",
-      "categoryId": "DIC_kwDOQCanIc4Cw8vj",
+      "categoryId": "DIC_kwDOPllfK84CvUpx",
       "mapping": "pathname",
       "strict": "0",
       "reactions": "1",
@@ -172,18 +198,18 @@
       "image": "/profile.jpg",
       "alt": "Profile picture",
       "size": "md",
-      "url": "/about",
+      "url": "",
       "placement": "footer",
       "style": "circle"
     },
     "comments": {
       "enabled": false,
       "provider": "giscus",
-      "rawScript": "<script src=\"https://giscus.app/client.js\"\n        data-repo=\"davidvkimball/astro-modular-sandbox\"\n        data-repo-id=\"R_kgDOQCanIQ\"\n        data-category=\"General\"\n        data-category-id=\"DIC_kwDOQCanIc4Cw8vj\"\n        data-mapping=\"pathname\"\n        data-strict=\"0\"\n        data-reactions-enabled=\"1\"\n        data-emit-metadata=\"0\"\n        data-input-position=\"bottom\"\n        data-theme=\"preferred_color_scheme\"\n        data-lang=\"en\"\n        data-loading=\"lazy\"\n        crossorigin=\"anonymous\"\n        async>\n</script>",
-      "repo": "davidvkimball/astro-modular-sandbox",
-      "repoId": "R_kgDOQCanIQ",
+      "rawScript": "",
+      "repo": "davidvkimball/astro-modular",
+      "repoId": "R_kgDOPllfKw",
       "category": "General",
-      "categoryId": "DIC_kwDOQCanIc4Cw8vj",
+      "categoryId": "DIC_kwDOPllfK84CvUpx",
       "mapping": "pathname",
       "strict": "0",
       "reactions": "1",
@@ -215,5 +241,7 @@
     "projects": true,
     "docs": true
   },
-  "availableThemes": "all"
+  "availableThemes": "default",
+  "customThemes": "",
+  "customThemeGenerationEnabled": false
 }

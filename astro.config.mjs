@@ -7,11 +7,15 @@ import remarkCallouts from './src/utils/remark-callouts.ts';
 import remarkImageGrids from './src/utils/remark-image-grids.ts';
 import remarkMermaid from './src/utils/remark-mermaid.ts';
 import { remarkObsidianEmbeds } from './src/utils/remark-obsidian-embeds.ts';
+import remarkBases from './src/utils/remark-bases.ts';
 import remarkMath from 'remark-math';
 import remarkReadingTime from 'remark-reading-time';
 import remarkToc from 'remark-toc';
+import remarkBreaks from 'remark-breaks';
 import rehypeKatex from 'rehype-katex';
 import rehypeMark from './src/utils/rehype-mark.ts';
+import rehypeImageAttributes from './src/utils/rehype-image-attributes.ts';
+import { rehypeNormalizeAnchors } from './src/utils/rehype-normalize-anchors.ts';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { siteConfig } from './src/config.ts';
@@ -26,7 +30,7 @@ export default defineConfig({
     platform: DEPLOYMENT_PLATFORM
   },
   devToolbar: {
-    enabled: false
+    enabled: true
   },
   redirects: {
   '/about-me': '/about',
@@ -34,7 +38,11 @@ export default defineConfig({
   '/contact-me': '/contact',
   '/contact-us': '/contact',
   '/privacy': '/privacy-policy',
-  '/posts/astro-suite-vault-modular-guide': '/posts/astro-suite-obsidian-vault-guide-astro-modular',
+  '/posts/mermaid-test': '/posts/obsidian-embeds-demo',
+  '/posts/mermaid-diagram-test': '/posts/obsidian-embeds-demo',
+  '/posts/mermaid-diagrams': '/posts/obsidian-embeds-demo',
+  '/posts/astro-suite-vault-modular-guide': '/posts/obsidian-vault-guide',
+  '/posts/astro-suite-obsidian-vault-guide-astro-modular': '/posts/obsidian-vault-guide',
   '/projects/obsidian-astro-composer': '/projects/astro-composer',
   '/docs/api-reference': '/docs/api',
   '/docs/astro-modular-configuration': '/docs/configuration',
@@ -77,13 +85,16 @@ export default defineConfig({
     })
   ],
   markdown: {
-        remarkPlugins: [
-          remarkInternalLinks,
+      remarkPlugins: [
+      remarkInternalLinks,
       remarkFolderImages,
       remarkObsidianEmbeds,
+      // Bases directive (table-only v1)
+      remarkBases,
       remarkImageCaptions,
       remarkMath,
       remarkCallouts,
+      remarkBreaks,
       remarkImageGrids,
       remarkMermaid,
       [remarkReadingTime, {}],
@@ -97,6 +108,7 @@ export default defineConfig({
     rehypePlugins: [
       rehypeKatex,
       rehypeMark,
+      rehypeImageAttributes,
       [rehypeSlug, {
         test: (node) => node.tagName !== 'h1'
       }],
@@ -107,7 +119,8 @@ export default defineConfig({
           className: ['anchor-link'],
           ariaLabel: 'Link to this section'
         }
-      }]
+      }],
+      rehypeNormalizeAnchors, // Run LAST to ensure className and href fixes aren't overridden
     ],
     shikiConfig: {
       theme: 'github-dark',
@@ -130,20 +143,19 @@ export default defineConfig({
       port: 5000,
       allowedHosts: [],
       middlewareMode: false,
-      hmr: false,
+      hmr: true,
+      watch: {
+        usePolling: process.platform === 'win32', // Use polling on Windows for better file watching
+        interval: 1000
+      },
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate'
+        // CSP headers are handled by src/middleware.ts for all routes
       }
     },
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       'process.env.ASTRO_CONTENT_COLLECTION_CACHE': 'false'
-    },
-    server: {
-      watch: {
-        usePolling: process.platform === 'win32', // Use polling on Windows for better file watching
-        interval: 1000
-      }
     },
     optimizeDeps: {
       exclude: ['astro:content']

@@ -1,5 +1,7 @@
 {
   "pluginList": [
+    "davidvkimball/obsidian-astro-modular-settings",
+    "davidvkimball/obsidian-oxygen-settings",
     "davidvkimball/obsidian-alias-file-name-history",
     "davidvkimball/obsidian-seo",
     "davidvkimball/obsidian-property-over-filename",
@@ -7,6 +9,14 @@
     "davidvkimball/obsidian-astro-composer"
   ],
   "pluginSubListFrozenVersion": [
+    {
+      "repo": "davidvkimball/obsidian-astro-modular-settings",
+      "version": "latest"
+    },
+    {
+      "repo": "davidvkimball/obsidian-oxygen-settings",
+      "version": "latest"
+    },
     {
       "repo": "davidvkimball/obsidian-alias-file-name-history",
       "version": "latest"
@@ -28,7 +38,12 @@
       "version": "latest"
     }
   ],
-  "themesList": [],
+  "themesList": [
+    {
+      "repo": "davidvkimball/obsidian-oxygen",
+      "lastUpdate": "22867559"
+    }
+  ],
   "updateAtStartup": true,
   "updateThemesAtStartup": true,
   "enableAfterInstall": true,

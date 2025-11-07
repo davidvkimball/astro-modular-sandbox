@@ -205,11 +205,14 @@ async function processMarkdownFile(filePath, isPost = false) {
         redirectFrom = `/${cleanAlias}`;
       }
       
-      redirects.push({
-        from: redirectFrom,
-        to: targetUrl,
-        alias: cleanAlias
-      });
+      // Skip self-redirects (redirecting to the same URL causes infinite loops)
+      if (redirectFrom !== targetUrl) {
+        redirects.push({
+          from: redirectFrom,
+          to: targetUrl,
+          alias: cleanAlias
+        });
+      }
     }
     
     return redirects;
@@ -295,8 +298,11 @@ async function updateAstroConfig(redirects) {
 
 // Platform-specific configuration generators
 function generateVercelConfig(redirects) {
+  // Filter out self-redirects (redirecting to the same URL causes infinite loops)
+  const validRedirects = redirects.filter(redirect => redirect.from !== redirect.to);
+  
   const config = {
-    redirects: redirects.map(redirect => ({
+    redirects: validRedirects.map(redirect => ({
       source: redirect.from,
       destination: redirect.to,
       permanent: (redirect.status || 301) === 301
@@ -349,7 +355,10 @@ function generateVercelConfig(redirects) {
 }
 
 function generateGitHubPagesConfig(redirects) {
-  const redirectLines = redirects.map(redirect => 
+  // Filter out self-redirects (redirecting to the same URL causes infinite loops)
+  const validRedirects = redirects.filter(redirect => redirect.from !== redirect.to);
+  
+  const redirectLines = validRedirects.map(redirect => 
     `${redirect.from}    ${redirect.to}    ${redirect.status || 301}!`
   );
   
@@ -359,7 +368,10 @@ function generateGitHubPagesConfig(redirects) {
 function generateNetlifyConfig(redirects) {
   const redirectLines = [];
   
-  for (const redirect of redirects) {
+  // Filter out self-redirects (redirecting to the same URL causes infinite loops)
+  const validRedirects = redirects.filter(redirect => redirect.from !== redirect.to);
+  
+  for (const redirect of validRedirects) {
     redirectLines.push('[[redirects]]');
     redirectLines.push(`  from = "${redirect.from}"`);
     redirectLines.push(`  to = "${redirect.to}"`);
@@ -377,30 +389,44 @@ function generateNetlifyConfig(redirects) {
   return redirectLines.join('\n');
 }
 
+function generateCloudflarePagesConfig(projectName) {
+  // Get current date for compatibility_date
+  const today = new Date();
+  const compatibilityDate = today.toISOString().split('T')[0];
+  
+  const configLines = [];
+  configLines.push(`name = "${projectName}"`);
+  configLines.push(`pages_build_output_dir = "./dist"`);
+  configLines.push(`compatibility_date = "${compatibilityDate}"`);
+  
+  return configLines.join('\n') + '\n';
+}
+
 // Clean up platform-specific files that don't match the selected platform
 async function cleanupOtherPlatformFiles(currentPlatform) {
   const projectRoot = path.join(__dirname, '..');
   
-  // Clean up GitHub Pages files if not using GitHub Pages
-  if (currentPlatform !== 'github-pages') {
-    const githubPagesFiles = [
+  // Clean up GitHub Pages/Cloudflare Pages files if not using those platforms
+  // (Both platforms use the same _redirects and _headers format)
+  if (currentPlatform !== 'github-pages' && currentPlatform !== 'cloudflare-pages') {
+    const sharedFiles = [
       path.join(projectRoot, 'public', '_redirects'),
       path.join(projectRoot, 'public', '_headers')
     ];
     
-    for (const file of githubPagesFiles) {
+    for (const file of sharedFiles) {
       try {
         await fs.access(file);
         await fs.unlink(file);
-        log.info(`🧹 Removed ${path.basename(file)} (GitHub Pages not selected)`);
+        log.info(`🧹 Removed ${path.basename(file)} (GitHub Pages/Cloudflare Pages not selected)`);
       } catch (error) {
         // File doesn't exist, nothing to clean up
       }
     }
   }
   
-  // Note: We don't remove vercel.json or netlify.toml as they may contain
-  // custom configuration (serverless functions, environment variables, etc.)
+  // Note: We don't remove vercel.json, netlify.toml, or wrangler.toml as they may contain
+  // custom configuration (serverless functions, environment variables, bindings, etc.)
 }
 
 // Platform-specific file writers
@@ -458,22 +484,108 @@ async function writeGitHubPagesConfig(redirects) {
     await fs.writeFile(redirectsPath, config, 'utf-8');
     log.info(`📝 Updated public/_redirects with ${redirects.length} redirects`);
     
-    // Write headers file (for paid GitHub Pages plans)
-    const headersContent = `# GitHub Pages Custom Headers
-# Note: Custom headers require GitHub Pages on a paid plan or GitHub Enterprise
-# For free GitHub Pages, these headers won't be applied
+    // Write headers file (for GitHub Pages and Cloudflare Pages)
+    // Note: Custom headers require GitHub Pages on a paid plan or GitHub Enterprise
+    // Cloudflare Pages supports custom headers on all plans (including free tier)
+    const headersContent = `# Custom Headers for GitHub Pages / Cloudflare Pages
+# Note: GitHub Pages requires paid plan for custom headers
+# Cloudflare Pages supports custom headers on all plans
 
-# PDF files - allow iframe embedding
-/*.pdf
-  X-Frame-Options: SAMEORIGIN
+# HTML files
+/*.html
+  Cache-Control: public, max-age=3600, s-maxage=86400
+
+# CSS files
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# JavaScript files
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# JSON files
+/*.json
   Cache-Control: public, max-age=3600
 
-# All pages - Content Security Policy for Twitter widgets
+# XML files
+/*.xml
+  Cache-Control: public, max-age=3600
+
+# Text files
+/*.txt
+  Cache-Control: public, max-age=3600
+
+# Pre-compressed files
+/*.gz
+  Content-Encoding: gzip
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.br
+  Content-Encoding: br
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static assets with long-term caching
+/_assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# WebP images
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+# Font files
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.eot
+  Cache-Control: public, max-age=31536000, immutable
+
+# Image files
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+# Favicon files
+/favicon*
+  Cache-Control: public, max-age=31536000, immutable
+
+# All pages - Security headers and Content Security Policy
 /*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Cross-Origin-Embedder-Policy: unsafe-none
+  Cross-Origin-Opener-Policy: same-origin
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://giscus.app https://platform.twitter.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://giscus.app; frame-src 'self' https://www.youtube.com https://giscus.app https://platform.twitter.com; object-src 'none'; base-uri 'self';
+
+# PDF files - allow iframe embedding (override X-Frame-Options for PDFs)
+/*.pdf
+  Cache-Control: public, max-age=3600
+  X-Frame-Options: SAMEORIGIN
 `;
     await fs.writeFile(headersPath, headersContent, 'utf-8');
-    log.info(`📝 Created public/_headers for GitHub Pages (requires paid plan)`);
+    log.info(`📝 Created public/_headers for GitHub Pages / Cloudflare Pages`);
   } catch (error) {
     log.error(`❌ Error updating GitHub Pages config:`, error.message);
   }
@@ -508,6 +620,70 @@ async function writeNetlifyConfig(redirects) {
     log.info(`📝 Updated netlify.toml with ${redirects.length} redirects`);
   } catch (error) {
     log.error(`❌ Error updating netlify.toml:`, error.message);
+  }
+}
+
+async function writeCloudflarePagesConfig(projectName) {
+  const projectRoot = path.join(__dirname, '..');
+  const wranglerTomlPath = path.join(projectRoot, 'wrangler.toml');
+  
+  if (DRY_RUN) {
+    log.info('📝 [DRY RUN] Would generate wrangler.toml:');
+    console.log(generateCloudflarePagesConfig(projectName));
+    return;
+  }
+  
+  try {
+    // Read existing wrangler.toml to preserve custom settings
+    let existingContent = '';
+    try {
+      existingContent = await fs.readFile(wranglerTomlPath, 'utf-8');
+    } catch (error) {
+      // File doesn't exist, create new one
+    }
+    
+    // Generate new config with managed fields
+    const newConfig = generateCloudflarePagesConfig(projectName);
+    
+    if (existingContent) {
+      // Update only the fields we manage while preserving everything else
+      // Use regex to replace name, pages_build_output_dir, and compatibility_date
+      let updatedContent = existingContent;
+      
+      // Update name field
+      updatedContent = updatedContent.replace(/^name\s*=\s*["'][^"']*["']/m, `name = "${projectName}"`);
+      if (!updatedContent.match(/^name\s*=/m)) {
+        // name doesn't exist, add it at the beginning
+        updatedContent = `name = "${projectName}"\n${updatedContent}`;
+      }
+      
+      // Update pages_build_output_dir field
+      updatedContent = updatedContent.replace(/^pages_build_output_dir\s*=\s*["'][^"']*["']/m, 'pages_build_output_dir = "./dist"');
+      if (!updatedContent.match(/^pages_build_output_dir\s*=/m)) {
+        // pages_build_output_dir doesn't exist, add it after name
+        updatedContent = updatedContent.replace(/^(name\s*=[^\n]+)/m, `$1\npages_build_output_dir = "./dist"`);
+      }
+      
+      // Update compatibility_date field
+      const today = new Date();
+      const compatibilityDate = today.toISOString().split('T')[0];
+      updatedContent = updatedContent.replace(/^compatibility_date\s*=\s*["'][^"']*["']/m, `compatibility_date = "${compatibilityDate}"`);
+      if (!updatedContent.match(/^compatibility_date\s*=/m)) {
+        // compatibility_date doesn't exist, add it after pages_build_output_dir
+        updatedContent = updatedContent.replace(/^(pages_build_output_dir\s*=[^\n]+)/m, `$1\ncompatibility_date = "${compatibilityDate}"`);
+      }
+      
+      updatedContent = updatedContent.replace(/\n*\[build\]\s*\n\s*command\s*=\s*["'][^"']*["']\s*\n*/g, '\n');
+      
+      await fs.writeFile(wranglerTomlPath, updatedContent, 'utf-8');
+      log.info(`📝 Updated wrangler.toml (preserved custom settings)`);
+    } else {
+      // File doesn't exist, create new one
+      await fs.writeFile(wranglerTomlPath, newConfig, 'utf-8');
+      log.info(`📝 Created wrangler.toml`);
+    }
+  } catch (error) {
+    log.error(`❌ Error updating wrangler.toml:`, error.message);
   }
 }
 
@@ -561,7 +737,17 @@ async function generateRedirects() {
     log.info('🔍 Validation mode - checking all platform configurations...');
   }
   
+  // Get project name from package.json for Cloudflare Pages
   const projectRoot = path.join(__dirname, '..');
+  let projectName = 'astro-modular';
+  try {
+    const packageJsonPath = path.join(projectRoot, 'package.json');
+    const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'));
+    projectName = packageJson.name || 'astro-modular';
+  } catch (error) {
+    // Use default if package.json can't be read
+  }
+  
   let allRedirects = [];
   let totalProcessedFiles = 0;
   
@@ -639,6 +825,12 @@ async function generateRedirects() {
         break;
       case 'github-pages':
         await writeGitHubPagesConfig(allRedirects);
+        break;
+      case 'cloudflare-pages':
+        // Cloudflare Pages only needs _redirects/_headers (redirects/headers)
+        // wrangler.toml is optional and not generated by default to avoid configuration conflicts
+        // Users can create it manually if they need bindings (KV, D1, etc.)
+        await writeGitHubPagesConfig(allRedirects); // Uses same _redirects/_headers format
         break;
       case 'netlify':
       default:

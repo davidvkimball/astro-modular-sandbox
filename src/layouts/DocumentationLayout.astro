@@ -3,7 +3,7 @@ import type { Docs } from '@/types';
 import { siteConfig } from '@/config';
 import { generateDocumentationSEO } from '@/utils/seo';
 import { isValidDate } from '@/utils/markdown';
-import { optimizeContentImagePath } from '@/utils/images';
+import { optimizeContentImagePath, getOptimizedFormat } from '@/utils/images';
 import { hasDocCategories } from '@/utils/categories';
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
@@ -22,7 +22,8 @@ const allDocs = await getCollection('docs');
 const docsHaveCategories = hasDocCategories(allDocs);
 
 // Render the documentation content
-const { Content, headings } = await documentation.render();
+const { render } = await import('astro:content');
+const { Content, headings } = await render(documentation);
 
 // Generate SEO data
 const seoData = generateDocumentationSEO(documentation, Astro.url.href);
@@ -55,9 +56,9 @@ const structuredData = {
   dateCreated: documentation.data.lastModified?.toISOString() || new Date().toISOString(),
   dateModified: documentation.data.lastModified?.toISOString() || new Date().toISOString(),
   version: documentation.data.version || '1.0',
-  articleSection: docsHaveCategories 
-    ? (documentation.data.category && documentation.data.category.trim() !== '' && documentation.data.category !== 'General' 
-        ? documentation.data.category 
+  articleSection: docsHaveCategories
+    ? (documentation.data.category && documentation.data.category.trim() !== '' && documentation.data.category !== 'General'
+        ? documentation.data.category
         : 'Unsorted')
     : undefined
 };
@@ -67,13 +68,13 @@ const structuredData = {
   <Fragment slot="head">
     <!-- Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-    
+
     <!-- Preload documentation image if exists -->
     {documentation.data.image && documentation.data.hideCoverImage !== true && typeof documentation.data.image === 'string' && !documentation.data.image.startsWith('http') && (
-      <link 
-        rel="preload" 
-        as="image" 
-        href={optimizeContentImagePath(documentation.data.image, 'documentation', documentation.slug, documentation.id)}
+      <link
+        rel="preload"
+        as="image"
+        href={optimizeContentImagePath(documentation.data.image, 'documentation', documentation.id, documentation.id)}
         fetchpriority="high"
       />
     )}
@@ -83,20 +84,74 @@ const structuredData = {
     <div class="mx-auto px-4 sm:px-6 lg:px-8 relative" style={`max-width: ${siteConfig.layout.contentWidth}`}>
       <!-- Documentation content -->
       <article class={`bg-primary-50 dark:bg-primary-900 rounded-lg border border-primary-200 dark:border-primary-700 shadow-sm ${documentation.data.image && documentation.data.hideCoverImage !== true ? 'overflow-hidden' : ''}`}>
-        {documentation.data.image && documentation.data.hideCoverImage !== true && (
-          <div class="h-40 sm:h-48 md:h-56 lg:h-64 overflow-hidden rounded-t-lg bg-primary-100 dark:bg-primary-800">
-            <img 
-              src={optimizeContentImagePath(documentation.data.image, 'documentation', documentation.slug, documentation.id)}
-              alt={documentation.data.imageAlt || `Featured image for documentation: ${documentation.data.title}`}
-              class="w-full h-full object-cover"
-              width="800"
-              height="450"
-              loading="eager"
-              decoding="async"
-              fetchpriority="high"
-            />
-          </div>
-        )}
+        {documentation.data.image && documentation.data.hideCoverImage !== true && (() => {
+          // Process image path similar to other layouts
+          let rawImage = documentation.data.image;
+          if (Array.isArray(rawImage)) {
+            rawImage = rawImage[0];
+          }
+          
+          // Clean Obsidian brackets
+          let cleanImagePath = typeof rawImage === 'string' ? rawImage : '';
+          if (cleanImagePath.startsWith('[[') && cleanImagePath.endsWith(']]')) {
+            cleanImagePath = cleanImagePath.slice(2, -2);
+          }
+          
+          // Determine src and basePath for ImageWrapper
+          let imageSrc = cleanImagePath;
+          let imageBasePath = '';
+          
+          if (typeof cleanImagePath === 'string' && cleanImagePath.startsWith('http')) {
+            // External URL - pass as-is
+            imageSrc = cleanImagePath;
+            imageBasePath = '';
+          } else {
+            // Detect folder-based vs file-based: if image path starts with 'attachments/',
+            // it's a single-file doc (shared attachments folder)
+            const isFileBased = typeof cleanImagePath === 'string' && cleanImagePath.startsWith('attachments/');
+            
+            if (isFileBased) {
+              // Single-file doc - remove attachments/ prefix
+              imageSrc = cleanImagePath.replace('attachments/', '');
+              imageBasePath = '/docs/attachments/';
+            } else {
+              // Folder-based doc - sync script copies images to doc folder root
+              // Remove 'images/' or 'attachments/' prefixes if present (sync script removes them)
+              if (cleanImagePath.startsWith('images/') || cleanImagePath.startsWith('attachments/')) {
+                imageSrc = cleanImagePath.replace(/^(images|attachments)\//, '');
+              } else {
+                imageSrc = cleanImagePath;
+              }
+              // Safety check: ensure documentation.id exists before using it
+              if (documentation.id) {
+                imageBasePath = `/docs/${documentation.id}/`;
+              } else {
+                // Fallback to attachments directory if documentation.id is undefined
+                imageBasePath = '/docs/attachments/';
+              }
+            }
+          }
+          
+          // Convert to WebP if applicable (sync-images.js creates WebP versions)
+          imageSrc = getOptimizedFormat(imageSrc);
+          
+          return (
+            <div class="h-40 sm:h-48 md:h-56 lg:h-64 overflow-hidden rounded-t-lg bg-primary-100 dark:bg-primary-800">
+              <ImageWrapper
+                src={imageSrc}
+                basePath={imageBasePath}
+                alt={documentation.data.imageAlt || `Featured image for documentation: ${documentation.data.title}`}
+                class="w-full h-full object-cover"
+                width={800}
+                height={450}
+                format="webp"
+                quality={85}
+                loading="eager"
+                fetchpriority="high"
+              />
+            </div>
+          );
+        })()}
 
         <!-- Documentation content wrapper -->
         <div class={`p-6 ${documentation.data.image && documentation.data.hideCoverImage !== true ? 'rounded-b-lg' : 'rounded-lg'}`}>
@@ -109,8 +164,8 @@ const structuredData = {
             <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-primary-600 dark:text-primary-300 mb-6">
               {docsHaveCategories && (
                 <span class="px-2 py-1 bg-primary-100 dark:bg-primary-800 text-primary-700 dark:text-primary-300 rounded-full text-xs font-medium">
-                  {documentation.data.category && documentation.data.category.trim() !== '' && documentation.data.category !== 'General' 
-                    ? documentation.data.category 
+                  {documentation.data.category && documentation.data.category.trim() !== '' && documentation.data.category !== 'General'
+                    ? documentation.data.category
                     : 'Unsorted'}
                 </span>
               )}
@@ -204,7 +259,7 @@ const structuredData = {
         // Initialize lightbox after a short delay to ensure images are loaded
         setTimeout(initializeLightbox, 200);
       });
-      
+
       // Remove duplicate H1 from documentation content (since we render it in header)
       document.addEventListener('DOMContentLoaded', function() {
         const documentationContent = document.getElementById('documentation-content');
@@ -222,7 +277,7 @@ const structuredData = {
         function initializeImageGrids() {
           // Check if browser supports :has() selector
           const supportsHas = CSS.supports('selector(:has(img))');
-          
+
           if (supportsHas) {
             // Browser supports :has(), CSS will handle it automatically
             return;
@@ -230,7 +285,7 @@ const structuredData = {
 
           // Fallback for browsers without :has() support
           const paragraphs = document.querySelectorAll('.prose p');
-          
+
           paragraphs.forEach(p => {
             const images = p.querySelectorAll('img, picture');
             const textNodes = Array.from(p.childNodes).filter((node) => {
@@ -239,22 +294,22 @@ const structuredData = {
             const otherElements = Array.from(p.childNodes).filter((node) => {
               return node.nodeType === Node.ELEMENT_NODE && !['IMG', 'PICTURE', 'BR'].includes(((node as Element).tagName || ''));
             });
-            
+
             // Only process if paragraph contains 2+ images and no other meaningful content
             if (images.length >= 2 && textNodes.length === 0 && otherElements.length === 0) {
               // Remove any existing image-grid classes first
               p.classList.remove('image-grid', 'image-grid-2', 'image-grid-3', 'image-grid-4', 'image-grid-5', 'image-grid-6');
-              
+
               // Add the appropriate grid class
               const gridClass = `image-grid-${Math.min(images.length, 6)}`;
               p.classList.add('image-grid', gridClass);
             }
           });
         }
-        
+
         // Initialize image grids
         initializeImageGrids();
-        
+
         // Process all external links in content to open in new tabs (including reference links)
         const allLinks = document.querySelectorAll('.prose a[href]');
         allLinks.forEach(link => {
@@ -267,7 +322,7 @@ const structuredData = {
             }
           }
         });
-        
+
         // Wrap tables in responsive containers for better mobile experience
         const tables = document.querySelectorAll('.prose table');
         tables.forEach((table) => {
@@ -275,18 +330,18 @@ const structuredData = {
             const wrapper = document.createElement('div');
             wrapper.className = 'table-wrapper';
             // Let CSS handle the styling instead of inline styles
-            
+
             if (table.parentNode) {
               (table.parentNode as Node & ParentNode).insertBefore(wrapper, table);
             }
             wrapper.appendChild(table);
-            
+
             // Reset table margin since wrapper handles it
             (table as unknown as HTMLElement).style.margin = '0';
           }
         });
 
-        
+
       });
 
     </script>

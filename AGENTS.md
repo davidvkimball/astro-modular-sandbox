@@ -9,7 +9,7 @@ This document contains essential information for AI agents working with this Ast
 **The most up-to-date and accurate information is found in these blog posts:**
 
 1. **[Getting Started Guide](src/content/posts/getting-started.md)** - Complete setup, configuration, and workflow information
-2. **[Astro Suite Vault Guide](src/content/posts/astro-suite-vault-modular-guide.md)** - Obsidian vault configuration and usage
+2. **[Astro Suite Vault Guide](src/content/posts/obsidian-vault-guide.md)** - Obsidian vault configuration and usage
 
 **These blog posts should be treated as the authoritative source of truth.** Use the information in this AGENTS.md file as supplementary technical documentation, but always reference the blog posts for the most current and accurate user-facing information.
 
@@ -19,14 +19,121 @@ This document contains essential information for AI agents working with this Ast
 
 **⚠️ READ THESE FIRST - These are the #1 issues that keep coming up:**
 
-1. **🚨 SWUP BREAKS JAVASCRIPT** - Interactive elements stop working after page transitions. [See detailed solution](#-critical-javascript-re-initialization-after-page-transitions)
-2. **🚨 MATH RENDERING DUPLICATION** - Math appears twice due to wrong CSS. [See solution](#1--math-rendering-duplication-most-critical)
-3. **🚨 PRODUCTION LOGGING** - Never use raw `console.log()` in production code
-4. **🚨 IMAGE SYSTEM CONFUSION** - Post cards vs post content images are separate systems
-5. **🚨 URL MAPPING SYSTEM CONFUSION** - URL mapping is for rendering only, doesn't affect linked mentions/graph view
-6. **🚨 FOLDER-BASED CONTENT ASSUMPTIONS** - ALL content types support folder-based organization, not just posts
+1. **🚨 NEVER EDIT MARKDOWN CONTENT** - NEVER edit markdown files in `src/content/` without explicit user permission
+2. **🚨 USE `id` NOT `slug`** - `slug` is deprecated in Astro v6. ALWAYS use `entry.id` instead. [See detailed solution](#-critical-use-id-not-slug)
+3. **🚨 SWUP BREAKS JAVASCRIPT** - Interactive elements stop working after page transitions. [See detailed solution](#-critical-javascript-re-initialization-after-page-transitions)
+4. **🚨 MATH RENDERING DUPLICATION** - Math appears twice due to wrong CSS. [See solution](#1--math-rendering-duplication-most-critical)
+5. **🚨 PRODUCTION LOGGING** - Never use raw `console.log()` in production code
+6. **🚨 IMAGE SYSTEM CONFUSION** - Post cards vs post content images are separate systems
+7. **🚨 URL MAPPING SYSTEM CONFUSION** - URL mapping is for rendering only, doesn't affect linked mentions/graph view
+8. **🚨 FOLDER-BASED CONTENT ASSUMPTIONS** - ALL content types support folder-based organization, not just posts
+9. **🚨 FOLDER-BASED POST ID DETECTION** - Astro v6 folder-based posts have IDs like 'folder-name', NOT 'folder-name/index'
+10. **🚨 PLUGIN ORDER AND EMBED HANDLING** - Plugins execute sequentially - changes affect subsequent plugins. [See detailed solution](#12--plugin-order-and-embed-handling-critical)
+11. **🚨 NEVER DISABLE ASTRO DEV TOOLBAR** - The dev toolbar must remain enabled (`devToolbar.enabled: true`) - do NOT disable it to resolve module loading errors
 
 **These issues are documented in detail in the [Common AI Agent Mistakes](#common-ai-agent-mistakes) section.**
+
+## 🚨 CRITICAL: Use `id` Not `slug` (Astro v6)
+
+**⚠️ AI AGENTS MUST READ THIS SECTION CAREFULLY ⚠️**
+
+**The `slug` property is DEPRECATED in Astro v6 and MUST NOT be used.**
+
+### **The Breaking Change**
+
+According to the [Astro v6 Upgrade Guide](https://deploy-preview-12322--astro-docs-2.netlify.app/en/guides/upgrade-to/v6/#upgrade-astro), the `slug` property on collection entries has been removed in favor of `id`:
+
+- **Old (WRONG)**: `post.slug` - This is deprecated and will cause "undefined" URLs
+- **New (CORRECT)**: `post.id` - This is the modern API and always works correctly
+
+### **Why This Matters**
+
+Previously, Astro used:
+- `id` - Based on the filename (e.g., `getting-started/index.md` → `"getting-started/index"`)
+- `slug` - A URL-friendly version (e.g., `"getting-started"`)
+
+Now in Astro v5/v6:
+- `id` - IS the slug (e.g., `"getting-started"`)
+- `slug` - REMOVED/DEPRECATED (causes undefined values)
+
+### **Common Mistakes**
+
+**❌ WRONG - Using `slug`:**
+```typescript
+// DON'T DO THIS - slug is deprecated
+const posts = await getCollection('posts');
+posts.map(post => ({
+  url: `/posts/${post.slug}`,  // ❌ Will be undefined!
+  id: post.slug                 // ❌ Will be undefined!
+}));
+```
+
+**✅ CORRECT - Using `id`:**
+```typescript
+// DO THIS - id is the modern API
+const posts = await getCollection('posts');
+posts.map(post => ({
+  url: `/posts/${post.id}`,    // ✅ Works correctly
+  id: post.id                   // ✅ Works correctly
+}));
+```
+
+### **Where to Check**
+
+Search your codebase for these patterns and replace `slug` with `id`:
+- API endpoints: `src/pages/api/*.json.ts`
+- Dynamic routes: `src/pages/[...slug].astro`
+- Component props: Any component receiving collection entries
+- URL generation: Anywhere constructing URLs from collection entries
+
+### **Files Already Fixed**
+
+These files have been updated to use `id` instead of `slug`:
+- ✅ `src/pages/api/posts.json.ts`
+- ✅ `src/pages/api/pages.json.ts`
+- ✅ `src/pages/api/projects.json.ts`
+- ✅ `src/pages/api/docs.json.ts`
+
+**This is CRITICAL for command palette search, navigation, and all URL generation.**
+
+## 🚨 CRITICAL: Astro v6 Compatibility Status
+
+**⚠️ AI AGENTS MUST READ THIS SECTION CAREFULLY ⚠️**
+
+**This theme is FULLY PREPARED for Astro v6 compatibility.** All legacy v4 patterns have been removed and the theme uses modern v5/v6 APIs.
+
+### **Current Status (January 2025)**
+- **Astro Version**: 5.15.1 (current stable)
+- **v6 Readiness**: ✅ **Fully prepared** - no breaking changes expected
+- **Content Collections**: ✅ Using modern v5/v6 API
+- **Config Location**: ✅ `src/content.config.ts` (v6 requirement)
+- **Legacy Patterns**: ✅ All removed
+- **Using `id` not `slug`**: ✅ All files updated
+
+### **What Was Fixed for v6 Compatibility**
+1. **Config File Location**: Moved from `src/content/config.ts` to `src/content.config.ts`
+2. **Collection Definitions**: Removed `type: 'content'` from all collections
+3. **ViewTransitions Import**: Removed unused import (v6 breaking change)
+4. **Image Field Safety**: Added type checking for `null` image fields
+5. **Legacy API Usage**: Verified no deprecated APIs are used
+6. **Slug to ID Migration**: All references to `entry.slug` replaced with `entry.id`
+
+### **Verified Clean (No Issues Found)**
+- ✅ No experimental flags in use
+- ✅ No legacy collection patterns
+- ✅ No deprecated APIs (`Astro.glob`, `emitESMImage`, etc.)
+- ✅ No `handleForms` prop on ClientRouter
+- ✅ No legacy collection methods
+- ✅ All integrations v6 compatible
+- ✅ Using `id` instead of deprecated `slug`
+
+### **When Astro v6 Releases**
+- **No action required** - theme will work immediately
+- **No breaking changes** expected
+- **All features** will continue to work
+- **Build process** will remain unchanged
+
+**This theme is future-proof and ready for Astro v6.**
 
 ## Table of Contents
 
@@ -91,7 +198,7 @@ Every feature can be toggled on or off through a single configuration file. Enab
 
 #### 3. **Content Management Excellence**
 - **Markdown-first** with enhanced processing and reading time estimation
-- **Folder-based posts** - Organize content and assets in dedicated folders (like Fuwari)
+- **Folder-based posts** - Organize content and assets in dedicated folders
 - **Draft support** - Show drafts in development, hide in production
 - **Image optimization** with WebP format priority and responsive layouts
 - **Table of contents** auto-generation from headings
@@ -593,6 +700,24 @@ The included Obsidian vault follows three core principles:
 
 ### Vault Setup & Configuration
 
+#### Obsidian Settings for Best Compatibility
+
+**Critical Settings:**
+- **Files & Links → New link format**: Set to **"Absolute path in Vault"** - This ensures paths like `bases/home.base` or `attachments/image.jpg` work correctly with the theme's image processing logic
+- **Files & Links → Default location for new attachments**: `./attachments` (as configured in vault)
+- **Files & Links → Use `[[]]` style links**: Can be enabled if you prefer wikilinks, but standard markdown links work better for cross-content-type linking
+
+**Why "Absolute path in Vault" is Recommended:**
+- Matches the theme's path processing logic which expects paths like `bases/home.base` (not `../bases/home.base` or just `home.base`)
+- Prevents issues with relative path resolution (`../` patterns aren't explicitly handled)
+- Maintains consistent paths when moving files around in Obsidian
+- Works seamlessly with the theme's image optimization functions
+
+**Path Format Examples:**
+- ✅ **Absolute path in Vault**: `bases/home.base` → Processes correctly
+- ❌ **Relative paths**: `../bases/home.base` → May cause resolution issues
+- ❌ **Shortest path possible**: `home.base` → Loses folder context
+
 #### Theme & Visual Experience
 - **Minimal Theme** - Understated color scheme with high contrast options
 - **Minimal Theme Settings** - Complete control over your experience
@@ -641,7 +766,7 @@ When working with the Obsidian vault, these hotkeys are crucial:
 
 #### Homepage and Default New Tab Page
 - **Home Base**: Default screen shows a `.base` file with all blog posts in reverse-chronological order
-- **Location**: Nested in `_bases` folder (underscore prefix prevents Astro processing)
+- **Location**: Nested in `bases` folder
 - **Customization**: Note properties in views can be customized
 
 #### Content Management Plugins
@@ -699,8 +824,9 @@ This theme supports two distinct linking behaviors, each with specific use cases
   - `[Home](special/home)` or `[Home](homepage)` → Special pages
 
 #### **When to Use Which**
-- **Use Wikilinks** when writing in Obsidian for posts - they feel natural and work seamlessly
-- **Use Standard Links** when linking between different content types or when you need explicit control
+- **Use Standard Markdown Links** (`[text](url)`) for linking between different content types - this is the most ideal approach if you care about cross-content-type linking
+- **Use Wikilinks** (`[[Post Title]]`) only if you exclusively link between posts and want the Obsidian-native feel - they work seamlessly for posts but don't support other content types
+- **Best Practice**: If you plan to link between posts, pages, projects, or docs, use standard markdown links for maximum flexibility
 - **Both work together** - you can mix wikilinks and standard links in the same document
 
 #### **Technical Implementation**
@@ -1405,14 +1531,17 @@ The theme supports deployment to all major platforms with an elegant configurati
 Set your deployment platform once in `src/config.ts`:
 ```typescript
 deployment: {
-  platform: "netlify", // "netlify" | "vercel" | "github-pages"
+  platform: "netlify", // "netlify" | "vercel" | "github-pages" | "cloudflare-pages"
 }
 ```
 
 #### Supported Platforms
 - **Netlify**: Generates `netlify.toml` with redirects and build settings
 - **Vercel**: Generates `vercel.json` with redirects and headers
-- **GitHub Pages**: Generates `public/redirects.txt` for GitHub Pages redirects
+- **GitHub Pages**: Generates `public/_redirects` and `public/_headers` for GitHub Pages
+- **Cloudflare Pages**: Generates `wrangler.toml` (deployment configuration) and `public/_redirects`/`public/_headers` (redirects and headers)
+
+**Note:** Cloudflare Pages requires a `wrangler.toml` file for deployment configuration, in addition to `_redirects` and `_headers` files in the public directory. Cloudflare Pages is for static site hosting (similar to Netlify/Vercel), while Cloudflare Workers is for serverless functions at the edge (not needed for basic static Astro sites).
 
 #### Build Process
 The build process automatically detects your chosen platform and generates the correct configuration files:
@@ -1423,7 +1552,8 @@ pnpm run build  # Works for all platforms - no environment variables needed!
 #### Platform-Specific Features
 - **Netlify**: Includes `netlify.toml` with redirects, build settings, and 404 handling
 - **Vercel**: Generates `vercel.json` with redirects and cache headers for assets
-- **GitHub Pages**: Creates `public/redirects.txt` in the format required by GitHub Pages
+- **GitHub Pages**: Creates `public/_redirects` and `public/_headers` in the format required by GitHub Pages
+- **Cloudflare Pages**: Creates `wrangler.toml` (deployment config with name, pages_build_output_dir, compatibility_date) and `public/_redirects`/`public/_headers` (redirects and headers)
 
 #### Platform Headers for PDF Embeds and Twitter Widgets
 
@@ -1454,18 +1584,32 @@ pnpm run build
 **GitHub Pages**
 Headers are generated automatically in `public/_headers` when you run the build command. The script creates:
 - `public/_redirects` - Redirect rules for GitHub Pages
-- `public/_headers` - Custom headers (requires paid GitHub Pages plan)
+- `public/_headers` - Custom headers
 
 **Important:** These files are auto-generated during build and are ignored by git (see `.gitignore`). They are:
 - Only created when `platform: "github-pages"` is selected
 - Automatically cleaned up when switching to other platforms
 - Build artifacts (similar to `dist/`) that should not be committed
 
-**Note:** Custom headers require GitHub Pages on a paid plan or GitHub Enterprise. Free GitHub Pages users won't have these headers applied.
+**GitHub Pages Notes:**
+- Custom headers require GitHub Pages on a paid plan or GitHub Enterprise. Free GitHub Pages users won't have these headers applied.
+- For free GitHub Pages users: PDF embeds may show security warnings in some browsers, but Twitter widgets should still work as the script is included directly in the page
 
-**For free GitHub Pages users:**
-- PDF embeds may show security warnings in some browsers
-- Twitter widgets should still work as the script is included directly in the page
+**Cloudflare Pages**
+Cloudflare Pages only requires `_redirects`/`_headers` files. The script creates:
+- `public/_redirects` - Redirect rules (same format as GitHub Pages)
+- `public/_headers` - Custom headers (same format as GitHub Pages)
+
+**Important:** 
+- `wrangler.toml` is **optional** and **not generated by default** to avoid configuration conflicts
+- If you need bindings (KV, D1, vars, etc.), you can create `wrangler.toml` manually
+- `public/_redirects` and `public/_headers` are auto-generated and cleaned up when switching away from Cloudflare Pages
+- Build commands are configured in the Cloudflare Pages dashboard, not in `wrangler.toml`
+
+**Cloudflare Pages Notes:**
+- Cloudflare Pages supports custom headers on all plans (including free tier)
+- Both `_redirects` and `_headers` files work out of the box with Cloudflare Pages
+- Cloudflare Pages is for static site hosting (like Netlify/Vercel), while Cloudflare Workers is for serverless functions (not needed for basic static Astro sites)
 
 **Common Issues:**
 - **PDF shows "Firefox Can't Open This Page"**: The server is blocking iframe embeds. Check that `X-Frame-Options: SAMEORIGIN` is set for PDF files.
@@ -1653,14 +1797,17 @@ postsPerPage: 5,
 #### Deployment Platform Configuration
 ```typescript
 deployment: {
-  platform: "netlify", // "netlify" | "vercel" | "github-pages" - set once and forget!
+  platform: "netlify", // "netlify" | "vercel" | "github-pages" | "cloudflare-pages" - set once and forget!
 }
 ```
 
 **Deployment Platform Options:**
 - **`"netlify"`** (default) - Generates `netlify.toml` with redirects and build settings
 - **`"vercel"`** - Generates `vercel.json` with redirects and cache headers
-- **`"github-pages"`** - Generates `public/redirects.txt` for GitHub Pages redirects
+- **`"github-pages"`** - Generates `public/_redirects` and `public/_headers` for GitHub Pages
+- **`"cloudflare-pages"`** - Generates `wrangler.toml` (deployment config) and `public/_redirects`/`public/_headers` (redirects and headers)
+
+**Note:** Cloudflare Pages requires a `wrangler.toml` file for deployment configuration, in addition to `_redirects` and `_headers` files. Cloudflare Pages is for static site hosting (like Netlify/Vercel), while Cloudflare Workers is for serverless functions at the edge (not needed for basic static Astro sites).
 
 **Important:** Set this once in your config and the build process automatically generates the correct platform-specific configuration files. No environment variables needed!
 
@@ -1685,6 +1832,45 @@ features: {
 **Linked Mentions Features:**
 - `linkedMentions: true` - Enable linked mentions section at the end of the page showing which posts reference the current post
 - `linkedMentionsCompact: false` - Choose between detailed view (default) or compact view for linked mentions
+
+#### Linked Mentions Excerpt Extraction Logic
+
+**🚨 CRITICAL: Structural-Only Approach**
+
+The Linked Mentions excerpt extraction logic uses **purely structural/syntax-based patterns** - **NEVER word or phrase matching**.
+
+**Key Principles:**
+
+1. **Markdown Cleanup (Structural Only)**:
+   - Remove markdown syntax: code blocks (`` ``` ``), inline code (`` ` ``), bold (`**`), italic (`*`), headers (`#`), blockquotes (`>`), callouts (`> [!TYPE]`), horizontal rules (`---`), list markers (`-`, `1.`)
+   - Remove structural patterns: orphaned labels ending with `:` (e.g., `Label:` at end), trailing colons/dashes
+   - **NEVER match specific words or phrases** like "Further reading", "See also", "Start lines with", etc.
+   - **ONLY use structural patterns** like `([A-Z][a-z]+):` to match any capitalized label, not specific label names
+
+2. **Ellipsis Placement (Structural Detection)**:
+   - **Detects natural endings** using structural patterns only:
+     - Links as endings: `]]` (wikilink), `)` (markdown link), `</mark>` (processed link HTML)
+     - Sentence endings: `.`, `!`, `?` (complete sentences)
+     - Incomplete punctuation: `,`, `:`, `-`, `;` (suggesting truncation)
+     - Letter endings: Ends with letter/word but no sentence punctuation (e.g., "or", "and" - detected structurally, not word-specific)
+   - **NEVER check for specific phrases** like "Further reading", "See also", etc.
+   - **NEVER match specific conjunctions** like "or", "and", "but" - instead check for letter endings without punctuation
+
+3. **Link Processing**:
+   - Processes standard markdown links FIRST, then wikilinks (prevents double-processing)
+   - Handles incomplete/truncated links (e.g., `[Obsidian Vault...`) by detecting structural patterns
+   - Highlights relevant links (matching target post) using slug comparison, not word matching
+
+4. **Semantic HTML**:
+   - Uses `div` elements for "Linked Mentions" heading and individual post titles (NOT `h2`/`h3` headings)
+   - Maintains proper visual hierarchy without interfering with post heading structure
+
+**Common Mistakes to Avoid:**
+- ❌ **NEVER hardcode word/phrase patterns** like `/\bFurther reading|See also\b/i`
+- ❌ **NEVER match specific words** like `/\b(or|and|but)\b/` - use structural letter-ending detection instead
+- ❌ **NEVER remove specific phrases** like "Start lines with", "separate columns" - use structural label patterns
+- ✅ **ALWAYS use structural patterns** like `/[.!?]\s*$/` (sentence endings), `/<\/mark>/i` (link endings)
+- ✅ **ALWAYS check for syntax artifacts** like code blocks, markdown formatting, not content-specific text
 
 #### Cover Image Options
 - `"all"` - Show cover images everywhere
@@ -2781,13 +2967,17 @@ The math processing is integrated into the existing markdown pipeline:
 
 **Remark Plugins (Processing Order):**
 1. `remarkInternalLinks` - Process wikilinks and standard links
-2. `remarkFolderImages` - Handle folder-based images
-3. `remarkImageCaptions` - Process image captions
-4. `remarkCallouts` - Process Obsidian-style callouts
-5. `remarkImageGrids` - Handle image grid layouts
-6. **`remarkMath`** - Parse LaTeX math syntax
-7. `remarkReadingTime` - Calculate reading time
-8. `remarkToc` - Generate table of contents
+2. `remarkBreaks` - Process line breaks
+3. `remarkFolderImages` - Handle folder-based images (⚠️ MUST skip non-image files)
+4. `remarkObsidianEmbeds` - Process Obsidian embed syntax
+5. `remarkBases` - Process base directives
+6. `remarkImageCaptions` - Process image captions
+7. **`remarkMath`** - Parse LaTeX math syntax
+8. `remarkCallouts` - Process Obsidian-style callouts
+9. `remarkImageGrids` - Handle image grid layouts
+10. `remarkMermaid` - Process Mermaid diagrams
+11. `remarkReadingTime` - Calculate reading time
+12. `remarkToc` - Generate table of contents
 
 **Rehype Plugins (Rendering Order):**
 1. **`rehypeKatex`** - Render math with KaTeX (first in chain)
@@ -3079,13 +3269,17 @@ The Mermaid processing is integrated into the existing markdown pipeline:
 
 **Remark Plugins (Processing Order):**
 1. `remarkInternalLinks` - Process wikilinks and standard links
-2. `remarkFolderImages` - Handle folder-based images
-3. `remarkImageCaptions` - Process image captions
-4. `remarkCallouts` - Process Obsidian-style callouts
-5. `remarkImageGrids` - Handle image grid layouts
-6. **`remarkMermaid`** - Parse Mermaid code blocks
-7. `remarkReadingTime` - Calculate reading time
-8. `remarkToc` - Generate table of contents
+2. `remarkBreaks` - Process line breaks
+3. `remarkFolderImages` - Handle folder-based images (⚠️ MUST skip non-image files)
+4. `remarkObsidianEmbeds` - Process Obsidian embed syntax
+5. `remarkBases` - Process base directives
+6. `remarkImageCaptions` - Process image captions
+7. `remarkMath` - Parse LaTeX math syntax
+8. `remarkCallouts` - Process Obsidian-style callouts
+9. `remarkImageGrids` - Handle image grid layouts
+10. **`remarkMermaid`** - Parse Mermaid code blocks
+11. `remarkReadingTime` - Calculate reading time
+12. `remarkToc` - Generate table of contents
 
 #### Performance Features
 - **Lazy Loading**: Uses Intersection Observer API for viewport-based rendering
@@ -3663,15 +3857,19 @@ The embed processing is integrated into the existing markdown pipeline:
 
 **Remark Plugins (Processing Order):**
 1. `remarkInternalLinks` - Process wikilinks and standard links
-2. `remarkFolderImages` - Handle folder-based images
-3. `remarkImageCaptions` - Process image captions
-4. `remarkMath` - Parse LaTeX math syntax
-5. `remarkCallouts` - Process Obsidian-style callouts
-6. `remarkImageGrids` - Handle image grid layouts
-7. **`remarkObsidianEmbeds`** - Process Obsidian embed syntax
-8. `remarkMermaid` - Process Mermaid diagrams
-9. `remarkReadingTime` - Calculate reading time
-10. `remarkToc` - Generate table of contents
+2. `remarkBreaks` - Process line breaks
+3. `remarkFolderImages` - Handle folder-based images (⚠️ MUST skip non-image files)
+4. **`remarkObsidianEmbeds`** - Process Obsidian embed syntax (audio, video, PDF, YouTube, Twitter)
+5. `remarkBases` - Process base directives
+6. `remarkImageCaptions` - Process image captions
+7. `remarkMath` - Parse LaTeX math syntax
+8. `remarkCallouts` - Process Obsidian-style callouts
+9. `remarkImageGrids` - Handle image grid layouts
+10. `remarkMermaid` - Process Mermaid diagrams
+11. `remarkReadingTime` - Calculate reading time
+12. `remarkToc` - Generate table of contents
+
+**⚠️ CRITICAL**: `remarkFolderImages` runs BEFORE `remarkObsidianEmbeds`. It MUST skip non-image files (audio, video, PDF) to prevent breaking embeds. See [Plugin Order and Embed Handling](#12--plugin-order-and-embed-handling-critical) for details.
 
 ### Supported Embed Types
 
@@ -3722,8 +3920,11 @@ The embed processing is integrated into the existing markdown pipeline:
 - **Audio Processing**: Detects audio file extensions and generates HTML5 audio elements
 - **Video Processing**: Detects video file extensions and generates HTML5 video elements
 - **YouTube Processing**: Extracts video IDs and generates embed iframes
-- **PDF Processing**: Generates iframe viewers with download links
+- **PDF Processing**: Generates iframe viewers with download links (preserves hash fragments for page linking)
 - **Twitter Processing**: Generates Twitter widget embeds
+- **URL Resolution**: Handles both relative (`attachments/file.mp4`) and absolute (`/posts/attachments/file.mp4`) URLs
+- **URL Cleanup**: Removes pipe syntax (`|alt text`) and fragments (`#page=3`) before processing, but preserves fragments for PDFs
+- **External URL Processing**: Processes external URLs (YouTube, Twitter) FIRST before attachment processing to prevent conflicts
 
 #### CSS Styling
 ```css
@@ -3776,6 +3977,16 @@ The embed implementation maintains full compatibility with Obsidian:
 - **Print Styles**: Embeds render correctly in print layouts
 
 ### Best Practices for AI Agents
+
+#### 🚨 CRITICAL: Plugin Order Dependencies
+
+**⚠️ ALWAYS CHECK PLUGIN ORDER BEFORE MODIFYING EMBED PROCESSING ⚠️**
+
+- **`remarkFolderImages` runs BEFORE `remarkObsidianEmbeds`** - This is critical!
+- **`remarkFolderImages` MUST skip non-image files** - It processes ALL image nodes, including embeds
+- **If `remarkFolderImages` processes audio/video/PDF**, they get converted to `.webp` and break
+- **The fix**: `remarkFolderImages` checks file extensions and skips non-image files
+- **See [Plugin Order and Embed Handling](#12--plugin-order-and-embed-handling-critical) for complete details**
 
 #### Embed Implementation
 - **Always use Obsidian syntax**: Maintain compatibility with Obsidian workflows
@@ -3891,7 +4102,16 @@ The comments are styled to match your theme automatically. If you see styling is
 
 ### Critical Distinctions to Remember
 
-#### 1. **🚨 MATH RENDERING DUPLICATION (MOST CRITICAL)**
+#### 1. **🚨 NEVER EDIT MARKDOWN CONTENT (MOST CRITICAL)**
+- **NEVER edit markdown files** in `src/content/` without explicit user permission
+- **NEVER modify post content, frontmatter, or any user content** without being asked
+- **ALWAYS ask for explicit permission** before touching any content files
+- **Content files are sacred** - they belong to the user, not the AI agent
+- **Only edit configuration, component, and utility files** unless specifically requested
+- **This includes**: posts, pages, projects, docs, and any other content in `src/content/`
+- **The user's content is their intellectual property** - respect it absolutely
+
+#### 2. **🚨 MATH RENDERING DUPLICATION (CRITICAL)**
 - **NEVER hide MathML output** - MathML is the properly formatted version
 - **ALWAYS hide HTML output** - HTML output is the broken, plain text version
 - **The correct CSS is:**
@@ -3906,7 +4126,7 @@ The comments are styled to match your theme automatically. If you see styling is
   ```
 - **This mistake causes "E=mc2E=mc2" duplication where math appears twice**
 
-#### 2. **🚨 SWUP PAGE TRANSITIONS BREAK JAVASCRIPT (CRITICAL)**
+#### 3. **🚨 SWUP PAGE TRANSITIONS BREAK JAVASCRIPT (CRITICAL)**
 - **NEVER assume JavaScript works after page transitions** - Swup replaces DOM content without triggering `DOMContentLoaded`
 - **ALWAYS re-initialize JavaScript after Swup transitions** - Use Swup hooks in `BaseLayout.astro`
 - **The correct approach:**
@@ -3941,24 +4161,46 @@ The comments are styled to match your theme automatically. If you see styling is
   - "It works on first load but not after navigation"
 - **This is the #1 most common issue** - affects ToC collapse, command palette, theme toggles, etc.
 
-#### 3. **🚨 PRODUCTION LOGGING (CRITICAL)**
+#### 4. **🚨 USE `id` NOT `slug` (CRITICAL - ASTRO v6)**
+- **NEVER use `entry.slug`** - It's deprecated in Astro v6 and causes "undefined" URLs
+- **ALWAYS use `entry.id`** - This is the modern API that works correctly
+- **Common mistake**: `post.slug` → causes command palette to navigate to "undefined"
+- **Correct usage**: `post.id` → properly generates URLs like `/posts/getting-started`
+- **Why it matters**: In Astro v5/v6, `id` IS the slug. The old `slug` property is removed.
+- **Reference**: [Astro v6 Upgrade Guide](https://deploy-preview-12322--astro-docs-2.netlify.app/en/guides/upgrade-to/v6/#upgrade-astro)
+- **Where to check**:
+  - API endpoints: `src/pages/api/*.json.ts`
+  - Dynamic routes: `src/pages/[...slug].astro`
+  - Component props: Any component receiving collection entries
+  - URL generation: Anywhere constructing URLs from entries
+- **Example fix**:
+  ```typescript
+  // ❌ WRONG - slug is deprecated
+  url: `/posts/${post.slug}`,  // undefined!
+  
+  // ✅ CORRECT - id is the modern API
+  url: `/posts/${post.id}`,    // works correctly
+  ```
+
+#### 5. **🚨 PRODUCTION LOGGING (CRITICAL)**
 - **NEVER use raw `console.log()`** in production code
 - **Use the project's logger utility** (`src/utils/logger.ts`) for any logging needs
 - **Keep console output clean** for professional deployments
 
-#### 3. **Image System Confusion (Most Common)**
+#### 6. **Image System Confusion (Most Common)**
 - **Post cards** show images based on `showPostCardCoverImages` config, NOT `hideCoverImage` frontmatter
 - **Post content** shows images based on `hideCoverImage` frontmatter, NOT config
 - These are completely separate systems - don't mix them up!
 
-#### 3. **Linking Behavior Confusion (Important)**
-- **Wikilinks (`[[...]]`) only work with posts** - this is intentional and matches Obsidian's primary use case
-- **Standard markdown links (`[text](url)`) work with all content types** - use these for pages, projects, docs
+#### 7. **Linking Behavior Confusion (Important)**
+- **Standard markdown links (`[text](url)`) are the most ideal** - use these for linking between different content types (posts, pages, projects, docs)
+- **Wikilinks (`[[...]]`) only work with posts** - use these only if you exclusively link between posts and want the Obsidian-native feel
+- **Best Practice**: Prefer standard markdown links for maximum flexibility and cross-content-type linking
 - **Don't try to extend wikilinks to other collections** - use standard links instead: `[Page Title](page-slug)`, `[Project](projects/project-slug)`, `[Doc](docs/doc-slug)`
 - **Linked mentions only track posts** - pages, projects, and docs are not included in linked mentions
 - **File renamed for clarity**: `wikilinks.ts` → `internallinks.ts` to distinguish between the two behaviors
 
-#### 4. **🚨 URL MAPPING SYSTEM CONFUSION (CRITICAL)**
+#### 8. **🚨 URL MAPPING SYSTEM CONFUSION (CRITICAL)**
 - **URL mapping is for RENDERING ONLY** - it doesn't affect linked mentions or graph view filtering
 - **Linked mentions and graph view remain posts-only** - URL mapping doesn't change this behavior
 - **Two separate systems**:
@@ -3967,7 +4209,7 @@ The comments are styled to match your theme automatically. If you see styling is
 - **Don't confuse the systems** - URL mapping makes links work, but doesn't change feature scope
 - **Test both systems independently** - URL mapping and linked mentions are separate concerns
 
-#### 5. **🚨 FOLDER-BASED CONTENT ASSUMPTIONS (CRITICAL)**
+#### 9. **🚨 FOLDER-BASED CONTENT ASSUMPTIONS (CRITICAL)**
 - **ALL content types support folder-based organization** - not just posts
 - **Pages, projects, and docs work identically to posts** for folder-based content
 - **Don't assume folder-based is posts-only** - all collections handle `folder-name/index.md` structure
@@ -3975,12 +4217,99 @@ The comments are styled to match your theme automatically. If you see styling is
 - **Asset syncing works for all content types** - images, PDFs, etc. are copied to public directory
 - **URL generation is consistent** - folder name becomes slug for all content types
 
-#### 6. **H1 Title Handling**
+#### 10. **🚨 FOLDER-BASED POST ID DETECTION (CRITICAL - ASTRO v6)**
+- **NEVER use `post.id.includes('/') && post.id.endsWith('/index')`** - This is WRONG for Astro v6
+- **Astro v6 folder-based posts have IDs like `'folder-name'`** - NOT `'folder-name/index'`
+- **CORRECT detection logic:**
+  ```javascript
+  // ❌ WRONG - This will NEVER match folder-based posts in Astro v6
+  const isFolderBasedPost = post.id.includes('/') && post.id.endsWith('/index');
+  
+  // ✅ CORRECT - Check if post has folder structure by other means
+  // Option 1: Check if post has co-located images (not in attachments/)
+  const isFolderBasedPost = post.data.image && !post.data.image.includes('attachments/');
+  
+  // Option 2: Use a known list of folder-based posts
+  const folderBasedPostIds = ['sample-folder-based-post', 'another-folder-post'];
+  const isFolderBasedPost = folderBasedPostIds.includes(post.id);
+  
+  // Option 3: Check file system (server-side only)
+  const isFolderBasedPost = await checkIfPostHasFolderStructure(post.id);
+  ```
+- **Why this matters**: Wrong detection causes folder-based posts to use `/posts/attachments/` instead of `/posts/folder-name/` for images
+- **Common symptoms**: Folder-based post images don't display on post cards
+- **This mistake breaks folder-based post functionality completely**
+
+#### 11. **🚨 LINKED MENTIONS EXCERPT LOGIC (CRITICAL)**
+- **NEVER use word/phrase matching** - All logic must be structural/syntax-based only
+- **Markdown cleanup** should only remove syntax artifacts (code blocks, formatting markers, structural patterns)
+- **Ellipsis placement** should detect endings using punctuation patterns (`.!?`, `,:;-`, letter endings), NOT specific words
+- **Link detection** should use slug comparison and structural patterns, NOT word matching
+- **Common mistakes**:
+  - ❌ Matching phrases like "Further reading", "See also", "Start lines with"
+  - ❌ Matching specific conjunctions like "or", "and", "but" as words
+  - ❌ Removing specific phrases from cleanup logic
+  - ✅ Using structural patterns like `/[.!?]\s*$/` (sentence endings), `/<\/mark>/i` (link HTML), `/([A-Z][a-z]+):/` (any label pattern)
+- **See [Linked Mentions Excerpt Extraction Logic](#linked-mentions-excerpt-extraction-logic) section for detailed guidelines**
+
+#### 12. **🚨 PLUGIN ORDER AND EMBED HANDLING (CRITICAL)**
+- **ALWAYS check plugin execution order** in `astro.config.mjs` before modifying remark/rehype plugins
+- **Plugins execute sequentially** - each plugin transforms the AST and passes it to the next
+- **Changes in one plugin affect subsequent plugins** - always trace the full data flow
+- **Critical plugin order** (from `astro.config.mjs`):
+  ```javascript
+  remarkPlugins: [
+    remarkInternalLinks,      // 1. Process wikilinks and standard links
+    remarkBreaks,              // 2. Process line breaks
+    remarkFolderImages,        // 3. ⚠️ Processes ALL image nodes - converts URLs and adds WebP
+    remarkObsidianEmbeds,      // 4. ⚠️ Processes embeds (audio, video, PDF, YouTube, Twitter)
+    remarkBases,               // 5. Process base directives
+    remarkImageCaptions,       // 6. Process image captions
+    remarkMath,                // 7. Parse LaTeX math
+    remarkCallouts,            // 8. Process callouts
+    remarkImageGrids,          // 9. Handle image grids
+    remarkMermaid,            // 10. Process Mermaid diagrams
+    remarkReadingTime,         // 11. Calculate reading time
+    remarkToc,                 // 12. Generate table of contents
+  ]
+  ```
+- **The Problem**: `remarkFolderImages` runs BEFORE `remarkObsidianEmbeds`
+  - `remarkFolderImages` processes ALL image nodes and converts URLs to WebP
+  - If it processes audio/video/PDF embeds, they get converted to `.webp` extensions
+  - Then `remarkObsidianEmbeds` can't detect them because extensions are wrong
+- **The Solution**: `remarkFolderImages` MUST skip non-image files:
+  ```typescript
+  // ✅ CORRECT - Skip non-image files in remarkFolderImages
+  const nonImageExtensions = ['.mp3', '.wav', '.ogg', '.m4a', '.3gp', '.flac', '.aac', // audio
+                              '.mp4', '.webm', '.ogv', '.mov', '.mkv', '.avi', // video
+                              '.pdf']; // PDF
+  if (nonImageExtensions.some(ext => urlLower.endsWith(ext))) {
+    return; // Let remarkObsidianEmbeds handle these
+  }
+  ```
+- **URL Resolution**: `remarkObsidianEmbeds` handles both relative and absolute URLs:
+  - Relative: `attachments/video.mp4` → `/posts/attachments/video.mp4`
+  - Absolute: `/posts/attachments/video.mp4` → Use as-is (already converted by remarkFolderImages)
+- **External URLs**: Process external URLs (YouTube, Twitter) FIRST before attachment processing
+- **URL Cleanup**: Remove pipe syntax (`|alt text`) and fragments (`#page=3`) before processing, but preserve fragments for PDFs
+- **Common mistakes**:
+  - ❌ Adding WebP conversion to `remarkFolderImages` without checking what else processes images
+  - ❌ Assuming plugins work independently - they don't, they transform the AST sequentially
+  - ❌ Not testing edge cases (embeds, external URLs, etc.) before making changes
+  - ❌ Modifying plugin logic without checking execution order
+- **Always do before modifying plugins**:
+  1. Check plugin order in `astro.config.mjs`
+  2. Trace data flow: input → plugin 1 → plugin 2 → output
+  3. Consider side effects: what else processes this data?
+  4. Test comprehensively: don't assume changes only affect intended targets
+- **This mistake breaks audio, video, PDF, and YouTube embeds completely**
+
+#### 13. **H1 Title Handling**
 - **Both Posts and Pages**: NO H1 in markdown content - title comes from frontmatter, content starts with H2
 - **H1 is hardcoded** in both PostLayout and PageLayout using frontmatter title
 - **NEVER add H1** to any markdown content - both posts and pages have hardcoded H1s from frontmatter
 
-#### 7. **Custom Collections Approach**
+#### 14. **Custom Collections Approach**
 - **Use subfolders within pages collection** - avoid creating custom collections at content level
 - **No Astro warnings** - subfolders within pages don't trigger auto-generation warnings
 - **Same URL structure** - `/services/web-development` works the same way
@@ -3989,7 +4318,7 @@ The comments are styled to match your theme automatically. If you see styling is
   - `pages/services/web-development.md` → `/services/web-development`
   - `pages/services/web-development/index.md` → `/services/web-development`
 
-#### 8. **🚨 FAVICON THEME BEHAVIOR (CRITICAL)**
+#### 15. **🚨 FAVICON THEME BEHAVIOR (CRITICAL)**
 - **Favicon should NOT change with manual theme toggle** - it should only change with browser system theme
 - **SIMPLE WORKING IMPLEMENTATION** (20 lines max, add to BaseLayout.astro script section):
   ```javascript
@@ -4021,25 +4350,25 @@ The comments are styled to match your theme automatically. If you see styling is
 - **Files**: Use `.png` format (matches existing favicon files)
 - **Behavior**: Favicon reflects OS/browser theme preference, ignores website theme toggle
 
-#### 9. **🎨 COLOR USAGE (CRITICAL)**
+#### 16. **🎨 COLOR USAGE (CRITICAL)**
 - **NEVER use hardcoded colors** - Always use theme variables from `src/themes/index.ts`
 - **Use Tailwind classes** that reference theme variables (`primary-*`, `highlight-*`)
 - **Include dark mode variants** for all color definitions (`dark:bg-primary-800`)
 - **Check existing code** for hardcoded colors and replace them
 - **Reference theme files** to understand available color scales
 
-#### 10. **Package Manager**
+#### 17. **Package Manager**
 - Always use `pnpm` instead of `npm` for all commands
 - Scripts: `pnpm run <script-name>`, not `npm run <script-name>`
 
-#### 11. **Deployment Platform Configuration**
+#### 18. **Deployment Platform Configuration**
 - **Set platform once in config** - Use `deployment.platform` in `src/config.ts`, not environment variables
 - **No environment variables needed** - The build process automatically detects the platform from config
 - **Platform options**: "netlify", "vercel", "github-pages" (all lowercase with hyphens)
 - **Backward compatibility**: Environment variables still work but are not recommended
 - **Configuration files**: Automatically generated based on platform choice
 
-#### 12. **Homepage Configuration Structure**
+#### 19. **Homepage Configuration Structure**
 - **Use `homeOptions`** - All homepage content is now under `homeOptions`, not `features` or `homeBlurb`
 - **Featured Post**: Use `homeOptions.featuredPost` with `type: "latest"` or `type: "featured"`
 - **Slug Flexibility**: Slug can be present even when `type: "latest"` - it will be ignored until switched to "featured"
@@ -4048,10 +4377,25 @@ The comments are styled to match your theme automatically. If you see styling is
 - **Blurb**: Use `homeOptions.blurb` with `placement: "above" | "below" | "none"`
 - **Old References**: `showLatestPost`, `recentPostsCount`, and `homeBlurb` are deprecated
 
-#### 11. **Development vs Production Behavior**
+#### 20. **Development vs Production Behavior**
 - **Development**: Missing images show placeholders, warnings are logged
 - **Production**: Missing images cause build failures
 - Always run `pnpm run check-images` before deploying
+
+#### 21. **🚨 NEVER DISABLE ASTRO DEV TOOLBAR (CRITICAL)**
+- **NEVER disable the Astro dev toolbar** - Always keep `devToolbar.enabled: true` in `astro.config.mjs`
+- **The dev toolbar is a critical development tool** - It provides debugging, auditing, and inspection capabilities
+- **Module loading errors with pnpm are harmless** - Known issue with pnpm's nested node_modules structure - errors appear in console but toolbar still works
+- **If dev toolbar modules fail to load:**
+  - **With pnpm**: Console errors are expected and harmless - toolbar functionality works despite errors
+  - **With npm/yarn**: Check Vite HMR configuration (should be enabled)
+  - Verify Vite server configuration is correct
+  - Ensure TypeScript module resolution is properly configured
+  - Check for duplicate `vite.server` configuration blocks
+  - **DO NOT** disable the toolbar as a workaround
+- **The toolbar is development-only** - It automatically excludes itself from production builds
+- **Configuration location**: `astro.config.mjs` → `devToolbar: { enabled: true }`
+- **Known pnpm issue**: Dev toolbar module loading errors in console with pnpm are cosmetic - functionality is unaffected
 
 ### Accessibility Warnings
 

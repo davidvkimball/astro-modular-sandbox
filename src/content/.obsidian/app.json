@@ -1,10 +1,10 @@
 {
-  "showInlineTitle": true,
+  "showInlineTitle": false,
   "promptDelete": true,
   "showIndentGuide": false,
-  "attachmentFolderPath": "./attachments",
+  "attachmentFolderPath": "./",
   "userIgnoreFilters": [
-    "_bases/"
+    "bases/"
   ],
   "focusNewTab": false,
   "mobilePullAction": "file-explorer:new-file",
@@ -31,9 +31,9 @@
     "editor:toggle-checklist-status",
     "editor:indent-list",
     "editor:unindent-list",
-    "astro-composer:rename-note",
     "astro-composer:standardize-properties",
     "astro-composer:convert-wikilinks-astro",
+    "seo:seo-run-current",
     "editor:configure-toolbar"
   ],
   "newFileLocation": "folder",

@@ -48,6 +48,8 @@ views:
     cardSize: 230
     image: note.image
     imageAspectRatio: 0.55
+    columnSize:
+      note.title: 235
   - type: cards
     name: Standard Pages
     filters:

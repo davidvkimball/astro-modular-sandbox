@@ -33,29 +33,71 @@
   "duplicateThreshold": 80,
   "cachedGlobalResults": [
     {
-      "file": "posts/astro-suite-obsidian-vault-guide-astro-modular.md",
-      "displayName": "Astro Suite Obsidian Vault Guide (Astro Modular)",
+      "file": "posts/sample-folder-based-post/index.md",
+      "displayName": "Sample Folder-Based Post",
       "checks": {
-        "titleLength": [],
-        "metaDescription": [
+        "titleLength": [
           {
             "passed": false,
-            "message": "No frontmatter found",
-            "suggestion": "Add frontmatter with description property",
+            "message": "Title too short: 24 characters",
+            "suggestion": "Aim for 30-60 characters",
             "severity": "warning"
           }
         ],
-        "titleH1Uniqueness": [],
-        "keywordInTitle": [],
-        "keywordInDescription": [],
-        "keywordInHeadings": [],
-        "keywordInSlug": [],
+        "metaDescription": [
+          {
+            "passed": false,
+            "message": "Description too short: 60 characters",
+            "suggestion": "Aim for 120-160 characters",
+            "severity": "warning"
+          }
+        ],
+        "titleH1Uniqueness": [
+          {
+            "passed": false,
+            "message": "Meta title and H1 are identical",
+            "suggestion": "Modify one to be unique, or specify a suffix/prefix in plugin settings",
+            "severity": "warning"
+          }
+        ],
+        "keywordInTitle": [
+          {
+            "passed": false,
+            "message": "Keyword not found in title",
+            "suggestion": "Include your target keyword in the title",
+            "severity": "warning"
+          }
+        ],
+        "keywordInDescription": [
+          {
+            "passed": false,
+            "message": "Keyword not found in description",
+            "suggestion": "Include your target keyword in the description",
+            "severity": "warning"
+          }
+        ],
+        "keywordInHeadings": [
+          {
+            "passed": false,
+            "message": "Keyword not found in H1",
+            "suggestion": "Include your target keyword in the H1 heading for better SEO",
+            "severity": "warning"
+          }
+        ],
+        "keywordInSlug": [
+          {
+            "passed": false,
+            "message": "Target keyword \"\"\"\" not found in slug",
+            "suggestion": "Include your target keyword in the filename",
+            "severity": "warning"
+          }
+        ],
         "slugFormat": [],
         "keywordDensity": [
           {
             "passed": false,
-            "message": "No frontmatter found",
-            "suggestion": "Add frontmatter with keyword property",
+            "message": "Keyword density too low: 0.0%",
+            "suggestion": "Aim for at least 1% density",
             "severity": "warning"
           }
         ],
@@ -68,9 +110,10 @@
         ],
         "contentLength": [
           {
-            "passed": true,
-            "message": "Good content length: 1634 words",
-            "severity": "info"
+            "passed": false,
+            "message": "Content too short: 82 words",
+            "suggestion": "Aim for at least 300 words",
+            "severity": "warning"
           }
         ],
         "duplicateTitles": [],
@@ -79,7 +122,7 @@
         "altText": [
           {
             "passed": true,
-            "message": "All images have alt text",
+            "message": "All media elements have alt text",
             "severity": "info"
           }
         ],
@@ -115,13 +158,119 @@
         "externalBrokenLinks": [
           {
             "passed": true,
-            "message": "External link: https://github.com/davidvkimball/astro-modular",
+            "message": "No external links found",
+            "severity": "info"
+          }
+        ],
+        "readingLevel": [
+          {
+            "passed": true,
+            "message": "Good reading level: 9.9 (Moderately easy to read)",
+            "severity": "info"
+          }
+        ]
+      },
+      "overallScore": 40,
+      "issuesCount": 0,
+      "warningsCount": 9,
+      "noticesCount": 0
+    },
+    {
+      "file": "posts/obsidian-vault-guide.md",
+      "displayName": "Obsidian Vault Guide",
+      "checks": {
+        "titleLength": [],
+        "metaDescription": [
+          {
+            "passed": false,
+            "message": "No frontmatter found",
+            "suggestion": "Add frontmatter with description property",
+            "severity": "warning"
+          }
+        ],
+        "titleH1Uniqueness": [],
+        "keywordInTitle": [],
+        "keywordInDescription": [],
+        "keywordInHeadings": [],
+        "keywordInSlug": [],
+        "slugFormat": [],
+        "keywordDensity": [
+          {
+            "passed": false,
+            "message": "No frontmatter found",
+            "suggestion": "Add frontmatter with keyword property",
+            "severity": "warning"
+          }
+        ],
+        "headingOrder": [
+          {
+            "passed": true,
+            "message": "Heading structure is correct",
+            "severity": "info"
+          }
+        ],
+        "contentLength": [
+          {
+            "passed": true,
+            "message": "Good content length: 1743 words",
+            "severity": "info"
+          }
+        ],
+        "duplicateTitles": [],
+        "duplicateDescriptions": [],
+        "duplicateContent": [],
+        "altText": [
+          {
+            "passed": true,
+            "message": "All media elements have alt text",
+            "severity": "info"
+          }
+        ],
+        "imageFileNames": [
+          {
+            "passed": true,
+            "message": "All images have good file names",
+            "severity": "info"
+          }
+        ],
+        "nakedLinks": [
+          {
+            "passed": true,
+            "message": "No naked links found",
+            "severity": "info"
+          }
+        ],
+        "brokenLinks": [
+          {
+            "passed": true,
+            "message": "No broken internal links found",
+            "severity": "info"
+          }
+        ],
+        "potentiallyBrokenLinks": [
+          {
+            "passed": true,
+            "message": "Relative path link: Astro and Obsidian logos stacked vertically with a \"+\" (plus) sign between them.",
+            "suggestion": "This link may be valid for static site generators but may not work in Obsidian",
+            "severity": "notice",
+            "position": {
+              "line": 22,
+              "searchText": "[Astro and Obsidian logos stacked vertically with a \"+\" (plus) sign between them.](/posts/attachments/astro-composer-suite-for-obsidian.png)",
+              "context": "  - astro-suite-obsidian-vault-guide-astro-modular\r\n---\r\n![Astro and Obsidian logos stacked vertically with a \"+\" (plus) sign between them.](/posts/attachments/astro-composer-suite-for-obsidian.png)\r\n\r\n## Overview\r"
+            }
+          }
+        ],
+        "potentiallyBrokenEmbeds": [],
+        "externalBrokenLinks": [
+          {
+            "passed": true,
+            "message": "External link: https://github.com/davidvkimball/obsidian-oxygen",
             "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
             "severity": "notice",
             "position": {
-              "line": 24,
-              "searchText": "https://github.com/davidvkimball/astro-modular",
-              "context": "## Overview\r\n\r\nAll plugins, key bindings, and the theme can be customized to your liking, but this is what's on by default. Optimized for use with the [Modular Astro theme](https://github.com/davidvkimball/astro-modular). \r\n\r\n## Philosophy \r"
+              "line": 36,
+              "searchText": "https://github.com/davidvkimball/obsidian-oxygen",
+              "context": "## Theme\r\n\r\nFor out-of-the-box customization, [Oxygen](https://github.com/davidvkimball/obsidian-oxygen) theme is used, based on the [Minimal theme system](https://minimal.guide/home). It uses a slick color scheme that's highly customizable. \r\n\r\nThe [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings), [Hider](https://github.com/kepano/obsidian-hider), and [Style Settings](https://obsidian.md/plugins?id=obsidian-style-settings) community plugins are also installed by default, giving you complete control over your experience. You can even define your own color scheme presets and tweak just about anything.\r"
             }
           },
           {
@@ -130,20 +279,20 @@
             "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
             "severity": "notice",
             "position": {
-              "line": 34,
+              "line": 36,
               "searchText": "https://minimal.guide/home",
-              "context": "## Theme\r\n\r\nFor out-of-the-box customization, [Minimal](https://minimal.guide/home) theme is used. It uses an understated color scheme with high contract options. \r\n\r\nThe [Minimal Theme Settings](https://github.com/kepano/obsidian-minimal-settings), [Hider](https://github.com/kepano/obsidian-hider), and [Style Settings](https://obsidian.md/plugins?id=obsidian-style-settings) community plugins are also installed by default, giving you complete control over your experience. \r"
+              "context": "## Theme\r\n\r\nFor out-of-the-box customization, [Oxygen](https://github.com/davidvkimball/obsidian-oxygen) theme is used, based on the [Minimal theme system](https://minimal.guide/home). It uses a slick color scheme that's highly customizable. \r\n\r\nThe [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings), [Hider](https://github.com/kepano/obsidian-hider), and [Style Settings](https://obsidian.md/plugins?id=obsidian-style-settings) community plugins are also installed by default, giving you complete control over your experience. You can even define your own color scheme presets and tweak just about anything.\r"
             }
           },
           {
             "passed": true,
-            "message": "External link: https://github.com/kepano/obsidian-minimal-settings",
+            "message": "External link: https://github.com/davidvkimball/obsidian-oxygen-settings",
             "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
             "severity": "notice",
             "position": {
-              "line": 36,
-              "searchText": "https://github.com/kepano/obsidian-minimal-settings",
-              "context": "For out-of-the-box customization, [Minimal](https://minimal.guide/home) theme is used. It uses an understated color scheme with high contract options. \r\n\r\nThe [Minimal Theme Settings](https://github.com/kepano/obsidian-minimal-settings), [Hider](https://github.com/kepano/obsidian-hider), and [Style Settings](https://obsidian.md/plugins?id=obsidian-style-settings) community plugins are also installed by default, giving you complete control over your experience. \r\n\r\n## CSS Snippets\r"
+              "line": 38,
+              "searchText": "https://github.com/davidvkimball/obsidian-oxygen-settings",
+              "context": "For out-of-the-box customization, [Oxygen](https://github.com/davidvkimball/obsidian-oxygen) theme is used, based on the [Minimal theme system](https://minimal.guide/home). It uses a slick color scheme that's highly customizable. \r\n\r\nThe [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings), [Hider](https://github.com/kepano/obsidian-hider), and [Style Settings](https://obsidian.md/plugins?id=obsidian-style-settings) community plugins are also installed by default, giving you complete control over your experience. You can even define your own color scheme presets and tweak just about anything.\r\n\r\n## CSS Snippets\r"
             }
           },
           {
@@ -152,9 +301,9 @@
             "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
             "severity": "notice",
             "position": {
-              "line": 36,
+              "line": 38,
               "searchText": "https://github.com/kepano/obsidian-hider",
-              "context": "For out-of-the-box customization, [Minimal](https://minimal.guide/home) theme is used. It uses an understated color scheme with high contract options. \r\n\r\nThe [Minimal Theme Settings](https://github.com/kepano/obsidian-minimal-settings), [Hider](https://github.com/kepano/obsidian-hider), and [Style Settings](https://obsidian.md/plugins?id=obsidian-style-settings) community plugins are also installed by default, giving you complete control over your experience. \r\n\r\n## CSS Snippets\r"
+              "context": "For out-of-the-box customization, [Oxygen](https://github.com/davidvkimball/obsidian-oxygen) theme is used, based on the [Minimal theme system](https://minimal.guide/home). It uses a slick color scheme that's highly customizable. \r\n\r\nThe [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings), [Hider](https://github.com/kepano/obsidian-hider), and [Style Settings](https://obsidian.md/plugins?id=obsidian-style-settings) community plugins are also installed by default, giving you complete control over your experience. You can even define your own color scheme presets and tweak just about anything.\r\n\r\n## CSS Snippets\r"
             }
           },
           {
@@ -163,9 +312,9 @@
             "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
             "severity": "notice",
             "position": {
-              "line": 36,
+              "line": 38,
               "searchText": "https://obsidian.md/plugins?id=obsidian-style-settings",
-              "context": "For out-of-the-box customization, [Minimal](https://minimal.guide/home) theme is used. It uses an understated color scheme with high contract options. \r\n\r\nThe [Minimal Theme Settings](https://github.com/kepano/obsidian-minimal-settings), [Hider](https://github.com/kepano/obsidian-hider), and [Style Settings](https://obsidian.md/plugins?id=obsidian-style-settings) community plugins are also installed by default, giving you complete control over your experience. \r\n\r\n## CSS Snippets\r"
+              "context": "For out-of-the-box customization, [Oxygen](https://github.com/davidvkimball/obsidian-oxygen) theme is used, based on the [Minimal theme system](https://minimal.guide/home). It uses a slick color scheme that's highly customizable. \r\n\r\nThe [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings), [Hider](https://github.com/kepano/obsidian-hider), and [Style Settings](https://obsidian.md/plugins?id=obsidian-style-settings) community plugins are also installed by default, giving you complete control over your experience. You can even define your own color scheme presets and tweak just about anything.\r\n\r\n## CSS Snippets\r"
             }
           },
           {
@@ -174,7 +323,7 @@
             "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
             "severity": "notice",
             "position": {
-              "line": 178,
+              "line": 298,
               "searchText": "https://obsidian.md/plugins?id=obsidian-git",
               "context": "### Git\r\n\r\nWith the [Git](https://obsidian.md/plugins?id=obsidian-git) plugin, you can easily publish to your Astro blog without leaving Obsidian using `CTRL + SHIFT + S`. Simply enable the plugin and configure with git to turn it on.\r\n\r\n### Disable Tabs\r"
             }
@@ -183,19 +332,19 @@
         "readingLevel": [
           {
             "passed": true,
-            "message": "Good reading level: 9.8 (Moderately easy to read)",
+            "message": "Good reading level: 9.9 (Moderately easy to read)",
             "severity": "info"
           }
         ]
       },
-      "overallScore": 79,
+      "overallScore": 76.77777777777777,
       "issuesCount": 0,
       "warningsCount": 2,
-      "noticesCount": 6
+      "noticesCount": 7
     },
     {
-      "file": "posts/sample-folder-based-post/index.md",
-      "displayName": "Sample Folder-Based Post",
+      "file": "posts/obsidian-embeds-demo.md",
+      "displayName": "Obsidian Embeds Demo",
       "checks": {
         "titleLength": [],
         "metaDescription": [
@@ -229,10 +378,9 @@
         ],
         "contentLength": [
           {
-            "passed": false,
-            "message": "Content too short: 131 words",
-            "suggestion": "Aim for at least 300 words",
-            "severity": "warning"
+            "passed": true,
+            "message": "Good content length: 762 words",
+            "severity": "info"
           }
         ],
         "duplicateTitles": [],
@@ -241,15 +389,21 @@
         "altText": [
           {
             "passed": true,
-            "message": "All images have alt text",
+            "message": "All media elements have alt text",
             "severity": "info"
           }
         ],
         "imageFileNames": [
           {
-            "passed": true,
-            "message": "All images have good file names",
-            "severity": "info"
+            "passed": false,
+            "message": "Image 2 has random file name: 1933196479801536736",
+            "suggestion": "Use descriptive file names",
+            "severity": "warning",
+            "position": {
+              "line": 53,
+              "searchText": "![Why doesn't everyone use Astro? Writing blog posts in markdown is beautiful.](https://x.com/davidvkimball/status/1933196479801536736)",
+              "context": "### Twitter/X Posts\r\n\r\n![Why doesn't everyone use Astro? Writing blog posts in markdown is beautiful.](https://x.com/davidvkimball/status/1933196479801536736)\r\n\r\nTwitter posts are embedded with theme-aware styling that matches your site's light/dark mode.\r"
+            }
           }
         ],
         "nakedLinks": [
@@ -277,22 +431,39 @@
         "externalBrokenLinks": [
           {
             "passed": true,
-            "message": "No external links found",
-            "severity": "info"
+            "message": "External link: https://www.youtube.com/watch?v=ZhizarvwLnU",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 47,
+              "searchText": "https://www.youtube.com/watch?v=ZhizarvwLnU",
+              "context": "### YouTube Videos\r\n\r\n![Astro Suite for Obsidian](https://www.youtube.com/watch?v=ZhizarvwLnU)\r\n\r\nYouTube videos are automatically embedded with responsive design and optimized settings.\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://x.com/davidvkimball/status/1933196479801536736",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 53,
+              "searchText": "https://x.com/davidvkimball/status/1933196479801536736",
+              "context": "### Twitter/X Posts\r\n\r\n![Why doesn't everyone use Astro? Writing blog posts in markdown is beautiful.](https://x.com/davidvkimball/status/1933196479801536736)\r\n\r\nTwitter posts are embedded with theme-aware styling that matches your site's light/dark mode.\r"
+            }
           }
         ],
         "readingLevel": [
           {
             "passed": true,
-            "message": "Good reading level: 11.2 (Moderately easy to read)",
+            "message": "Good reading level: 9.1 (Moderately easy to read)",
             "severity": "info"
           }
         ]
       },
-      "overallScore": 71.22727272727273,
+      "overallScore": 68.5,
       "issuesCount": 0,
       "warningsCount": 3,
-      "noticesCount": 0
+      "noticesCount": 2
     },
     {
       "file": "posts/getting-started.md",
@@ -301,7 +472,7 @@
         "titleLength": [
           {
             "passed": false,
-            "message": "Title too short: 20 characters",
+            "message": "Title too short: 12 characters",
             "suggestion": "Aim for 30-60 characters",
             "severity": "warning"
           }
@@ -338,7 +509,7 @@
         "contentLength": [
           {
             "passed": true,
-            "message": "Good content length: 1983 words",
+            "message": "Good content length: 504 words",
             "severity": "info"
           }
         ],
@@ -348,163 +519,7 @@
         "altText": [
           {
             "passed": true,
-            "message": "No images in this post",
-            "severity": "info"
-          }
-        ],
-        "imageFileNames": [
-          {
-            "passed": true,
-            "message": "All images have good file names",
-            "severity": "info"
-          }
-        ],
-        "nakedLinks": [
-          {
-            "passed": true,
-            "message": "No naked links found",
-            "severity": "info"
-          }
-        ],
-        "brokenLinks": [
-          {
-            "passed": true,
-            "message": "No broken internal links found",
-            "severity": "info"
-          }
-        ],
-        "potentiallyBrokenLinks": [
-          {
-            "passed": true,
-            "message": "Relative path link: About",
-            "suggestion": "This link may be valid for static site generators but may not work in Obsidian",
-            "severity": "notice",
-            "position": {
-              "line": 584,
-              "searchText": "[About](/about])",
-              "context": "- **Compact or detailed view** options for linked mentions display\r\n\r\n<small>*Because standard pages live under the `pages` folder and special pages live under the `special` folder, relative links won't BOTH work in Obsidian as expected to link *and* show up on your blog. If you don't care about it working in Obsidian, you can do something like <code>[About](/about])</code> and it will work as expected on your site.</small>\r\n\r\n### Linking Between Content Types\r"
-            }
-          }
-        ],
-        "potentiallyBrokenEmbeds": [],
-        "externalBrokenLinks": [
-          {
-            "passed": true,
-            "message": "External link: https://giscus.app",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 327,
-              "searchText": "https://giscus.app",
-              "context": "\r\n3. **Get Giscus Configuration**:\r\n   - Visit [giscus.app](https://giscus.app)\r\n   - Enter your repository: `username/repo-name`\r\n   - Select **\"General\"** as the discussion category\r"
-            }
-          },
-          {
-            "passed": true,
-            "message": "External link: https://docs.netlify.com/manage/forms/setup/",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 497,
-              "searchText": "https://docs.netlify.com/manage/forms/setup/",
-              "context": "### Other Page Details\r\n\r\nThe Contact page has an optional form embedded into it, which leads to the Thank You page when filled out. It's preconfigured to work with Netlify out of the box, you just have to [enable form detection](https://docs.netlify.com/manage/forms/setup/) on your project.\r\n\r\nAn optional Privacy Policy page can be edited or removed by deleting it if you don't want it. \r"
-            }
-          }
-        ],
-        "readingLevel": [
-          {
-            "passed": false,
-            "message": "Reading level too high: 12.1 (Moderately difficult to read)",
-            "suggestion": "Consider simplifying sentence structure and using shorter words",
-            "severity": "warning"
-          }
-        ]
-      },
-      "overallScore": 58,
-      "issuesCount": 0,
-      "warningsCount": 4,
-      "noticesCount": 3
-    },
-    {
-      "file": "posts/mermaid-diagram-test.md",
-      "displayName": "Mermaid Diagram Test",
-      "checks": {
-        "titleLength": [
-          {
-            "passed": false,
-            "message": "Title too short: 20 characters",
-            "suggestion": "Aim for 30-60 characters",
-            "severity": "warning"
-          }
-        ],
-        "metaDescription": [
-          {
-            "passed": false,
-            "message": "Description too short: 87 characters",
-            "suggestion": "Aim for 120-160 characters",
-            "severity": "warning"
-          }
-        ],
-        "titleH1Uniqueness": [
-          {
-            "passed": false,
-            "message": "Meta title and H1 are identical",
-            "suggestion": "Modify one to be unique, or specify a suffix/prefix in plugin settings",
-            "severity": "warning"
-          }
-        ],
-        "keywordInTitle": [
-          {
-            "passed": true,
-            "message": "No valid keyword defined in properties",
-            "severity": "notice"
-          }
-        ],
-        "keywordInDescription": [],
-        "keywordInHeadings": [
-          {
-            "passed": true,
-            "message": "No valid keyword defined in properties",
-            "severity": "notice"
-          }
-        ],
-        "keywordInSlug": [
-          {
-            "passed": true,
-            "message": "No valid keyword defined in properties",
-            "severity": "notice"
-          }
-        ],
-        "slugFormat": [],
-        "keywordDensity": [
-          {
-            "passed": true,
-            "message": "No valid keyword defined in properties",
-            "severity": "notice"
-          }
-        ],
-        "headingOrder": [
-          {
-            "passed": true,
-            "message": "Heading structure is correct",
-            "severity": "info"
-          }
-        ],
-        "contentLength": [
-          {
-            "passed": false,
-            "message": "Content too short: 105 words",
-            "suggestion": "Aim for at least 300 words",
-            "severity": "warning"
-          }
-        ],
-        "duplicateTitles": [],
-        "duplicateDescriptions": [],
-        "duplicateContent": [],
-        "altText": [
-          {
-            "passed": true,
-            "message": "No images in this post",
+            "message": "No media elements in this post",
             "severity": "info"
           }
         ],
@@ -546,17 +561,16 @@
         ],
         "readingLevel": [
           {
-            "passed": false,
-            "message": "Reading level too high: 16.3 (Difficult to read)",
-            "suggestion": "Consider simplifying sentence structure and using shorter words",
-            "severity": "warning"
+            "passed": true,
+            "message": "Good reading level: 8.6 (Easy to read)",
+            "severity": "info"
           }
         ]
       },
-      "overallScore": 55.833333333333336,
+      "overallScore": 73.5,
       "issuesCount": 0,
-      "warningsCount": 5,
-      "noticesCount": 4
+      "warningsCount": 3,
+      "noticesCount": 0
     },
     {
       "file": "posts/formatting-reference.md",
@@ -565,7 +579,7 @@
         "titleLength": [
           {
             "passed": false,
-            "message": "Title too short: 20 characters",
+            "message": "Title too short: 9 characters",
             "suggestion": "Aim for 30-60 characters",
             "severity": "warning"
           }
@@ -573,47 +587,23 @@
         "metaDescription": [
           {
             "passed": false,
-            "message": "Description too short: 99 characters",
-            "suggestion": "Aim for 120-160 characters",
+            "message": "No frontmatter found",
+            "suggestion": "Add frontmatter with description property",
             "severity": "warning"
           }
         ],
-        "titleH1Uniqueness": [
-          {
-            "passed": false,
-            "message": "Meta title and H1 are identical",
-            "suggestion": "Modify one to be unique, or specify a suffix/prefix in plugin settings",
-            "severity": "warning"
-          }
-        ],
-        "keywordInTitle": [
-          {
-            "passed": true,
-            "message": "No valid keyword defined in properties",
-            "severity": "notice"
-          }
-        ],
+        "titleH1Uniqueness": [],
+        "keywordInTitle": [],
         "keywordInDescription": [],
-        "keywordInHeadings": [
-          {
-            "passed": true,
-            "message": "No valid keyword defined in properties",
-            "severity": "notice"
-          }
-        ],
-        "keywordInSlug": [
-          {
-            "passed": true,
-            "message": "No valid keyword defined in properties",
-            "severity": "notice"
-          }
-        ],
+        "keywordInHeadings": [],
+        "keywordInSlug": [],
         "slugFormat": [],
         "keywordDensity": [
           {
-            "passed": true,
-            "message": "No valid keyword defined in properties",
-            "severity": "notice"
+            "passed": false,
+            "message": "No frontmatter found",
+            "suggestion": "Add frontmatter with keyword property",
+            "severity": "warning"
           }
         ],
         "headingOrder": [
@@ -623,16 +613,16 @@
             "suggestion": "H1 should be the first heading or not used at all",
             "severity": "warning",
             "position": {
-              "line": 34,
-              "searchText": "# Heading 1",
-              "context": "### Headings\n\n# Heading 1\n## Heading 2\n### Heading 3"
+              "line": 35,
+              "searchText": "# Heading 1\r",
+              "context": "### Headings\r\n\r\n# Heading 1\r\n## Heading 2\r\n### Heading 3\r"
             }
           }
         ],
         "contentLength": [
           {
             "passed": true,
-            "message": "Good content length: 1692 words",
+            "message": "Good content length: 1236 words",
             "severity": "info"
           }
         ],
@@ -641,59 +631,9 @@
         "duplicateContent": [],
         "altText": [
           {
-            "passed": false,
-            "message": "Image missing alt text: https://www.youtube.com/watch?v=ZhizarvwLnU",
-            "suggestion": "Add descriptive alt text for accessibility",
-            "severity": "error",
-            "position": {
-              "line": 160,
-              "searchText": "![](https://www.youtube.com/watch?v=ZhizarvwLnU)",
-              "context": "### YouTube Videos\n\n![](https://www.youtube.com/watch?v=ZhizarvwLnU)\n\nYouTube videos are automatically embedded with responsive design and optimized settings."
-            }
-          },
-          {
-            "passed": false,
-            "message": "Image missing alt text: https://x.com/davidvkimball/status/1933196479801536736",
-            "suggestion": "Add descriptive alt text for accessibility",
-            "severity": "error",
-            "position": {
-              "line": 180,
-              "searchText": "![](https://x.com/davidvkimball/status/1933196479801536736)",
-              "context": "### Twitter/X Posts\n\n![](https://x.com/davidvkimball/status/1933196479801536736)\n\nTwitter posts are embedded with theme-aware styling that matches your site's light/dark mode."
-            }
-          },
-          {
-            "passed": false,
-            "message": "Wikilink image missing alt text: attachments/video.mp4",
-            "suggestion": "Add alt text using ![[image.png|alt text]] syntax or consider using standard markdown image syntax",
-            "severity": "error",
-            "position": {
-              "line": 154,
-              "searchText": "![[attachments/video.mp4]]",
-              "context": "### Video Files\n\n![[attachments/video.mp4]]\n\nVideo files are embedded as HTML5 video players with controls and responsive design."
-            }
-          },
-          {
-            "passed": false,
-            "message": "Wikilink image missing alt text: attachments/sound.wav",
-            "suggestion": "Add alt text using ![[image.png|alt text]] syntax or consider using standard markdown image syntax",
-            "severity": "error",
-            "position": {
-              "line": 166,
-              "searchText": "![[attachments/sound.wav]]",
-              "context": "### Audio Files\n\n![[attachments/sound.wav]]\n\nAudio files are embedded as HTML5 audio players with controls and filename display."
-            }
-          },
-          {
-            "passed": false,
-            "message": "Wikilink image missing alt text: attachments/document.pdf",
-            "suggestion": "Add alt text using ![[image.png|alt text]] syntax or consider using standard markdown image syntax",
-            "severity": "error",
-            "position": {
-              "line": 172,
-              "searchText": "![[attachments/document.pdf]]",
-              "context": "### PDF Documents\n\n![[attachments/document.pdf]]\n\nPDFs are embedded as inline viewers with download links. "
-            }
+            "passed": true,
+            "message": "All media elements have alt text",
+            "severity": "info"
           }
         ],
         "imageFileNames": [
@@ -703,9 +643,9 @@
             "suggestion": "Use descriptive file names",
             "severity": "warning",
             "position": {
-              "line": 124,
+              "line": 125,
               "searchText": "![Mountain landscape](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)",
-              "context": "**Two Images Side by Side**\n\n![Mountain landscape](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\n![Ocean view](https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=600&fit=crop)\n"
+              "context": "**Two Images Side by Side**\r\n\r\n![Mountain landscape](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\r\n![Ocean view](https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=600&fit=crop)\r\n\r"
             }
           },
           {
@@ -714,9 +654,9 @@
             "suggestion": "Use descriptive file names",
             "severity": "warning",
             "position": {
-              "line": 125,
+              "line": 126,
               "searchText": "![Ocean view](https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=600&fit=crop)",
-              "context": "\n![Mountain landscape](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\n![Ocean view](https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=600&fit=crop)\n\n**Three Images in a Row**"
+              "context": "\r\n![Mountain landscape](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\r\n![Ocean view](https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=600&fit=crop)\r\n\r\n**Three Images in a Row**\r"
             }
           },
           {
@@ -725,9 +665,9 @@
             "suggestion": "Use descriptive file names",
             "severity": "warning",
             "position": {
-              "line": 129,
+              "line": 130,
               "searchText": "![Forest path](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop)",
-              "context": "**Three Images in a Row**\n\n![Forest path](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop)\n![Desert sunset](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\n![City skyline](https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop)"
+              "context": "**Three Images in a Row**\r\n\r\n![Forest path](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop)\r\n![Desert sunset](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\r\n![City skyline](https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop)\r"
             }
           },
           {
@@ -736,9 +676,9 @@
             "suggestion": "Use descriptive file names",
             "severity": "warning",
             "position": {
-              "line": 130,
+              "line": 131,
               "searchText": "![Desert sunset](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)",
-              "context": "\n![Forest path](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop)\n![Desert sunset](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\n![City skyline](https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop)\n"
+              "context": "\r\n![Forest path](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop)\r\n![Desert sunset](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\r\n![City skyline](https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop)\r\n\r"
             }
           },
           {
@@ -747,9 +687,9 @@
             "suggestion": "Use descriptive file names",
             "severity": "warning",
             "position": {
-              "line": 131,
+              "line": 132,
               "searchText": "![City skyline](https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop)",
-              "context": "![Forest path](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop)\n![Desert sunset](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\n![City skyline](https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop)\n\n**Four Images in a Row**"
+              "context": "![Forest path](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop)\r\n![Desert sunset](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\r\n![City skyline](https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop)\r\n\r\n**Four Images in a Row**\r"
             }
           },
           {
@@ -758,9 +698,9 @@
             "suggestion": "Use descriptive file names",
             "severity": "warning",
             "position": {
-              "line": 135,
+              "line": 136,
               "searchText": "![Winter landscape](https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop)",
-              "context": "**Four Images in a Row**\n\n![Winter landscape](https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop)\n![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)"
+              "context": "**Four Images in a Row**\r\n\r\n![Winter landscape](https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop)\r\n![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\r\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\r"
             }
           },
           {
@@ -769,9 +709,9 @@
             "suggestion": "Use descriptive file names",
             "severity": "warning",
             "position": {
-              "line": 136,
+              "line": 137,
               "searchText": "![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)",
-              "context": "\n![Winter landscape](https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop)\n![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\n![Autumn leaves](https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop)"
+              "context": "\r\n![Winter landscape](https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop)\r\n![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\r\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\r\n![Autumn leaves](https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop)\r"
             }
           },
           {
@@ -780,9 +720,9 @@
             "suggestion": "Use descriptive file names",
             "severity": "warning",
             "position": {
-              "line": 137,
+              "line": 138,
               "searchText": "![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)",
-              "context": "![Winter landscape](https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop)\n![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\n![Autumn leaves](https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop)\n"
+              "context": "![Winter landscape](https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop)\r\n![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\r\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\r\n![Autumn leaves](https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop)\r\n\r"
             }
           },
           {
@@ -791,20 +731,9 @@
             "suggestion": "Use descriptive file names",
             "severity": "warning",
             "position": {
-              "line": 138,
+              "line": 139,
               "searchText": "![Autumn leaves](https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop)",
-              "context": "![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\n![Autumn leaves](https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop)\n\n**How to Use Multiple Images / Gallery**"
-            }
-          },
-          {
-            "passed": false,
-            "message": "Image 12 has random file name: 1933196479801536736",
-            "suggestion": "Use descriptive file names",
-            "severity": "warning",
-            "position": {
-              "line": 180,
-              "searchText": "![](https://x.com/davidvkimball/status/1933196479801536736)",
-              "context": "### Twitter/X Posts\n\n![](https://x.com/davidvkimball/status/1933196479801536736)\n\nTwitter posts are embedded with theme-aware styling that matches your site's light/dark mode."
+              "context": "![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\r\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\r\n![Autumn leaves](https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop)\r\n\r\n**How to Use Multiple Images / Gallery**\r"
             }
           }
         ],
@@ -815,9 +744,9 @@
             "suggestion": "Convert to markdown link format: [link text](url)",
             "severity": "warning",
             "position": {
-              "line": 256,
+              "line": 221,
               "searchText": "https://example.com",
-              "context": "This is a [reference link][1] and this is another [reference link][markdown].\n\n[1]: https://example.com\n[markdown]: https://daringfireball.net/projects/markdown/\n"
+              "context": "This is a [reference link][1] and this is another [reference link][markdown].\r\n\r\n[1]: https://example.com\r\n[markdown]: https://daringfireball.net/projects/markdown/\r\n\r"
             }
           },
           {
@@ -826,9 +755,9 @@
             "suggestion": "Convert to markdown link format: [link text](url)",
             "severity": "warning",
             "position": {
-              "line": 257,
+              "line": 222,
               "searchText": "https://daringfireball.net/projects/markdown/",
-              "context": "\n[1]: https://example.com\n[markdown]: https://daringfireball.net/projects/markdown/\n\n## Mathematical Notation"
+              "context": "\r\n[1]: https://example.com\r\n[markdown]: https://daringfireball.net/projects/markdown/\r\n\r\n## Code Blocks\r"
             }
           }
         ],
@@ -842,38 +771,170 @@
         "potentiallyBrokenLinks": [
           {
             "passed": true,
-            "message": "Relative path link: Mermaid Diagram Test",
-            "suggestion": "This link may be valid for static site generators but may not work in Obsidian",
-            "severity": "notice",
-            "position": {
-              "line": 251,
-              "searchText": "[Mermaid Diagram Test](/posts/mermaid-diagram-test)",
-              "context": "Here's an internal link with an anchor: [[sample-folder-based-post/index#Benefits of Folder-Based Approach|Benefits of Folder-Based Approach]]\n\nHere's a relative link: [Mermaid Diagram Test](/posts/mermaid-diagram-test) \n### Reference Links\n"
-            }
+            "message": "No potentially broken links found",
+            "severity": "info"
           }
         ],
         "potentiallyBrokenEmbeds": [],
         "externalBrokenLinks": [
           {
             "passed": true,
-            "message": "Found 15 external link(s), all appear to resolve and are working",
-            "severity": "info"
+            "message": "External link: https://unsplash.com/@antoinerault?utm_source=Obsidian%20Image%20Inserter%20Plugin&utm_medium=referral",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 117,
+              "searchText": "https://unsplash.com/@antoinerault?utm_source=Obsidian%20Image%20Inserter%20Plugin&utm_medium=referral",
+              "context": "\r\n![Mountains](/posts/attachments/mountains.png)\r\n*Photo by [Antoine Rault](https://unsplash.com/@antoinerault?utm_source=Obsidian%20Image%20Inserter%20Plugin&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Obsidian%20Image%20Inserter%20Plugin&utm_medium=referral)*\r\n\r\n#### Multiple Image Layouts\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://unsplash.com/?utm_source=Obsidian%20Image%20Inserter%20Plugin&utm_medium=referral",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 117,
+              "searchText": "https://unsplash.com/?utm_source=Obsidian%20Image%20Inserter%20Plugin&utm_medium=referral",
+              "context": "\r\n![Mountains](/posts/attachments/mountains.png)\r\n*Photo by [Antoine Rault](https://unsplash.com/@antoinerault?utm_source=Obsidian%20Image%20Inserter%20Plugin&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Obsidian%20Image%20Inserter%20Plugin&utm_medium=referral)*\r\n\r\n#### Multiple Image Layouts\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 125,
+              "searchText": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+              "context": "**Two Images Side by Side**\r\n\r\n![Mountain landscape](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\r\n![Ocean view](https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=600&fit=crop)\r\n\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=600&fit=crop",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 126,
+              "searchText": "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=600&fit=crop",
+              "context": "\r\n![Mountain landscape](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\r\n![Ocean view](https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=600&fit=crop)\r\n\r\n**Three Images in a Row**\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 130,
+              "searchText": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop",
+              "context": "**Three Images in a Row**\r\n\r\n![Forest path](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop)\r\n![Desert sunset](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\r\n![City skyline](https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop)\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 132,
+              "searchText": "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
+              "context": "![Forest path](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop)\r\n![Desert sunset](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop)\r\n![City skyline](https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop)\r\n\r\n**Four Images in a Row**\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 136,
+              "searchText": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop",
+              "context": "**Four Images in a Row**\r\n\r\n![Winter landscape](https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop)\r\n![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\r\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 137,
+              "searchText": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop",
+              "context": "\r\n![Winter landscape](https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop)\r\n![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\r\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\r\n![Autumn leaves](https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop)\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 138,
+              "searchText": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop",
+              "context": "![Winter landscape](https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=600&fit=crop)\r\n![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\r\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\r\n![Autumn leaves](https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop)\r\n\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 139,
+              "searchText": "https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop",
+              "context": "![Spring flowers](https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop)\r\n![Summer beach](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop)\r\n![Autumn leaves](https://images.unsplash.com/photo-1441260038675-7329ab4cc264?w=800&h=600&fit=crop)\r\n\r\n**How to Use Multiple Images / Gallery**\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://obsidian.md",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 155,
+              "searchText": "https://obsidian.md",
+              "context": "### Linked Images\r\n\r\n[![Mountains](/posts/attachments/mountains.png)](https://obsidian.md)\r\n\r\n```\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://example.com",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 221,
+              "searchText": "https://example.com",
+              "context": "This is a [reference link][1] and this is another [reference link][markdown].\r\n\r\n[1]: https://example.com\r\n[markdown]: https://daringfireball.net/projects/markdown/\r\n\r"
+            }
+          },
+          {
+            "passed": true,
+            "message": "External link: https://daringfireball.net/projects/markdown/",
+            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
+            "severity": "notice",
+            "position": {
+              "line": 222,
+              "searchText": "https://daringfireball.net/projects/markdown/",
+              "context": "\r\n[1]: https://example.com\r\n[markdown]: https://daringfireball.net/projects/markdown/\r\n\r\n## Code Blocks\r"
+            }
           }
         ],
         "readingLevel": [
           {
             "passed": true,
-            "message": "Good reading level: 6.9 (Easy to read)",
+            "message": "Good reading level: 6.8 (Easy to read)",
             "severity": "info"
           }
         ]
       },
       "overallScore": 40,
-      "issuesCount": 5,
-      "warningsCount": 16,
-      "noticesCount": 5
+      "issuesCount": 0,
+      "warningsCount": 15,
+      "noticesCount": 13
     }
   ],
-  "lastScanTimestamp": 1760591665832,
+  "lastScanTimestamp": 1762412663652,
   "showNotices": true
 }

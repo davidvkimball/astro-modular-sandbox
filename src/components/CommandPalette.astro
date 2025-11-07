@@ -1,12 +1,14 @@
 ---
-import { siteConfig } from '../config';
+import { siteConfig, getThemeDisplayName } from '../config';
 import Icon from './Icon.astro';
 ---
 
 <!-- Make site configuration available to client-side JavaScript -->
-<script define:vars={{ siteConfig }}>
+<script define:vars={{ siteConfig, getThemeDisplayName }}>
   // Make siteConfig available globally for the command palette
   window.siteConfig = siteConfig;
+  // Make theme display name utility available globally
+  window.getThemeDisplayName = getThemeDisplayName;
 </script>
 
 <!-- Command Palette Overlay -->
@@ -138,12 +140,12 @@ import Icon from './Icon.astro';
           )}
 
           <!-- Social Links -->
-          {siteConfig.commandPalette.sections.social && siteConfig.navigation.social.length > 0 && (
+          {siteConfig.commandPalette.sections.social && (siteConfig.navigation.social || []).filter((social) => social && social.url && social.icon).length > 0 && (
             <div class="p-2">
               <div class="px-3 py-2 text-xs font-medium text-primary-500 dark:text-primary-400 uppercase tracking-wide">
                 Social
               </div>
-              {siteConfig.navigation.social.map(social => (
+              {(siteConfig.navigation.social || []).filter((social) => social && social.url && social.icon).map(social => (
                 <a 
                   href={social.url}
                   target="_blank"
@@ -1143,6 +1145,12 @@ import Icon from './Icon.astro';
           this.close(); // Close palette after action
           break;
         case 'change-theme':
+          // Check if theme switching is available before showing theme selection
+          if ((window as any).isThemeSwitchingAvailable && !(window as any).isThemeSwitchingAvailable()) {
+            console.warn('Theme switching is not available');
+            this.close();
+            return;
+          }
           // Show theme selection interface
           this.populateThemeList();
           this.showThemeSelection();
@@ -1173,6 +1181,12 @@ import Icon from './Icon.astro';
     }
 
     private populateThemeList() {
+      // Check if theme switching is available before showing theme list
+      if ((window as any).isThemeSwitchingAvailable && !(window as any).isThemeSwitchingAvailable()) {
+        this.themeList.innerHTML = '<div class="p-4 text-center text-primary-500 dark:text-primary-400">Theme switching is not available</div>';
+        return;
+      }
+
       // Available themes from src/themes/index.ts
       const allThemes = [
         'minimal', 'oxygen', 'atom', 'ayu', 'catppuccin', 'charcoal', 'dracula', 
@@ -1180,17 +1194,29 @@ import Icon from './Icon.astro';
         'rose-pine', 'sky', 'solarized', 'things'
       ];
 
-      // Get current theme from localStorage, data-theme attribute, or config
-      let currentTheme = localStorage.getItem('selectedTheme');
+      // Get current theme using the new preference system
+      let currentTheme = (window as any).siteConfig?.theme || 'oxygen'; // Default to config theme
       
-      // If no stored theme, check the current data-theme attribute
-      if (!currentTheme) {
-        currentTheme = document.documentElement.getAttribute('data-theme');
-      }
+      const themePreference = localStorage.getItem('themePreference');
       
-      // If still no theme, use config default
-      if (!currentTheme) {
+      if (themePreference === 'default') {
+        // User explicitly chose to follow the site's default theme
         currentTheme = (window as any).siteConfig?.theme || 'oxygen';
+      } else if (themePreference && themePreference.startsWith('specific:')) {
+        // User chose a specific theme
+        currentTheme = themePreference.replace('specific:', '');
+      } else {
+        // Legacy support: check old selectedTheme key
+        const storedTheme = localStorage.getItem('selectedTheme');
+        if (storedTheme) {
+          currentTheme = storedTheme;
+        } else {
+          // Fallback to current data-theme attribute
+          const dataTheme = document.documentElement.getAttribute('data-theme');
+          if (dataTheme) {
+            currentTheme = dataTheme;
+          }
+        }
       }
 
       // Get default theme from config
@@ -1203,12 +1229,33 @@ import Icon from './Icon.astro';
       }
       
       // Get available themes from config
-      const configAvailableThemes = (window as any).siteConfig?.availableThemes || 'all';
+      const configAvailableThemes = (window as any).siteConfig?.availableThemes || 'default';
       
       // Filter themes based on config
-      const filteredThemes = configAvailableThemes === 'all' 
-        ? allThemes 
-        : allThemes.filter(theme => configAvailableThemes.includes(theme));
+      let filteredThemes;
+      if (configAvailableThemes === 'default') {
+        // Show all built-in themes
+        filteredThemes = allThemes;
+      } else if (Array.isArray(configAvailableThemes)) {
+        // Filter based on availableThemes array
+        filteredThemes = configAvailableThemes.filter(theme => {
+          // Include if it's a built-in theme
+          if (allThemes.includes(theme)) {
+            return true;
+          }
+          // For custom themes, we'll include them and let the theme loading handle validation
+          return true;
+        });
+      } else {
+        // Fallback to all themes
+        filteredThemes = allThemes;
+      }
+      
+      // Always include the selected theme, even if not in availableThemes
+      const selectedTheme = (window as any).siteConfig?.theme;
+      if (selectedTheme && !filteredThemes.includes(selectedTheme)) {
+        filteredThemes.unshift(selectedTheme); // Add to beginning so it appears first
+      }
       
       // Reorder themes to put default theme first
       const themes = [defaultTheme, ...filteredThemes.filter(theme => theme !== defaultTheme)];
@@ -1224,7 +1271,7 @@ import Icon from './Icon.astro';
         button.dataset.theme = theme;
         button.dataset.index = index.toString();
 
-        const themeName = theme.charAt(0).toUpperCase() + theme.slice(1).replace('-', ' ');
+        const themeName = (window as any).getThemeDisplayName ? (window as any).getThemeDisplayName(theme) : theme.charAt(0).toUpperCase() + theme.slice(1).replace('-', ' ');
         const displayName = isDefaultTheme ? `${themeName} (Default)` : themeName;
         
         button.innerHTML = `
@@ -1252,11 +1299,35 @@ import Icon from './Icon.astro';
     }
 
     private async applyTheme(themeName: string) {
+      // Check if theme switching is available before applying
+      if ((window as any).isThemeSwitchingAvailable && !(window as any).isThemeSwitchingAvailable()) {
+        console.warn('Theme switching is not available - theme change blocked');
+        return;
+      }
+      
+      // Validate theme is available before applying
+      if ((window as any).isThemeAvailable && !(window as any).isThemeAvailable(themeName)) {
+        console.warn('Theme is not available:', themeName);
+        return;
+      }
+      
       // Use the global changeTheme function from BaseLayout.astro
       if ((window as any).changeTheme) {
         await (window as any).changeTheme(themeName);
       } else {
         // Fallback if global function is not available
+        const configTheme = (window as any).siteConfig?.theme || 'oxygen';
+        
+        // Store theme preference based on selection
+        if (themeName === configTheme) {
+          // User selected the default theme - store as 'default' preference
+          localStorage.setItem('themePreference', 'default');
+        } else {
+          // User selected a specific theme - store as 'specific:theme-name'
+          localStorage.setItem('themePreference', `specific:${themeName}`);
+        }
+        
+        // Also maintain backward compatibility with selectedTheme for now
         localStorage.setItem('selectedTheme', themeName);
         document.documentElement.setAttribute('data-theme', themeName);
         

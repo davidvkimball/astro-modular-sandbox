@@ -2,7 +2,7 @@
 import type { Post, Heading } from '@/types';
 import { siteConfig } from '@/config';
 import { generatePostSEO } from '@/utils/seo';
-import { optimizePostImagePath } from '@/utils/images';
+import { optimizePostImagePath, getOptimizedFormat } from '@/utils/images';
 import { processWikilinksInHTML } from '@/utils/internallinks';
 import { getCollection } from 'astro:content';
 import { shouldShowPost, processPost, calculateReadingTime, generateTOC, getAdjacentPosts, formatDate, formatDateMobile, getReadingTimeMobile } from '@/utils/markdown';
@@ -13,8 +13,10 @@ import LocalGraph from '@/components/LocalGraph.astro';
 import GiscusComments from '@/components/GiscusComments.astro';
 import Lightbox from '@/components/Lightbox.astro';
 import Icon from '@/components/Icon.astro';
-import { Image } from 'astro:assets';
+import ImageWrapper from '@/components/ImageWrapper.astro';
 import { devConfig } from '@/config/dev';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export interface Props {
   post: Post;
@@ -26,27 +28,9 @@ const { post } = Astro.props;
 const isDev = import.meta.env.DEV;
 
 // Generate SEO data
-const seoData = generatePostSEO(post, Astro.site ? Astro.site.toString() : '');
+const seoData = generatePostSEO(post, import.meta.env.SITE || '');
 
 
-// Dynamic image import for local images
-let localImage: any = null;
-let hasImageError = false;
-if (post.data.image && typeof post.data.image === 'string' && !post.data.image.startsWith('http')) {
-  try {
-    const imagePath = optimizePostImagePath(post.data.image, post.slug, post.id);
-    const images = import.meta.glob('/public/**');
-    const imageKey = `/public${imagePath}`;
-
-    if (images[imageKey]) {
-      localImage = await images[imageKey]();
-    } else {
-      hasImageError = true;
-    }
-  } catch (error) {
-    hasImageError = true;
-  }
-}
 
 // Generate structured data for the post
 const structuredData = {
@@ -88,24 +72,23 @@ const shouldShowTOC = !hideTOC && siteConfig.tableOfContents.enabled && headings
 const toc = shouldShowTOC ? await generateTOC(headings) : [];
 
 // Get adjacent posts for navigation
-const { prev: prevPost, next: nextPost } = getAdjacentPosts(visiblePosts, post.slug);
+const { prev: prevPost, next: nextPost } = getAdjacentPosts(visiblePosts, post.id);
 
 // Check if current post has connections for LocalGraph
 let hasLocalGraphConnections = false;
 if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView.showInSidebar) {
   try {
-    // Read the graph data file to check for connections
-    const graphDataPath = new URL('/graph/graph-data.json', Astro.site);
-    const graphDataResponse = await fetch(graphDataPath);
+    // Read the graph data file directly from the file system (works at build time)
+    const graphDataPath = join(process.cwd(), 'public', 'graph', 'graph-data.json');
+    const graphDataContent = readFileSync(graphDataPath, 'utf-8');
+    const graphData = JSON.parse(graphDataContent);
+
+    // Check if current post has any connections (both incoming and outgoing)
+    const matchingConnections = graphData.connections.filter((conn: any) =>
+      conn.source === post.id || conn.target === post.id
+    );
     
-    if (graphDataResponse.ok) {
-      const graphData = await graphDataResponse.json();
-      
-      // Check if current post has any connections
-      hasLocalGraphConnections = graphData.connections.some((conn: any) => 
-        conn.source === post.slug || conn.target === post.slug
-      );
-    }
+    hasLocalGraphConnections = matchingConnections.length > 0;
   } catch (error) {
     // If we can't read the graph data at build time, don't show the graph
     hasLocalGraphConnections = false;
@@ -121,19 +104,19 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
     <!-- Preload post cover image - only for posts that will definitely show the image immediately -->
     {(() => {
       if (!post.data.image || post.data.hideCoverImage === true) return false;
-      
+
       const showCoverImages = siteConfig.postOptions.showPostCardCoverImages;
       // Only preload for posts that are likely to show the image immediately
       // Skip preload for complex posts that might have delayed rendering
-      const shouldPreload = ['all', 'posts', 'featured-and-posts'].includes(showCoverImages) && 
-                           post.slug !== 'formatting-reference';
-      
+      const shouldPreload = ['all', 'posts', 'featured-and-posts'].includes(showCoverImages) &&
+                           post.id !== 'formatting-reference';
+
       return shouldPreload;
     })() && (
-      <link 
-        rel="preload" 
-        as="image" 
-        href={post.data.image?.startsWith('http') ? post.data.image : (post.data.image ? optimizePostImagePath(post.data.image, post.slug, post.id) : '')}
+      <link
+        rel="preload"
+        as="image"
+        href={post.data.image?.startsWith('http') ? post.data.image : (post.data.image ? optimizePostImagePath(post.data.image, post.id, post.id) : '')}
         fetchpriority="high"
       />
     )}
@@ -149,45 +132,74 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
       <!-- Main content -->
       <article class={`bg-primary-50 dark:bg-primary-900 rounded-lg border border-primary-200 dark:border-primary-700 shadow-sm ${siteConfig.postOptions.showPostCardCoverImages !== 'none' && post.data.image && post.data.hideCoverImage !== true ? 'overflow-hidden' : ''}`}>
         {/* Cover image - shown if global config allows and not hidden by frontmatter */}
-        {siteConfig.postOptions.showPostCardCoverImages !== 'none' && post.data.image && post.data.hideCoverImage !== true && (
-          <div class="h-40 sm:h-48 md:h-56 lg:h-64 overflow-hidden rounded-t-lg bg-primary-100 dark:bg-primary-800">
-            {typeof post.data.image === 'string' && post.data.image.startsWith('http') ? (
-              <img 
-                src={post.data.image}
+        {siteConfig.postOptions.showPostCardCoverImages !== 'none' && post.data.image && post.data.hideCoverImage !== true && (() => {
+          // Process image path similar to PostCard
+          let rawImage = post.data.image;
+          if (Array.isArray(rawImage)) {
+            rawImage = rawImage[0];
+          }
+          
+          // Clean Obsidian brackets
+          let cleanImagePath = typeof rawImage === 'string' ? rawImage : '';
+          if (cleanImagePath.startsWith('[[') && cleanImagePath.endsWith(']]')) {
+            cleanImagePath = cleanImagePath.slice(2, -2);
+          }
+          
+          // Determine src and basePath for ImageWrapper
+          let imageSrc = cleanImagePath;
+          let imageBasePath = '';
+          
+          if (typeof cleanImagePath === 'string' && cleanImagePath.startsWith('http')) {
+            // External URL - pass as-is
+            imageSrc = cleanImagePath;
+            imageBasePath = '';
+          } else {
+            // Detect folder-based vs file-based: if image path starts with 'attachments/',
+            // it's a single-file post (shared attachments folder)
+            const isFileBased = typeof cleanImagePath === 'string' && cleanImagePath.startsWith('attachments/');
+            
+            if (isFileBased) {
+              // Single-file post - remove attachments/ prefix
+              imageSrc = cleanImagePath.replace('attachments/', '');
+              imageBasePath = '/posts/attachments/';
+            } else {
+              // Folder-based post - sync script copies images to post folder root
+              // Remove 'images/' or 'attachments/' prefixes if present (sync script removes them)
+              if (cleanImagePath.startsWith('images/') || cleanImagePath.startsWith('attachments/')) {
+                imageSrc = cleanImagePath.replace(/^(images|attachments)\//, '');
+              } else {
+                imageSrc = cleanImagePath;
+              }
+              // Safety check: ensure post.id exists before using it
+              if (post.id) {
+                imageBasePath = `/posts/${post.id}/`;
+              } else {
+                // Fallback to attachments directory if post.id is undefined
+                imageBasePath = '/posts/attachments/';
+              }
+            }
+          }
+          
+          // Convert to WebP if applicable (sync-images.js creates WebP versions)
+          imageSrc = getOptimizedFormat(imageSrc);
+          
+          return (
+            <div class="h-40 sm:h-48 md:h-56 lg:h-64 overflow-hidden rounded-t-lg bg-primary-100 dark:bg-primary-800">
+              <ImageWrapper
+                src={imageSrc}
+                basePath={imageBasePath}
                 alt={post.data.imageAlt || `Featured image for post: ${post.data.title}`}
-                class="w-full h-full object-cover"
-                width="800"
-                height="256"
-                loading="eager"
-                decoding="async"
-                fetchpriority="high"
-              />
-            ) : localImage ? (
-              <Image
-                src={localImage.default}
-                alt={post.data.imageAlt || `Featured image for post: ${post.data.title}`}
+                class="w-full h-full"
                 width={800}
-                height={256}
+                height={450}
                 format="webp"
-                class="w-full h-full object-cover"
+                quality={85}
                 loading="eager"
-                decoding="async"
                 fetchpriority="high"
               />
-            ) : (
-              <img 
-                src={optimizePostImagePath(post.data.image, post.slug, post.id)}
-                alt={post.data.imageAlt || `Featured image for post: ${post.data.title}`}
-                class="w-full h-full object-cover"
-                width="800"
-                height="256"
-                loading="eager"
-                decoding="async"
-                fetchpriority="high"
-              />
-            )}
-          </div>
-        )}
+            </div>
+          );
+        })()}
 
         <!-- Post content wrapper -->
         <div class={`p-6 ${siteConfig.postOptions.showPostCardCoverImages !== 'none' && post.data.image && post.data.hideCoverImage !== true ? 'rounded-b-lg' : 'rounded-lg'}`}>
@@ -250,7 +262,7 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
         </div>
 
         {siteConfig.postOptions.linkedMentions.enabled && (
-          <LinkedMentions currentSlug={post.slug} />
+          <LinkedMentions currentSlug={post.id} />
         )}
 
         <!-- Post navigation -->
@@ -260,7 +272,7 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
               {prevPost && (
                 <div class="text-left">
                   <a
-                    href={`/posts/${prevPost.slug}`}
+                    href={`/posts/${prevPost.id}`}
                     class="group block p-4 rounded-lg border border-primary-200 dark:border-primary-700 hover:border-highlight-300 dark:hover:border-highlight-600 transition-all duration-200 hover:shadow-md"
                   >
                     <h3 class="font-semibold text-primary-900 dark:text-primary-50 group-hover:text-highlight-600 dark:group-hover:text-highlight-400 transition-colors">
@@ -276,7 +288,7 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
               {nextPost && (
                 <div class={`text-right ${!prevPost ? 'md:col-start-2' : ''}`}>
                   <a
-                    href={`/posts/${nextPost.slug}`}
+                    href={`/posts/${nextPost.id}`}
                     class="group block p-4 rounded-lg border border-primary-200 dark:border-primary-700 hover:border-highlight-300 dark:hover:border-highlight-600 transition-all duration-200 hover:shadow-md"
                   >
                     <h3 class="font-semibold text-primary-900 dark:text-primary-50 group-hover:text-highlight-600 dark:group-hover:text-highlight-400 transition-colors">
@@ -297,7 +309,7 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
           <div class="mt-16">
             <GiscusComments
               postTitle={post.data.title}
-              postSlug={post.slug}
+              postSlug={post.id}
               postUrl={Astro.url.href}
             />
           </div>
@@ -310,11 +322,11 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
         <div class={`top-24 ${hasLocalGraphConnections || shouldShowTOC ? 'space-y-4' : ''}`} id="sidebar">
           {hasLocalGraphConnections && (
             <div id="local-graph-sidebar">
-              <LocalGraph currentSlug={post.slug} />
+              <LocalGraph currentSlug={post.id} />
             </div>
           )}
-          
-          
+
+
           {shouldShowTOC && (
             <div id="toc">
               <TableOfContents headings={toc} />
@@ -326,62 +338,64 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
   </div>
 
   <Fragment slot="scripts">
-    <script define:vars={{ posts: visiblePosts, commentsEnabled: siteConfig.postOptions.comments.enabled, postTitle: post.data.title, postSlug: post.slug }}>
+    <script define:vars={{ posts: visiblePosts, commentsEnabled: siteConfig.postOptions.comments.enabled, postTitle: post.data.title, postSlug: post.id }}>
 
-      // Process wikilinks and initialize layouts after content loads
-      document.addEventListener('DOMContentLoaded', () => {
-
-        
-        // Process external links in captions to open in new tabs
-        const captionLinks = document.querySelectorAll('p em a, .image-caption-container a');
-        captionLinks.forEach(link => {
-          const href = link.getAttribute('href');
-          if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
-            link.setAttribute('target', '_blank');
-            link.setAttribute('rel', 'noopener noreferrer');
-          }
-        });
-        
-        // Process all external links in content to open in new tabs (including reference links)
-        const allLinks = document.querySelectorAll('.prose a[href]');
-        allLinks.forEach(link => {
-          const href = link.getAttribute('href');
-          if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
-            // Skip if already has target attribute (e.g., manually set)
-            if (!link.hasAttribute('target')) {
-              link.setAttribute('target', '_blank');
-              link.setAttribute('rel', 'noopener noreferrer');
-            }
-          }
-        });
-        
-
-        // Process wikilinks - unified logic for all wikilink types
+      // Process wikilinks - unified logic for all wikilink types
+      function initializeWikilinks() {
         const wikilinks = document.querySelectorAll('.wikilink[data-wikilink]');
 
         wikilinks.forEach(link => {
           const linkText = link.dataset.wikilink;
+          
+          // Skip same-page anchors (empty data-wikilink) - they're already properly formatted
+          if (!linkText || linkText === '') {
+            return;
+          }
+          
           const displayOverride = link.dataset.displayOverride;
           const currentDisplayText = link.textContent;
 
-          // Find the matching post
+          // Find the matching post - use id (not slug, which is deprecated in Astro v6)
           const slug = linkText.toLowerCase()
             .replace(/[^a-z0-9\s-]/g, '')
             .replace(/\s+/g, '-')
             .replace(/-+/g, '-')
             .replace(/^-+|-+$/g, '');
 
-          const post = posts.find(p => p.slug === slug);
+          // Helper function to create slug from title (same as resolveWikilink logic)
+          const createSlugFromTitle = (title) => {
+            return title.toLowerCase()
+              .replace(/[^a-z0-9\s-]/g, '')
+              .replace(/\s+/g, '-')
+              .replace(/-+/g, '-')
+              .replace(/^-+|-+$/g, '');
+          };
+
+          // First try exact id match (Astro v6 uses id, not slug)
+          let post = posts.find(p => p.id === slug);
           
+          // If not found, try title match (for wikilinks that use post titles)
+          if (!post) {
+            post = posts.find(p => createSlugFromTitle(p.data.title) === slug);
+          }
+
           if (post) {
-            // Update href
-            link.href = `/posts/${post.slug}`;
+            // Update href - preserve anchor if present
+            const currentHref = link.href || link.getAttribute('href') || '';
+            const anchorMatch = currentHref.match(/#(.+)$/);
+            const anchor = anchorMatch ? anchorMatch[1] : null;
             
-            // Simple logic: 
+            if (anchor) {
+              link.href = `/posts/${post.id}#${anchor}`;
+            } else {
+              link.href = `/posts/${post.id}`;
+            }
+
+            // Simple logic:
             // - If displayOverride exists and is not null, it's a wikilink with custom text [[link|display]] - use it
             // - If displayOverride is null/undefined, it's a standard markdown link [text](url) - NEVER change the text
             // - If displayOverride is empty string, it's a naked wikilink [[link]] - use post title
-            
+
             if (displayOverride && displayOverride !== 'null' && displayOverride !== 'undefined') {
               // Wikilink with custom display: [[link|display]]
               link.textContent = displayOverride;
@@ -398,65 +412,23 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
             link.title = 'Link not found';
           }
         });
+      }
 
+      // Make function globally available for Swup re-initialization
+      window.initializeWikilinks = initializeWikilinks;
 
-      });
-
-      // Handle Swup page transitions for comments
-      document.addEventListener('swup:contentReplaced', () => {
-        setTimeout(() => {
-
-          // Process external links in captions to open in new tabs
-          const captionLinks = document.querySelectorAll('p em a, .image-caption-container a');
-          captionLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
-              link.setAttribute('target', '_blank');
-              link.setAttribute('rel', 'noopener noreferrer');
-            }
-          });
-          
-          // Process all external links in content to open in new tabs (including reference links)
-          const allLinks = document.querySelectorAll('.prose a[href]');
-          allLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
-              // Skip if already has target attribute (e.g., manually set)
-              if (!link.hasAttribute('target')) {
-                link.setAttribute('target', '_blank');
-                link.setAttribute('rel', 'noopener noreferrer');
-              }
-            }
-          });
-
-
-          // Comments are now handled globally by BaseLayout Swup hooks
-        }, 100);
-
-        // Initialize lightbox functionality for images
-        function initializeLightbox() {
-          const images = document.querySelectorAll('img');
-          images.forEach((img, index) => {
-            // Skip images that are already clickable (like in galleries)
-            if (img.closest('a')) {
-              return;
-            }
-
-            // Make image clickable
-            img.style.cursor = 'pointer';
-            img.addEventListener('click', () => {
-              // Dispatch custom event to open lightbox
-              window.dispatchEvent(new CustomEvent('openLightbox', {
-                detail: { index }
-              }));
-            });
-          });
+      // Process wikilinks and initialize layouts after content loads
+      document.addEventListener('DOMContentLoaded', () => {
+        // Process external links - handled by BaseLayout, but call here as backup for initial load
+        if (window.processExternalLinks) {
+          window.processExternalLinks();
         }
 
-        // Initialize lightbox after a short delay to ensure images are loaded
-        setTimeout(initializeLightbox, 200);
-
+        // Initialize wikilinks on initial load
+        initializeWikilinks();
       });
+
+      // External links are now handled globally by BaseLayout Swup hooks
 
     </script>
   </Fragment>

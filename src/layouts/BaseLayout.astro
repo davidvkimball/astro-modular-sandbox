@@ -1,7 +1,5 @@
-
 ---
-import { ViewTransitions } from 'astro:transitions';
-import { siteConfig, getFontFamily, getGoogleFontsUrl, shouldLoadLocalFonts, shouldLoadCdnFonts, getFontDisplay } from '@/config';
+import { siteConfig, getFontFamily, getGoogleFontsUrl, shouldLoadLocalFonts, shouldLoadCdnFonts, getFontDisplay, getThemeDisplayName } from '@/config';
 import type { SEOData } from '@/types';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
@@ -24,7 +22,7 @@ if (shouldLoadLocalFonts()) {
     import('@fontsource/inter/600.css');
     import('@fontsource/inter/700.css');
   }
-  
+
   // Import JetBrains Mono font
   if (siteConfig.fonts.families.mono === 'JetBrains Mono') {
     import('@fontsource/jetbrains-mono/300.css');
@@ -47,7 +45,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
 ---
 
 <!DOCTYPE html>
-<html lang={siteConfig.language} class={`scrollbar-hide ${scrollbarClass}`} data-theme-config={siteConfig.theme} data-custom-theme-file={siteConfig.customThemeFile} data-available-themes={JSON.stringify(siteConfig.availableThemes)}>
+<html lang={siteConfig.language} class={`scrollbar-hide ${scrollbarClass}`} data-theme-config={siteConfig.theme} data-custom-theme-file={siteConfig.customThemeFile} data-available-themes={JSON.stringify(siteConfig.availableThemes)} data-command-palette-enabled={siteConfig.commandPalette.enabled} data-command-palette-change-theme={siteConfig.commandPalette.quickActions.changeTheme} data-feature-button={siteConfig.featureButton} data-favicon-theme-adaptive={siteConfig.faviconThemeAdaptive}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,9 +55,9 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
   <meta name="description" content={seoData.description}>
   <link rel="canonical" href={seoData.canonical}>
 
-  <!-- Robots meta tag -->  
+  <!-- Robots meta tag -->
   {seoData.noIndex && (
-    <meta name="robots" content="noindex, nofollow">  
+    <meta name="robots" content="noindex, nofollow">
   )}
 
   <!-- Open Graph -->
@@ -79,7 +77,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
   ) : (
     <>
       <meta property="og:image" content="/open-graph.png">
-      <meta property="og:image:alt" content={siteConfig.seo.defaultOgImageAlt}>
+      <meta property="og:image:alt" content={siteConfig.defaultOgImageAlt}>
       {/* Assuming default image dimensions, adjust if known */}
       <meta property="og:image:width" content="1200">
       <meta property="og:image:height" content="630">
@@ -98,7 +96,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
   ) : (
     <>
       <meta name="twitter:image" content="/open-graph.png">
-      <meta name="twitter:image:alt" content={siteConfig.seo.defaultOgImageAlt}>
+      <meta name="twitter:image:alt" content={siteConfig.defaultOgImageAlt}>
     </>
   )}
 
@@ -131,7 +129,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
     </>
   )}
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-  
+
   <!-- Fonts with optimized loading -->
   {shouldLoadCdnFonts() && (
     <>
@@ -143,8 +141,8 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
   <!-- Font Awesome Icons now handled by hybrid Icon component -->
 
   <!-- Swup handled via Astro integration -->
-  
-  
+
+
   <!-- Font CSS Variables -->
   <style define:vars={{
     fontHeading: getFontFamily(siteConfig.fonts.families.heading),
@@ -166,8 +164,192 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
     window.siteConfig = {
       theme: document.documentElement.getAttribute('data-theme-config') || 'oxygen',
       customThemeFile: document.documentElement.getAttribute('data-custom-theme-file') || 'custom',
-      availableThemes: JSON.parse(document.documentElement.getAttribute('data-available-themes') || '"all"')
+      availableThemes: JSON.parse(document.documentElement.getAttribute('data-available-themes') || '"default"'),
+      commandPalette: {
+        enabled: document.documentElement.getAttribute('data-command-palette-enabled') === 'true',
+        quickActions: {
+          changeTheme: document.documentElement.getAttribute('data-command-palette-change-theme') === 'true'
+        }
+      },
+      featureButton: document.documentElement.getAttribute('data-feature-button') || 'none',
+      faviconThemeAdaptive: document.documentElement.getAttribute('data-favicon-theme-adaptive') === 'true'
     };
+
+    // Check if theme switching is available in the UI
+    function isThemeSwitchingAvailable() {
+      const availableThemes = window.siteConfig?.availableThemes || 'default';
+      const hasMultipleThemes = availableThemes === 'default' || (Array.isArray(availableThemes) && availableThemes.length > 1);
+
+      // Check if theme switching is available via command palette
+      const commandPaletteEnabled = window.siteConfig?.commandPalette?.enabled || false;
+      const commandPaletteThemeEnabled = window.siteConfig?.commandPalette?.quickActions?.changeTheme || false;
+
+      // Check if theme switching is available via feature button
+      const featureButton = window.siteConfig?.featureButton || 'none';
+      const featureButtonThemeEnabled = featureButton === 'theme';
+
+      // Theme switching is available if:
+      // 1. There are multiple themes available AND
+      // 2. Either command palette theme switching OR feature button theme switching is enabled
+      return hasMultipleThemes && (commandPaletteThemeEnabled || featureButtonThemeEnabled);
+    }
+
+    // Validate if a theme is in the available themes list
+    function isThemeAvailable(theme) {
+      const availableThemes = window.siteConfig?.availableThemes || 'default';
+      const selectedTheme = window.siteConfig?.theme;
+
+      // Always allow the selected theme, even if not in availableThemes
+      if (theme === selectedTheme) {
+        return true;
+      }
+
+      // Check if theme is in availableThemes
+      return availableThemes === 'default' || (Array.isArray(availableThemes) && availableThemes.includes(theme));
+    }
+
+    // Initialize Twitter theme immediately (before Twitter script loads)
+    function initializeTwitterThemeImmediately() {
+      // Wait for theme to be applied, then initialize Twitter theme
+      const checkThemeAndInit = () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        const newTheme = isDark ? 'dark' : 'light';
+        
+        // Update the meta tag immediately
+        const themeMeta = document.querySelector('meta[name="twitter:widgets:theme"]');
+        if (themeMeta) {
+          themeMeta.setAttribute('content', newTheme);
+        }
+        
+        // Update data-theme attributes on any existing blockquotes
+        const twitterEmbeds = document.querySelectorAll('.twitter-tweet');
+        twitterEmbeds.forEach(embed => {
+          embed.setAttribute('data-theme', newTheme);
+        });
+      };
+
+      // Try immediately
+      checkThemeAndInit();
+      
+      // Also try after theme is applied (when deferred script runs)
+      setTimeout(checkThemeAndInit, 500);
+      setTimeout(checkThemeAndInit, 1000);
+    }
+
+    // Initialize Twitter theme immediately
+    initializeTwitterThemeImmediately();
+
+    // Twitter theme change handling - force iframe update
+    function handleTwitterThemeChange(isDark) {
+      const newTheme = isDark ? 'dark' : 'light';
+      
+      // Update the meta tag
+      const themeMeta = document.querySelector('meta[name="twitter:widgets:theme"]');
+      if (themeMeta) {
+        themeMeta.setAttribute('content', newTheme);
+      }
+      
+      // Force update all Twitter iframes by updating their src URLs
+      const twitterIframes = document.querySelectorAll('iframe[src*="platform.twitter.com/embed/Tweet.html"]');
+      twitterIframes.forEach(iframe => {
+        const currentSrc = iframe.src;
+        // Replace theme parameter in URL
+        const updatedSrc = currentSrc.replace(/theme=[^&]+/, `theme=${newTheme}`);
+        if (updatedSrc !== currentSrc) {
+          iframe.src = updatedSrc;
+        }
+      });
+    }
+
+    // Giscus theme change handling
+    function handleGiscusThemeChange(isDark) {
+      // Giscus theme changes are handled by the Giscus client script
+      // This is just a placeholder to prevent the error
+    }
+
+
+    // Reset theme to default and clear user preferences
+    function resetThemeToDefault() {
+      const configTheme = window.siteConfig?.theme || 'oxygen';
+
+      // Clear all theme preferences
+      localStorage.removeItem('themePreference');
+      localStorage.removeItem('selectedTheme');
+
+      // Set theme to config default
+      document.documentElement.setAttribute('data-theme', configTheme);
+
+      // Update CSS custom properties
+      updateThemeCSSVariables(configTheme).catch(console.error);
+
+      return configTheme;
+    }
+
+    // Get theme without clearing preferences (for initialization)
+    function getThemeWithoutClearing() {
+      const configTheme = window.siteConfig?.theme || 'oxygen';
+
+      // Check if theme switching is available in the UI
+      const themeSwitchingAvailable = isThemeSwitchingAvailable();
+
+      // If theme switching is NOT available, ALWAYS use default theme and clear preferences
+      if (!themeSwitchingAvailable) {
+        // Clear any stored theme preferences since theme switching is not available
+        localStorage.removeItem('themePreference');
+        localStorage.removeItem('selectedTheme');
+        return configTheme;
+      }
+
+      // Theme switching IS available, so respect user preferences
+      const themePreference = localStorage.getItem('themePreference');
+      const hasUserPreference = themePreference !== null;
+
+      if (hasUserPreference) {
+        // User has made a theme choice before
+        if (themePreference === 'default') {
+          // User explicitly chose to follow the site's default theme
+          return configTheme;
+        } else if (themePreference && themePreference.startsWith('specific:')) {
+          // User chose a specific theme
+          const specificTheme = themePreference.replace('specific:', '');
+
+          // Validate theme is still available
+          if (isThemeAvailable(specificTheme)) {
+            return specificTheme;
+          } else {
+            // Theme is no longer available, fall back to default
+            return configTheme;
+          }
+        }
+      } else {
+        // User has never made a theme choice
+        // Check for legacy selectedTheme key
+        const storedTheme = localStorage.getItem('selectedTheme');
+        if (storedTheme) {
+          // Migrate legacy preference
+          if (storedTheme === configTheme) {
+            // Legacy theme was the default, clear preference to follow default
+            localStorage.removeItem('selectedTheme');
+            return configTheme;
+          } else {
+            // Legacy theme was custom, migrate to new system
+            if (isThemeAvailable(storedTheme)) {
+              localStorage.setItem('themePreference', `specific:${storedTheme}`);
+              localStorage.removeItem('selectedTheme');
+              return storedTheme;
+            } else {
+              // Theme is no longer available, fall back to default
+              return configTheme;
+            }
+          }
+        } else {
+          // No user preference at all, always follow config default
+          return configTheme;
+        }
+      }
+
+      return configTheme;
+    }
 
     // Initialize theme before page renders to prevent flash
     async function initTheme() {
@@ -180,28 +362,10 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
       document.documentElement.classList.add(mode);
 
       // Handle theme selection (color scheme)
-      const configTheme = window.siteConfig?.theme || 'oxygen';
-      const availableThemes = window.siteConfig?.availableThemes || 'all';
-      
-      let theme = configTheme; // Always default to config theme
-      
-      // Check if theme selector is actually available in the UI
-      // This will be determined by checking if there are multiple themes available
-      const hasThemeSelector = availableThemes === 'all' || (Array.isArray(availableThemes) && availableThemes.length > 1);
-      
-      // Only respect user preference if theme selector is available
-      if (hasThemeSelector) {
-        const storedTheme = localStorage.getItem('selectedTheme');
-        if (storedTheme) {
-          // Validate that stored theme is in available themes list
-          if (availableThemes === 'all' || (Array.isArray(availableThemes) && availableThemes.includes(storedTheme))) {
-            theme = storedTheme;
-          }
-        }
-      }
+      const theme = getThemeWithoutClearing();
 
       document.documentElement.setAttribute('data-theme', theme);
-      
+
       // Update CSS custom properties for the initial theme
       try {
         await updateThemeCSSVariables(theme);
@@ -215,29 +379,38 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
 
     // Set favicon based on system theme
     function setFavicon() {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      const faviconThemeAdaptive = window.siteConfig?.faviconThemeAdaptive ?? true;
       
       let faviconUrl;
-      if (prefersDark) {
-        faviconUrl = '/favicon-dark.png';
-      } else if (prefersLight) {
-        faviconUrl = '/favicon-light.png';
+      
+      if (faviconThemeAdaptive) {
+        // Use theme-based favicons based on browser preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+
+        if (prefersDark) {
+          faviconUrl = '/favicon-dark.png';
+        } else if (prefersLight) {
+          faviconUrl = '/favicon-light.png';
+        } else {
+          faviconUrl = '/favicon.png';
+        }
       } else {
+        // Always use static favicon
         faviconUrl = '/favicon.png';
       }
-      
+
       // Remove ALL existing favicon links
       const existingFavicons = document.querySelectorAll('link[rel="icon"]');
       existingFavicons.forEach(link => link.remove());
-      
+
       // Create new favicon link
       const faviconLink = document.createElement('link');
       faviconLink.rel = 'icon';
       faviconLink.type = 'image/png';
       faviconLink.href = `${faviconUrl}?v=${Date.now()}`;
       document.head.appendChild(faviconLink);
-      
+
       // Force favicon refresh by updating page title
       const originalTitle = document.title;
       document.title = originalTitle;
@@ -260,8 +433,11 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
         if (window.location.hostname === 'localhost' || window.location.hostname.includes('localhost')) {
         }
       }
-      // Always update favicon based on system theme, regardless of user's manual theme choice
-      setFavicon();
+      // Only update favicon if theme adaptive is enabled
+      const faviconThemeAdaptive = window.siteConfig?.faviconThemeAdaptive ?? true;
+      if (faviconThemeAdaptive) {
+        setFavicon();
+      }
     });
 
     // Global theme toggle function - always available regardless of button visibility
@@ -283,29 +459,32 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
 
     // Global function to change theme (color scheme)
     async function changeTheme(theme) {
-      // Get config values from data attributes if window.siteConfig is not available
-      const availableThemes = window.siteConfig?.availableThemes ?? 
-        JSON.parse(document.documentElement.getAttribute('data-available-themes') || '"all"');
-      
-      // Check if theme selector is actually available in the UI
-      const hasThemeSelector = availableThemes === 'all' || (Array.isArray(availableThemes) && availableThemes.length > 1);
-      
-      
-      // Only allow theme changes if theme selector is available
-      if (!hasThemeSelector) {
-        console.warn('Theme changes are disabled - theme selector is not available');
-        return;
+      // Check if theme switching is available in the UI
+      if (!isThemeSwitchingAvailable()) {
+        return; // Silent no-op if theme switching is not available
       }
-      
+
       // Validate theme is in available themes list
-      if (availableThemes !== 'all' && (!Array.isArray(availableThemes) || !availableThemes.includes(theme))) {
-        console.warn('Theme not available:', theme, 'Available themes:', availableThemes);
-        return;
+      if (!isThemeAvailable(theme)) {
+        return; // Silent no-op if theme is not available
       }
-      
-      localStorage.setItem('selectedTheme', theme);
+
+      // Store theme preference based on selection
+      const configTheme = window.siteConfig?.theme || 'oxygen';
+
+      if (theme === configTheme) {
+        // User selected the default theme - clear preference to follow default
+        localStorage.removeItem('themePreference');
+        localStorage.removeItem('selectedTheme');
+      } else {
+        // User selected a specific theme - store as 'specific:theme-name'
+        localStorage.setItem('themePreference', `specific:${theme}`);
+        // Also maintain backward compatibility with selectedTheme for now
+        localStorage.setItem('selectedTheme', theme);
+      }
+
       document.documentElement.setAttribute('data-theme', theme);
-      
+
       // Update CSS custom properties for the selected theme
       await updateThemeCSSVariables(theme);
 
@@ -314,10 +493,10 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
         detail: { theme: theme }
       }));
     }
-    
+
     // Function to update CSS custom properties based on theme
     async function updateThemeCSSVariables(themeName) {
-      
+
       // Load all themes dynamically
       const themes = {
         minimal: {
@@ -526,39 +705,60 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
           }
         }
       };
-      
-      // Handle custom theme
-      if (themeName === 'custom') {
-        // Try to load custom theme from config
-        const configTheme = window.siteConfig?.theme;
-        const customThemeFile = window.siteConfig?.customThemeFile;
-        
-        if (configTheme === 'custom' && customThemeFile) {
-          // Try to load the actual custom theme
-          try {
-            // Import the custom theme dynamically
-            const customThemeModule = await import(`/src/themes/custom/${customThemeFile}.ts`);
-            if (customThemeModule && customThemeModule.customTheme) {
-              themes.custom = customThemeModule.customTheme;
-            } else {
-              // Fallback if custom theme doesn't export properly
-              themes.custom = {
-                primary: {
-                  50: '#ffffff', 100: '#f8f8f8', 200: '#e8e8e8', 300: '#d0d0d0',
-                  400: '#a0a0a0', 500: '#808080', 600: '#606060', 700: '#404040',
-                  800: '#202020', 900: '#101010', 950: '#000000'
-                },
-                highlight: {
-                  50: '#f0f8ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc',
-                  400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1',
-                  800: '#075985', 900: '#0c4a6e', 950: '#082f49'
-                }
-              };
+
+      // Handle custom themes (both "custom" and custom theme filenames)
+      const builtInThemes = [
+        'minimal', 'oxygen', 'atom', 'ayu', 'catppuccin', 'charcoal', 'dracula',
+        'everforest', 'flexoki', 'gruvbox', 'macos', 'nord', 'obsidian',
+        'rose-pine', 'sky', 'solarized', 'things', 'custom'
+      ];
+
+      if (themeName === 'custom' || !builtInThemes.includes(themeName)) {
+        let customThemeFile;
+
+        if (themeName === 'custom') {
+          // Use the configured custom theme file
+          customThemeFile = window.siteConfig?.customThemeFile || 'custom';
+        } else {
+          // Use the theme name as the custom theme file
+          customThemeFile = themeName;
+        }
+
+        // Try to load the custom theme
+        try {
+          // Import the custom theme dynamically
+          const customThemeModule = await import(`/src/themes/custom/${customThemeFile}.ts`);
+
+          // Look for the theme export - try different possible export names
+          let themeData = null;
+          if (customThemeModule.customTheme) {
+            themeData = customThemeModule.customTheme;
+          } else if (customThemeModule[`${customThemeFile}Theme`]) {
+            // Try filename + "Theme" (e.g., minimalismTheme)
+            themeData = customThemeModule[`${customThemeFile}Theme`];
+          } else if (customThemeModule.default) {
+            // Try default export
+            themeData = customThemeModule.default;
+          } else {
+            // Look for any export that looks like a theme object
+            const exports = Object.keys(customThemeModule);
+            const themeExport = exports.find(key =>
+              customThemeModule[key] &&
+              typeof customThemeModule[key] === 'object' &&
+              customThemeModule[key].primary &&
+              customThemeModule[key].highlight
+            );
+            if (themeExport) {
+              themeData = customThemeModule[themeExport];
             }
-          } catch (error) {
-            console.warn('Could not load custom theme, using fallback:', error);
-            // Fallback custom theme
-            themes.custom = {
+          }
+
+          if (themeData) {
+            themes[themeName] = themeData;
+          } else {
+            // Fallback if custom theme doesn't export properly
+            console.warn(`Custom theme "${customThemeFile}" doesn't export theme data properly. Available exports:`, Object.keys(customThemeModule));
+            themes[themeName] = {
               primary: {
                 50: '#ffffff', 100: '#f8f8f8', 200: '#e8e8e8', 300: '#d0d0d0',
                 400: '#a0a0a0', 500: '#808080', 600: '#606060', 700: '#404040',
@@ -571,12 +771,27 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
               }
             };
           }
+        } catch (error) {
+          console.warn(`Could not load custom theme "${customThemeFile}", using fallback:`, error);
+          // Fallback custom theme
+          themes[themeName] = {
+            primary: {
+              50: '#ffffff', 100: '#f8f8f8', 200: '#e8e8e8', 300: '#d0d0d0',
+              400: '#a0a0a0', 500: '#808080', 600: '#606060', 700: '#404040',
+              800: '#202020', 900: '#101010', 950: '#000000'
+            },
+            highlight: {
+              50: '#f0f8ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc',
+              400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1',
+              800: '#075985', 900: '#0c4a6e', 950: '#082f49'
+            }
+          };
         }
       }
-      
+
       const theme = themes[themeName] || themes.oxygen;
       const root = document.documentElement;
-      
+
       // Update primary colors
       Object.entries(theme.primary).forEach(([shade, color]) => {
         const rgb = hexToRgb(color);
@@ -584,7 +799,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
           root.style.setProperty(`--color-primary-${shade}`, `${rgb.r} ${rgb.g} ${rgb.b}`);
         }
       });
-      
+
       // Update highlight colors
       Object.entries(theme.highlight).forEach(([shade, color]) => {
         const rgb = hexToRgb(color);
@@ -593,7 +808,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
         }
       });
     }
-    
+
     // Helper function to convert hex to RGB
     function hexToRgb(hex) {
       const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -605,8 +820,33 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
     }
 
     // Make functions globally accessible
+    // Theme display name utility (mirrors the server-side function)
+    function getThemeDisplayName(themeName) {
+      // Special cases for proper formatting
+      const specialCases = {
+        'rose-pine': 'Rosé Pine',
+        'macos': 'macOS'
+      };
+
+      // Return special case if it exists
+      if (specialCases[themeName]) {
+        return specialCases[themeName];
+      }
+
+      // General formatting: capitalize first letter and replace hyphens with spaces
+      return themeName
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    }
+
     window.toggleTheme = toggleTheme;
     window.changeTheme = changeTheme;
+    window.isThemeSwitchingAvailable = isThemeSwitchingAvailable;
+    window.isThemeAvailable = isThemeAvailable;
+    window.resetThemeToDefault = resetThemeToDefault;
+    window.getThemeWithoutClearing = getThemeWithoutClearing;
+    window.getThemeDisplayName = getThemeDisplayName;
 
     // Global function to restore scroll functionality
     function restoreScroll() {
@@ -621,12 +861,12 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
 
     // Global comments initialization function - Swup compatible
     function initializeGiscusComments() {
-      
+
       // Check if comments are enabled in config
       if (!window.commentsEnabled) {
         return;
       }
-      
+
       // Check if comments container exists
       const commentsContainer = document.querySelector('#giscus-comments');
       if (!commentsContainer) {
@@ -635,7 +875,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
 
       // CRITICAL: Clear the entire container content first
       commentsContainer.innerHTML = '';
-      
+
       // Remove any existing Giscus scripts from the entire document
       const existingScripts = document.querySelectorAll('script[src*="giscus.app"]');
       existingScripts.forEach(script => {
@@ -648,16 +888,16 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
         iframe.remove();
       });
 
-      
+
       // Clear any error state
       commentsContainer.removeAttribute('data-error');
-      
+
       // Create a fresh Giscus script
       const script = document.createElement('script');
       script.src = 'https://giscus.app/client.js';
       script.async = true;
       script.crossOrigin = 'anonymous';
-      
+
       // Get configuration from data attributes
       const containerElement = commentsContainer;
       const repo = containerElement.dataset.repo || '';
@@ -671,10 +911,10 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
       const inputPosition = containerElement.dataset.inputPosition || 'bottom';
       const lang = containerElement.dataset.lang || 'en';
       const loading = containerElement.dataset.loading || 'lazy';
-      
+
       // Use the theme from config (should be 'preferred_color_scheme' for dynamic switching)
       const theme = containerElement.dataset.theme || 'preferred_color_scheme';
-      
+
       script.setAttribute('data-repo', repo);
       script.setAttribute('data-repo-id', repoId);
       script.setAttribute('data-category', category);
@@ -687,9 +927,9 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
       script.setAttribute('data-theme', theme);
       script.setAttribute('data-lang', lang);
       script.setAttribute('data-loading', loading);
-      
+
       script.onload = function() {
-        
+
         // Auto-scroll to comments section after GitHub sign-in
         // This helps users find the comments after authentication
         setTimeout(() => {
@@ -697,20 +937,20 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
           if (commentsContainer) {
             // Check if we're returning from GitHub OAuth (common pattern)
             const urlParams = new URLSearchParams(window.location.search);
-            const isOAuthReturn = urlParams.has('code') || urlParams.has('state') || 
+            const isOAuthReturn = urlParams.has('code') || urlParams.has('state') ||
                                  window.location.hash.includes('giscus') ||
                                  document.referrer.includes('github.com') ||
                                  document.referrer.includes('giscus.app');
-            
+
             if (isOAuthReturn) {
-              commentsContainer.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start' 
+              commentsContainer.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
               });
             }
           }
         }, 1000); // Delay to allow Giscus to fully load
-        
+
         // Simple iframe load detection and theme initialization
         const checkForGiscusIframe = () => {
           const giscusIframe = document.querySelector('iframe[src*="giscus"]');
@@ -726,14 +966,14 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
             setTimeout(checkForGiscusIframe, 500);
           }
         };
-        
+
         checkForGiscusIframe();
       };
-      
+
       script.onerror = function() {
         commentsContainer.setAttribute('data-error', 'true');
       };
-      
+
       // Append to the container
       commentsContainer.appendChild(script);
     };
@@ -744,20 +984,20 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
     // Collapsible callouts functionality
     function initializeCollapsibleCallouts() {
       const collapsibleCallouts = document.querySelectorAll('.callout-collapsible');
-      
+
       collapsibleCallouts.forEach(callout => {
         const toggleButton = callout.querySelector('.callout-toggle');
         const content = callout.querySelector('.callout-content');
-        
+
         if (!toggleButton || !content) return;
-        
+
         // Add click handler to toggle button
         toggleButton.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          
+
           const isCollapsed = callout.classList.contains('callout-collapsed');
-          
+
           if (isCollapsed) {
             // Expand
             callout.classList.remove('callout-collapsed');
@@ -770,7 +1010,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
             toggleButton.setAttribute('aria-expanded', 'false');
           }
         });
-        
+
         // Add click handler to title for easier interaction
         const title = callout.querySelector('.callout-title');
         if (title) {
@@ -790,6 +1030,42 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
     } else {
       initializeCollapsibleCallouts();
     }
+
+    // Process external links to open in new tabs
+    function processExternalLinks() {
+      // Process external links in captions to open in new tabs
+      const captionLinks = document.querySelectorAll('p em a, .image-caption-container a');
+      captionLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+          link.setAttribute('target', '_blank');
+          link.setAttribute('rel', 'noopener noreferrer');
+        }
+      });
+
+      // Process all external links in content to open in new tabs (including reference links)
+      const allLinks = document.querySelectorAll('.prose a[href], article a[href]');
+      allLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+          // Skip if already has target attribute (e.g., manually set)
+          if (!link.hasAttribute('target')) {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+          }
+        }
+      });
+    }
+
+    // Make function globally accessible
+    window.processExternalLinks = processExternalLinks;
+
+    // Initialize external links when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', processExternalLinks);
+    } else {
+      processExternalLinks();
+    }
   </script>
 
   <!-- View Transitions - temporarily disabled to fix compiler issues -->
@@ -797,14 +1073,11 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
 
   <!-- Additional head content -->
   <slot name="head" />
-  
-  <!-- Twitter Widgets Theme Configuration -->
-  <meta name="twitter:widgets:theme" content="preferred_color_scheme">
-  <meta name="twitter:widgets:border-color" content="rgb(var(--color-primary-200))">
-  
+
+
   <!-- Twitter Widgets Script -->
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-  
+
 </head>
 
 <body class={`min-h-screen bg-white dark:bg-primary-950 text-primary-900 dark:text-primary-50 text-selection-highlight transition-colors duration-200 ${scrollbarClass} ${bodyClass}`}>
@@ -828,10 +1101,10 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
 
   <!-- Command Palette -->
   {siteConfig.commandPalette.enabled && <CommandPalette />}
-  
+
   <!-- Theme Selector (for when command palette is disabled but theme button is needed) -->
   <ThemeSelector />
-  
+
 
   <!-- Scroll to Top -->
   {siteConfig.scrollToTop && <ScrollToTop />}
@@ -845,11 +1118,15 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
 
     <!-- Mermaid diagrams handled by client script -->
     <script>
-      import('../scripts/mermaid-client.ts');
+      try { await import('../scripts/base-embeds-client.ts'); } catch (_) {}
+    </script>
+    <script>
+      try { await import('../scripts/mermaid-client.ts'); } catch (_) {}
     </script>
 
   <!-- Global scripts - Defer non-critical JavaScript -->
   <script define:vars={{ commentsEnabled: siteConfig.postOptions.comments.enabled }} defer>
+    
     // Logger removed - no console output in production
 
     // Define isDev in client-side JavaScript (always false in production)
@@ -860,13 +1137,23 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
 
     // Simple favicon function - follows system theme only
     function setFavicon() {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const faviconUrl = prefersDark ? '/favicon-dark.png' : '/favicon-light.png';
+      const faviconThemeAdaptive = window.siteConfig?.faviconThemeAdaptive ?? true;
       
+      let faviconUrl;
+      
+      if (faviconThemeAdaptive) {
+        // Use theme-based favicons based on browser preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        faviconUrl = prefersDark ? '/favicon-dark.png' : '/favicon-light.png';
+      } else {
+        // Always use static favicon
+        faviconUrl = '/favicon.png';
+      }
+
       // Remove existing favicon
       const existingFavicon = document.querySelector('link[rel="icon"]');
       if (existingFavicon) existingFavicon.remove();
-      
+
       // Add new favicon
       const faviconLink = document.createElement('link');
       faviconLink.rel = 'icon';
@@ -878,25 +1165,30 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
     setFavicon();
 
     // Update favicon when system theme changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setFavicon);
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      const faviconThemeAdaptive = window.siteConfig?.faviconThemeAdaptive ?? true;
+      if (faviconThemeAdaptive) {
+        setFavicon();
+      }
+    });
 
     // Update navigation highlighting based on current page
     function updateNavigationHighlighting(targetPath) {
       const currentPath = targetPath || window.location.pathname;
-      
+
       // Target both desktop and mobile navigation links
       const navLinks = document.querySelectorAll('header nav a, #mobile-menu nav a');
-      
+
       navLinks.forEach((link) => {
         const linkPath = link.getAttribute('href');
-        
+
         if (linkPath) {
           // Remove ALL existing classes that could conflict
           link.classList.remove('active', 'current', 'bg-highlight-100', 'dark:bg-highlight-900', 'text-highlight-600', 'dark:text-highlight-400', 'bg-highlight-50', 'dark:bg-highlight-900/20', 'text-primary-600', 'dark:text-primary-300', 'text-primary-500', 'dark:text-primary-400');
-          
+
           // Check if this link matches the current page
           let isActive = false;
-          
+
           if (linkPath === currentPath) {
             // Exact match
             isActive = true;
@@ -908,15 +1200,15 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
             // This prevents /posts from matching /posts/something
             const normalizedLinkPath = linkPath.endsWith('/') ? linkPath : linkPath + '/';
             const normalizedCurrentPath = currentPath.endsWith('/') ? currentPath : currentPath + '/';
-            
+
             // Only match if it's an exact match (including trailing slash normalization)
             isActive = normalizedLinkPath === normalizedCurrentPath;
           }
-          
+
           if (isActive) {
             // Add appropriate active classes based on navigation style
             const isMobile = link.closest('#mobile-menu');
-            
+
             if (isMobile) {
               // Mobile navigation active classes
               link.classList.add('text-highlight-600', 'dark:text-highlight-400', 'bg-highlight-50', 'dark:bg-highlight-900/20');
@@ -927,7 +1219,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
           } else {
             // Ensure inactive state classes are applied
             const isMobile = link.closest('#mobile-menu');
-            
+
             if (isMobile) {
               // Mobile navigation inactive classes
               link.classList.add('text-primary-600', 'dark:text-primary-300');
@@ -935,7 +1227,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
               // Desktop navigation inactive classes - check if it's minimal style
               const nav = link.closest('nav');
               const isMinimal = nav && Array.from(nav.classList).some(cls => cls.includes('space-x-4'));
-              
+
               if (isMinimal) {
                 link.classList.add('text-primary-500', 'dark:text-primary-400');
               } else {
@@ -949,7 +1241,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
 
     // Make function globally accessible
     window.updateNavigationHighlighting = updateNavigationHighlighting;
-    
+
     // Test the function immediately
     updateNavigationHighlighting();
 
@@ -962,22 +1254,26 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
         }
         window.initializeGiscusComments();
       }
+      // Initialize base embeds on initial page load (before table wrappers)
+      if (window.initializeBaseEmbeds) {
+        window.initializeBaseEmbeds();
+      }
       // Initialize table wrappers on initial page load
       window.initializeTableWrappers();
-      
+
       // Initialize GraphModal on initial page load
       if (window.initializeGraphModal) {
         window.initializeGraphModal();
       }
-      
+
       // Initialize linked mentions on initial page load
       if (window.initializeLinkedMentions) {
         window.initializeLinkedMentions();
       }
-      
+
       // Setup smooth scrolling for anchor links
       setupSmoothScrolling();
-      
+
       // Handle initial hash scroll (if URL has hash)
       handleInitialHashScroll();
     });
@@ -987,11 +1283,11 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
       // Get the shortcut from the meta tag
       const shortcutMeta = document.querySelector('meta[name="command-palette-shortcut"]');
       if (!shortcutMeta) return;
-      
+
       const shortcut = shortcutMeta.getAttribute('content');
       if (!shortcut || shortcut.trim() === '') return;
-      
-      // Parse the shortcut (e.g., "ctrl+e" -> {ctrl: true, key: "e"})
+
+      // Parse the shortcut (e.g., "ctrl+e" -> {ctrl/meta primary, key: "e"})
       const parts = shortcut.toLowerCase().split('+').map(p => p.trim());
       const modifiers = {
         ctrl: parts.includes('ctrl') || parts.includes('control'),
@@ -999,32 +1295,36 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
         shift: parts.includes('shift'),
         meta: parts.includes('meta') || parts.includes('cmd') || parts.includes('command')
       };
-      
+      const isMac = typeof navigator !== 'undefined' && (/mac/i.test(navigator.platform) || /mac os x/i.test(navigator.userAgent));
+      // Treat ctrl on Windows/Linux and cmd (meta) on macOS as the same "primary" modifier
+      const requiresPrimary = modifiers.ctrl || modifiers.meta;
+
       // Get the main key (last part)
       const key = parts[parts.length - 1];
       if (!key) return;
-      
+
       // Add global keyboard listener
       document.addEventListener('keydown', (e) => {
-        // Check if all required modifiers are pressed
-        const modifiersMatch = modifiers.ctrl === e.ctrlKey &&
-                              modifiers.alt === e.altKey &&
-                              modifiers.shift === e.shiftKey &&
-                              modifiers.meta === e.metaKey;
-        
+        // Check modifiers with cross-platform primary mapping (Ctrl on Win/Linux, Cmd on macOS)
+        const primaryPressed = isMac ? e.metaKey : e.ctrlKey;
+        const primaryMatch = requiresPrimary ? primaryPressed : (!e.ctrlKey && !e.metaKey);
+        const modifiersMatch = primaryMatch &&
+                              (modifiers.alt === e.altKey) &&
+                              (modifiers.shift === e.shiftKey);
+
         // Check if the key matches (case insensitive)
         const keyMatch = e.key.toLowerCase() === key.toLowerCase();
-        
+
         // Only trigger if we're not in an input field, textarea, or contenteditable
         const isInputField = e.target.tagName === 'INPUT' ||
                             e.target.tagName === 'TEXTAREA' ||
                             e.target.contentEditable === 'true' ||
                             e.target.isContentEditable;
-        
+
         if (modifiersMatch && keyMatch && !isInputField) {
           e.preventDefault();
           e.stopPropagation();
-          
+
           // Dispatch the openCommandPalette event
           const event = new CustomEvent('openCommandPalette');
           window.dispatchEvent(event);
@@ -1043,32 +1343,43 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
     // Wait for Swup to be available
     let swupRetryCount = 0;
     const maxSwupRetries = 50; // Max 5 seconds of retries
-    
+
     function setupSwupHooks() {
       if (window.swup) {
         if (isDev) {
         }
-        
+
         // Use the correct Swup hooks API
         window.swup.hooks.on('content:replace', () => {
           if (isDev) {
           }
+          // Re-initialize theme properly respecting theme switching availability
+          const theme = getThemeWithoutClearing();
+          document.documentElement.setAttribute('data-theme', theme);
+          updateThemeCSSVariables(theme).catch(console.error);
           // Close any open lightbox before content replacement
           if (window.lightboxInstance && window.lightboxInstance.isOpen) {
             window.lightboxInstance.closeLightbox();
           }
           // Reinitialize favicon after page transition
           setFavicon();
-          // Initialize table wrappers after content replacement
+          // Initialize after content replacement
           setTimeout(() => {
             if (document.querySelector('#giscus-comments')) {
               window.initializeGiscusComments();
             }
-            // Initialize table wrappers
+            // Initialize base embeds first, then wrap tables
+            if (window.initializeBaseEmbeds) {
+              window.initializeBaseEmbeds();
+            }
             window.initializeTableWrappers();
             // Initialize linked mentions
             if (window.initializeLinkedMentions) {
               window.initializeLinkedMentions();
+            }
+            // Initialize wikilinks
+            if (window.initializeWikilinks) {
+              window.initializeWikilinks();
             }
             // Initialize image galleries
             if (typeof window['initializeImageGalleries'] === 'function') {
@@ -1078,20 +1389,34 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
             if (typeof window['initializeCategoryFiltering'] === 'function') {
               window['initializeCategoryFiltering']();
             }
+            // Process external links to open in new tabs
+            if (window.processExternalLinks) {
+              window.processExternalLinks();
+            }
             // Re-setup smooth scrolling for anchor links
             setupSmoothScrolling();
+            // Also setup same-page path anchor handler
+            setupSamePagePathAnchors();
           }, 100);
         });
 
         window.swup.hooks.on('page:view', () => {
           if (isDev) {
           }
+          // Re-initialize theme properly respecting theme switching availability
+          const theme = getThemeWithoutClearing();
+          document.documentElement.setAttribute('data-theme', theme);
+          updateThemeCSSVariables(theme).catch(console.error);
           setTimeout(() => {
             if (document.querySelector('#giscus-comments')) {
               window.initializeGiscusComments();
             }
-            // Initialize table wrappers with small delay to ensure DOM is ready
+            // Initialize with small delay to ensure DOM is ready
             setTimeout(() => {
+              // Initialize base embeds first, then wrap tables
+              if (window.initializeBaseEmbeds) {
+                window.initializeBaseEmbeds();
+              }
               window.initializeTableWrappers();
             }, 50);
             // Re-initialize GraphModal after page transition
@@ -1101,6 +1426,10 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
             // Initialize linked mentions
             if (window.initializeLinkedMentions) {
               window.initializeLinkedMentions();
+            }
+            // Initialize wikilinks
+            if (window.initializeWikilinks) {
+              window.initializeWikilinks();
             }
             // Initialize category filtering
             if (typeof window['initializeCategoryFiltering'] === 'function') {
@@ -1119,6 +1448,10 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
             }
             if (window.setupGraphButtons) {
               window.setupGraphButtons();
+            }
+            // Process external links to open in new tabs
+            if (window.processExternalLinks) {
+              window.processExternalLinks();
             }
             // Re-setup smooth scrolling for anchor links
             setupSmoothScrolling();
@@ -1178,7 +1511,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
     document.addEventListener('click', (event) => {
       const target = event.target;
       if (!target) return;
-      
+
       // Check if it's a navigation link
       const href = target.getAttribute('href');
       if (target.tagName === 'A' && href && !href.startsWith('#')) {
@@ -1247,69 +1580,156 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
     // Initialize global preloader
     window.imagePreloader = new ImagePreloader();
 
-    // Initialize table wrappers for responsive tables
-    function initializeTableWrappers() {
-      // Try multiple selectors to catch all tables
-      const proseTables = document.querySelectorAll('.prose table');
-      const allTables = document.querySelectorAll('table');
-      const tables = proseTables.length > 0 ? proseTables : allTables;
+    // Handle smooth scrolling for anchor links (same-page only)
+    function setupSmoothScrolling() {
+      // Remove any existing event listeners to avoid duplicates
+      // Select all anchor links (starting with #) but exclude root anchor (# only)
+      const existingLinks = document.querySelectorAll('a[href^="#"]');
+      existingLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        // Only process links that have a hash with content (not just #)
+        if (href && href.length > 1) {
+          link.removeEventListener('click', handleAnchorClick);
+        }
+      });
+
+      // Only handle anchor links that have content after #
+      const anchorLinks = document.querySelectorAll('a[href^="#"]');
+
+      anchorLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        // Only attach handler to links with actual anchor (not just #)
+        if (href && href.length > 1) {
+          link.addEventListener('click', handleAnchorClick);
+        }
+      });
+
+      // Also handle same-page links with paths (e.g., /posts/getting-started#heading)
+      // These aren't handled by Swup (same-page), so browser jumps - we smooth scroll instead
+      const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+      const allLinks = document.querySelectorAll('a[href]');
       
-      if (isDev) {
-        console.log('Table wrapper initialization: Found', tables.length, 'tables (prose:', proseTables.length, ', all:', allTables.length, ')');
-      }
-      
-      tables.forEach((table, index) => {
-        if (!table.parentElement?.classList.contains('table-wrapper')) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'table-wrapper';
-          // Let CSS handle the styling instead of inline styles
-          
-          table.parentNode?.insertBefore(wrapper, table);
-          wrapper.appendChild(table);
-          
-          // Reset table margin since wrapper handles it
-          table.style.margin = '0';
-          
-          if (isDev) {
-            console.log('Wrapped table', index + 1);
-          }
-        } else if (isDev) {
-          console.log('Table', index + 1, 'already wrapped');
+      allLinks.forEach(link => {
+        const hrefAttr = link.getAttribute('href');
+        if (!hrefAttr) return;
+        
+        // Skip links already handled above (starting with #)
+        if (hrefAttr.startsWith('#')) return;
+        
+        // Skip external links
+        if (hrefAttr.startsWith('http') || hrefAttr.startsWith('mailto:') || hrefAttr.startsWith('tel:')) return;
+        
+        const hashIndex = hrefAttr.indexOf('#');
+        if (hashIndex === -1) return; // No hash
+
+        // Use resolved href (after markdown processing) for path comparison
+        const href = link.href;
+        if (!href) return;
+
+        // Parse the link URL
+        let linkUrl;
+        try {
+          linkUrl = new URL(href);
+        } catch {
+          return;
+        }
+
+        // Only handle same origin
+        if (linkUrl.origin !== window.location.origin) return;
+
+        // Normalize paths - remove trailing slashes and .md extensions for comparison
+        const linkPath = linkUrl.pathname.replace(/\/$/, '').replace(/\.md$/, '') || '/';
+        const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+        
+        // Only attach handler if same page
+        if (linkPath === currentPath) {
+          link.removeEventListener('click', handleSamePagePathAnchorClick);
+          link.addEventListener('click', handleSamePagePathAnchorClick, true); // Capture phase - run before Swup
         }
       });
     }
 
-    // Make initializeTableWrappers globally accessible
-    window.initializeTableWrappers = initializeTableWrappers;
+    // Handler for same-page path anchors - uses same smooth scroll as handleAnchorClick
+    function handleSamePagePathAnchorClick(e) {
+      const target = e.target;
+      const link = target.closest('a[href]');
+      if (!link) return;
 
+      // Use resolved href (after markdown processing) instead of raw attribute
+      const href = link.href;
+      if (!href) return;
 
-    // Handle smooth scrolling for anchor links (same-page only)
-    function setupSmoothScrolling() {
-      // Remove any existing event listeners to avoid duplicates
-      const existingLinks = document.querySelectorAll('a[href^="#"]:not([href="/"]):not([href^="/"])');
-      existingLinks.forEach(link => {
-        link.removeEventListener('click', handleAnchorClick);
-      });
-      
-      // Only handle anchor links that are NOT navigation links
-      const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="/"]):not([href^="/"])');
-      
-      anchorLinks.forEach(link => {
-        link.addEventListener('click', handleAnchorClick);
-      });
+      // Parse the link URL
+      let linkUrl;
+      try {
+        linkUrl = new URL(href);
+      } catch {
+        return;
+      }
+
+      // Only handle same origin
+      if (linkUrl.origin !== window.location.origin) return;
+
+      const linkPath = linkUrl.pathname.replace(/\/$/, '').replace(/\.md$/, '') || '/';
+      const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+      const hash = linkUrl.hash;
+
+      // Only handle if same page AND has hash
+      if (linkPath === currentPath && hash && hash.length > 1) {
+        e.preventDefault();
+        e.stopPropagation(); // Stop Swup from intercepting
+        e.stopImmediatePropagation(); // Stop all other handlers
+
+        const targetElement = document.querySelector(hash);
+        
+        if (targetElement) {
+          // Update URL without triggering Swup
+          const currentUrl = window.location.pathname + window.location.search;
+          window.history.pushState(null, '', currentUrl + hash);
+
+          // Same smooth scroll as handleAnchorClick
+          const targetPosition = targetElement.offsetTop - 100;
+          const startPosition = window.pageYOffset;
+          const distance = targetPosition - startPosition;
+          const duration = 800;
+          let start = null;
+
+          function step(timestamp) {
+            if (!start) start = timestamp;
+            const progress = timestamp - start;
+            const percentage = Math.min(progress / duration, 1);
+
+            const easeInOut = percentage < 0.5
+              ? 2 * percentage * percentage
+              : 1 - Math.pow(-2 * percentage + 2, 2) / 2;
+
+            window.scrollTo(0, startPosition + distance * easeInOut);
+
+            if (progress < duration) {
+              requestAnimationFrame(step);
+            }
+          }
+
+          requestAnimationFrame(step);
+        }
+      }
     }
 
     // Handle anchor link clicks with smooth scrolling
     function handleAnchorClick(e) {
-      const href = e.target.getAttribute('href');
+      const target = e.target;
+      const link = target.closest('a[href]');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
       if (href && href.startsWith('#') && href.length > 1) {
         const targetElement = document.querySelector(href);
         if (targetElement) {
           e.preventDefault();
-          
+
           // DON'T update URL - let the browser handle it naturally
           // This prevents interfering with browser history
-          
+
           // Custom smooth scroll animation
           const targetPosition = targetElement.offsetTop - 100; // Account for header
           const startPosition = window.pageYOffset;
@@ -1321,19 +1741,19 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
             if (!start) start = timestamp;
             const progress = timestamp - start;
             const percentage = Math.min(progress / duration, 1);
-            
+
             // Easing function (ease-in-out)
-            const easeInOut = percentage < 0.5 
-              ? 2 * percentage * percentage 
+            const easeInOut = percentage < 0.5
+              ? 2 * percentage * percentage
               : 1 - Math.pow(-2 * percentage + 2, 2) / 2;
-            
+
             window.scrollTo(0, startPosition + distance * easeInOut);
-            
+
             if (progress < duration) {
               requestAnimationFrame(step);
             }
           }
-          
+
           requestAnimationFrame(step);
         }
       }
@@ -1345,7 +1765,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
       if (hash && hash.length > 1) {
         // First, scroll to top instantly
         window.scrollTo(0, 0);
-        
+
         // Then wait a bit and smooth scroll to target
         setTimeout(() => {
           const targetElement = document.querySelector(hash);
@@ -1361,19 +1781,19 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
               if (!start) start = timestamp;
               const progress = timestamp - start;
               const percentage = Math.min(progress / duration, 1);
-              
+
               // Easing function (ease-in-out)
-              const easeInOut = percentage < 0.5 
-                ? 2 * percentage * percentage 
+              const easeInOut = percentage < 0.5
+                ? 2 * percentage * percentage
                 : 1 - Math.pow(-2 * percentage + 2, 2) / 2;
-              
+
               window.scrollTo(0, startPosition + distance * easeInOut);
-              
+
               if (progress < duration) {
                 requestAnimationFrame(step);
               }
             }
-            
+
             requestAnimationFrame(step);
           }
         }, 100);
@@ -1387,7 +1807,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
       setTimeout(() => {
         // Let the browser handle scroll position restoration naturally
         // Don't force scroll to top - this preserves user's previous scroll position
-        
+
         // Reinitialize components after back/forward navigation
         if (window.initializeImageGrids) {
           window.initializeImageGrids();
@@ -1465,27 +1885,6 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
       }
     }
 
-    // Twitter theme change handling - force iframe update
-    function handleTwitterThemeChange(isDark) {
-      const newTheme = isDark ? 'dark' : 'light';
-      
-      // Update the meta tag
-      const themeMeta = document.querySelector('meta[name="twitter:widgets:theme"]');
-      if (themeMeta) {
-        themeMeta.setAttribute('content', newTheme);
-      }
-      
-      // Force update all Twitter iframes by updating their src URLs
-      const twitterIframes = document.querySelectorAll('iframe[src*="platform.twitter.com/embed/Tweet.html"]');
-      twitterIframes.forEach(iframe => {
-        const currentSrc = iframe.src;
-        // Replace theme parameter in URL
-        const updatedSrc = currentSrc.replace(/theme=[^&]+/, `theme=${newTheme}`);
-        if (updatedSrc !== currentSrc) {
-          iframe.src = updatedSrc;
-        }
-      });
-    }
 
     // Giscus theme change handling - use postMessage API for dynamic theme switching
     function handleGiscusThemeChange() {
@@ -1496,7 +1895,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
           // Get current theme from document
           const isDark = document.documentElement.classList.contains('dark');
           const newTheme = isDark ? 'dark' : 'light';
-          
+
           // Send message to Giscus iframe to change theme
           giscusIframe.contentWindow.postMessage(
             { giscus: { setConfig: { theme: newTheme } } },
@@ -1527,7 +1926,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
           setTimeout(checkForGiscusIframe, 500);
         }
       };
-      
+
       // Only check if comments are enabled
       if (window.commentsEnabled) {
         checkForGiscusIframe();
@@ -1542,7 +1941,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
           if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
             const isDark = document.documentElement.classList.contains('dark');
             const wasDark = mutation.oldValue && mutation.oldValue.includes('dark');
-            
+
             // Only re-render if theme actually changed
             if (isDark !== wasDark) {
               handleMermaidThemeChange();
@@ -1552,7 +1951,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
           }
         });
       });
-      
+
       observer.observe(document.documentElement, {
         attributes: true,
         attributeOldValue: true,
@@ -1564,7 +1963,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
     function setupSwupScrollBehavior() {
       if (typeof window !== 'undefined' && window.swup) {
         const swup = window.swup;
-        
+
         // Completely disable all scroll behavior - let browser handle it naturally
         swup.hooks.on('page:view', () => {
           // Do nothing - let browser handle scroll position naturally
@@ -1584,7 +1983,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
             window.setupLocalGraphButtons();
           }
         });
-        
+
         swup.hooks.on('visit:end', () => {
           // Update navigation highlighting after page transition is complete
           updateNavigationHighlighting();
@@ -1592,6 +1991,12 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
           if (window.initializeLinkedMentions) {
             window.initializeLinkedMentions();
           }
+          // Initialize base embeds after page transition is complete
+          if (window.initializeBaseEmbeds) {
+            window.initializeBaseEmbeds();
+          }
+          // Then wrap tables
+          window.initializeTableWrappers();
           // Initialize Mermaid diagrams after page transition is complete
           if (typeof window.initializeMermaid === 'function') {
             window.initializeMermaid();
@@ -1618,7 +2023,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
           // Graph initialization is handled in page:view hook to prevent duplicates
           // Don't call handleInitialHashScroll() here - it interferes with back/forward navigation
         });
-        
+
       }
     }
 
@@ -1649,13 +2054,67 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
         document.addEventListener('swup:enable', setupSwupScrollBehavior);
       }
     }
+
+    // Listen for theme changes using MutationObserver (elegant approach from master)
+    if (typeof window !== 'undefined') {
+      // Watch for class changes on documentElement (theme toggle)
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const isDark = document.documentElement.classList.contains('dark');
+            const wasDark = mutation.oldValue && mutation.oldValue.includes('dark');
+            
+            // Only re-render if theme actually changed
+            if (isDark !== wasDark) {
+              handleMermaidThemeChange();
+              handleTwitterThemeChange(isDark);
+              handleGiscusThemeChange(isDark);
+            }
+          }
+        });
+      });
+      
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeOldValue: true,
+        attributeFilter: ['class']
+      });
+    }
+
+    function initializeTableWrappers() {
+      // Try multiple selectors to catch all tables
+      const proseTables = document.querySelectorAll('.prose table');
+      const allTables = document.querySelectorAll('table');
+      const tables = proseTables.length > 0 ? proseTables : allTables;
+
+      tables.forEach((table, index) => {
+        // Skip tables already inside a base embed container (client adds wrapper)
+        if (table.closest && table.closest('.base-embed')) {
+          return;
+        }
+        if (!table.parentElement?.classList.contains('table-wrapper')) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'table-wrapper';
+          // Let CSS handle the styling instead of inline styles
+
+          table.parentNode?.insertBefore(wrapper, table);
+          wrapper.appendChild(table);
+
+          // Reset table margin since wrapper handles it
+          table.style.margin = '0';
+        }
+      });
+    }
+
+    // Expose for Swup hooks
+    window.initializeTableWrappers = initializeTableWrappers;
   </script>
 
 
 
   <!-- Lightbox for images (global) -->
   <Lightbox />
-  
+
   <!-- Graph Modal (global) -->
   <GraphModal />
 
