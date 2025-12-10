@@ -20,5 +20,6 @@
   "property-over-file-name",
   "bases-cms",
   "astro-modular-settings",
-  "oxygen-settings"
+  "oxygen-settings",
+  "vault-cms"
 ]

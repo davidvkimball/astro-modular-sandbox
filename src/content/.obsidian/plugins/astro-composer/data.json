@@ -50,7 +50,7 @@
   ],
   "helpButtonReplacement": {
     "enabled": true,
-    "commandId": "astro-modular-settings:open-settings",
+    "commandId": "vault-cms:vault-cms-open-wizard",
     "iconId": "wrench"
   },
   "linkBasePath": "/posts/",
