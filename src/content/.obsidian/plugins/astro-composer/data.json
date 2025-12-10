@@ -24,8 +24,8 @@
   "terminalProjectRootPath": "../..",
   "enableTerminalRibbonIcon": true,
   "enableOpenConfigFileCommand": true,
-  "configFilePath": "../config.ts",
-  "enableConfigRibbonIcon": false,
+  "configFilePath": "../../astro.config.mjs",
+  "enableConfigRibbonIcon": true,
   "customContentTypes": [
     {
       "id": "custom-1758090445018",
