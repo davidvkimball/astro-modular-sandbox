@@ -1,4 +1,5 @@
 // Site configuration with TypeScript types
+import type { NavigationItem } from "./types";
 
 // Aspect ratio options for post cards
 export type AspectRatio = 
@@ -50,7 +51,7 @@ export interface SiteConfig {
   scrollToTop: boolean;
   featureButton: "mode" | "graph" | "theme" | "none";
   deployment: {
-    platform: "netlify" | "vercel" | "github-pages" | "cloudflare-pages";
+    platform: "netlify" | "vercel" | "github-pages" | "cloudflare-workers";
   };
   
   // Command Palette
@@ -93,7 +94,7 @@ export interface SiteConfig {
     showNavigation: boolean;
     style: "minimal" | "traditional";
     showMobileMenu: boolean;
-    pages: Array<{ title: string; url: string }>;
+    pages: NavigationItem[];
     social: Array<{ title: string; url: string; icon: string }>;
   };
   
@@ -241,7 +242,7 @@ export const siteConfig: SiteConfig = {
   featureButton: "mode", // "mode" | "graph" | "theme" | "none"
   deployment: {
     // [CONFIG:DEPLOYMENT_PLATFORM]
-    platform: "netlify", // "netlify" | "vercel" | "github-pages" | "cloudflare-pages" - sets redirect configuration for the chosen platform (Cloudflare Pages uses same format as GitHub Pages)
+    platform: "netlify", // "netlify" | "vercel" | "github-pages" | "cloudflare-workers" - sets redirect configuration for the chosen platform (Cloudflare Workers uses Workers-compatible config)
   },
 
   // Command Palette
@@ -310,11 +311,14 @@ export const siteConfig: SiteConfig = {
     showMobileMenu: true,
     // [CONFIG:NAVIGATION_PAGES]
     pages: [
-      { title: "Posts", url: "/posts" },
-      { title: "Projects", url: "/projects" },
-      { title: "Docs", url: "/docs" },
-      { title: "About", url: "/about" },
-      { title: "GitHub", url: "https://github.com/davidvkimball/astro-modular" },
+      { title: "Posts", url: "/posts/" },
+      { title: "Projects", url: "/projects/" },
+      { title: "Docs", url: "/docs/" },
+      { title: "About", url: "/about/",
+        children: [
+          { title: "Privacy Policy", url: "/privacy-policy/" }
+        ] },
+      { title: "GitHub", url: "https://github.com/davidvkimball/astro-modular" }
     ],
     // [CONFIG:NAVIGATION_SOCIAL]
     social: [
@@ -413,29 +417,29 @@ export const siteConfig: SiteConfig = {
       // [CONFIG:POST_OPTIONS_COMMENTS_PROVIDER]
       provider: "giscus",
       // [CONFIG:POST_OPTIONS_COMMENTS_REPO]
-      repo: "davidvkimball/astro-modular",
+      repo: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_REPO_ID]
-      repoId: "R_kgDOPllfKw",
+      repoId: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_CATEGORY]
-      category: "General",
+      category: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_CATEGORY_ID]
-      categoryId: "DIC_kwDOPllfK84CvUpx",
+      categoryId: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_MAPPING]
-      mapping: "pathname",
+      mapping: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_STRICT]
-      strict: "0",
+      strict: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_REACTIONS]
-      reactions: "1",
+      reactions: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_METADATA]
-      metadata: "0",
+      metadata: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_INPUT_POSITION]
-      inputPosition: "bottom",
+      inputPosition: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_THEME]
-      theme: "preferred_color_scheme",
+      theme: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_LANG]
-      lang: "en",
+      lang: "",
       // [CONFIG:POST_OPTIONS_COMMENTS_LOADING]
-      loading: "lazy",
+      loading: "",
     },
   },
 };

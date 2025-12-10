@@ -3,7 +3,7 @@
   "currentTemplate": "standard",
   "currentTheme": "oxygen",
   "customThemeFile": "custom",
-  "contentOrganization": "folder-based",
+  "contentOrganization": "file-based",
   "themeColors": {
     "mode": "simple",
     "simpleColors": {
@@ -42,19 +42,25 @@
     "pages": [
       {
         "title": "Posts",
-        "url": "/posts"
+        "url": "/posts/"
       },
       {
         "title": "Projects",
-        "url": "/projects"
+        "url": "/projects/"
       },
       {
         "title": "Docs",
-        "url": "/docs"
+        "url": "/docs/"
       },
       {
         "title": "About",
-        "url": "/about"
+        "url": "/about/",
+        "children": [
+          {
+            "title": "Privacy Policy",
+            "url": "/privacy-policy/"
+          }
+        ]
       },
       {
         "title": "GitHub",
@@ -141,18 +147,18 @@
       "enabled": false,
       "provider": "giscus",
       "rawScript": "",
-      "repo": "davidvkimball/astro-modular",
-      "repoId": "R_kgDOPllfKw",
-      "category": "General",
-      "categoryId": "DIC_kwDOPllfK84CvUpx",
-      "mapping": "pathname",
-      "strict": "0",
-      "reactions": "1",
-      "metadata": "0",
-      "inputPosition": "bottom",
-      "theme": "preferred_color_scheme",
-      "lang": "en",
-      "loading": "lazy"
+      "repo": "",
+      "repoId": "",
+      "category": "",
+      "categoryId": "",
+      "mapping": "",
+      "strict": "",
+      "reactions": "",
+      "metadata": "",
+      "inputPosition": "",
+      "theme": "",
+      "lang": "",
+      "loading": ""
     }
   },
   "features": {
@@ -206,18 +212,18 @@
       "enabled": false,
       "provider": "giscus",
       "rawScript": "",
-      "repo": "davidvkimball/astro-modular",
-      "repoId": "R_kgDOPllfKw",
-      "category": "General",
-      "categoryId": "DIC_kwDOPllfK84CvUpx",
-      "mapping": "pathname",
-      "strict": "0",
-      "reactions": "1",
-      "metadata": "0",
-      "inputPosition": "bottom",
-      "theme": "preferred_color_scheme",
-      "lang": "en",
-      "loading": "lazy"
+      "repo": "",
+      "repoId": "",
+      "category": "",
+      "categoryId": "",
+      "mapping": "",
+      "strict": "",
+      "reactions": "",
+      "metadata": "",
+      "inputPosition": "",
+      "theme": "",
+      "lang": "",
+      "loading": ""
     }
   },
   "deployment": {
@@ -243,5 +249,6 @@
   },
   "availableThemes": "default",
   "customThemes": "",
-  "customThemeGenerationEnabled": false
+  "customThemeGenerationEnabled": false,
+  "removeRibbonIcon": false
 }

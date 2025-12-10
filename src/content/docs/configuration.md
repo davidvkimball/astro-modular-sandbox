@@ -19,10 +19,13 @@ This comprehensive guide covers everything needed to set up and customize your m
 ## Prerequisites & Setup
 
 You'll need:
-- **Node.js 18+**
-- **pnpm** (recommended) or npm
+- Git
 - Basic markdown familiarity
 - Obsidian (optional)
+
+If you want to build and test locally, you'll need:
+- **Node.js 18+**
+- **pnpm** (recommended) or npm
 
 ### Installation
 
@@ -42,6 +45,11 @@ pnpm build
 ```
 
 ## Configuration
+
+> [!Important] Important
+> If you're using Obsidian, you may be able to skip most of this and just jump in with the Astro Modular Settings Obsidian plugin. It has a wizard that walks you through site setup on startup and lets you tweak and manage practically everything covered here. 
+> 
+> If this applies to you, you can jump right to the [Content Structure](docs/configuration.md#Content%20Structure) section.
 
 ### Core Settings
 
@@ -373,7 +381,7 @@ postOptions: {
    - Select **"General"** as the discussion category
    - Copy the generated **Repository ID** and **Category ID**
 
-1. **Update Your Config**:
+4. **Update Your Config**:
 
 ```typescript
 postOptions: {
@@ -484,9 +492,9 @@ Tags sync between Obsidian and your blog, creating:
 - Organized navigation
 
 ### Drafts
-- **Development**: All posts visible
-- **Production**: Only published posts
-- Use `draft: true` in frontmatter to hide
+- **Development**: All content visible (posts, pages, projects, docs)
+- **Preview and production**: Only published content
+- Use `draft: true` in frontmatter to hide any content type
 
 ## Writing Posts
 
@@ -504,7 +512,7 @@ imageOG: false
 hideCoverImage: false
 targetKeyword: ""
 hideTOC: false
-draft: true
+draft: false
 ---
 
 ## Start with H2 Headings
@@ -531,6 +539,7 @@ title: "{{title}}"
 description: ""
 hideTOC: false
 noIndex: false
+draft: false
 ---
 
 ## Start with H2 Headings
@@ -613,7 +622,7 @@ The vault provides:
 - **Optional CSS snippets** to customize your experience
 - **Custom hotkeys** for accelerating post creation and publishing
 
-Read [the guide](../posts/obsidian-vault-guide.md) for more detailed information.
+Read [the guide](../posts/vault-cms-guide.md) for more detailed information.
 
 To remove Obsidian, simply delete the `.obsidian` folder.
 
@@ -672,7 +681,7 @@ Common issues:
 
 1. **Customize** `src/config.ts`
 2. **Write** your first post
-3. **Explore** [Formatting Reference](formatting-reference.md)
+3. **Explore** [Formatting Reference](../posts/formatting-reference.md)
 4. **Set up** Obsidian vault workflow
 5. **Deploy** and share
 

@@ -246,7 +246,7 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
             <div class="flex flex-wrap gap-2 mb-8">
               {post.data.tags.map(tag => (
                 <a
-                  href={`/posts?tag=${encodeURIComponent(tag)}`}
+                  href={`/posts/tag/${encodeURIComponent(tag)}`}
                   class="text-xs text-primary-600 dark:text-primary-300 bg-primary-100 dark:bg-primary-800 px-2.5 py-1 rounded-full border border-primary-200 dark:border-primary-700 transition-colors hover:bg-highlight-100 dark:hover:bg-highlight-800"
                 >
                   {tag}
@@ -267,7 +267,7 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
 
         <!-- Post navigation -->
         {siteConfig.postOptions.postNavigation && (prevPost || nextPost) && (
-          <nav class="mt-8 pt-8 border-t border-primary-200 dark:border-primary-700">
+          <nav class={`mt-8 pt-8 ${siteConfig.postOptions.linkedMentions.enabled ? '' : 'border-t border-primary-200 dark:border-primary-700'}`}>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               {prevPost && (
                 <div class="text-left">
@@ -318,7 +318,7 @@ if (siteConfig.postOptions.graphView.enabled && siteConfig.postOptions.graphView
       </article>
 
       <!-- Desktop Sidebar - floats to the right of the content container -->
-      <div class="hidden xl:block absolute top-0 left-full ml-1 w-64">
+      <div class="hidden xl:block absolute top-0 left-full ml-1 w-[280px]">
         <div class={`top-24 ${hasLocalGraphConnections || shouldShowTOC ? 'space-y-4' : ''}`} id="sidebar">
           {hasLocalGraphConnections && (
             <div id="local-graph-sidebar">

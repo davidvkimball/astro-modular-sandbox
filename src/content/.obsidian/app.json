@@ -2,12 +2,12 @@
   "showInlineTitle": false,
   "promptDelete": true,
   "showIndentGuide": false,
-  "attachmentFolderPath": "./",
+  "attachmentFolderPath": "./attachments",
   "userIgnoreFilters": [
     "bases/"
   ],
   "focusNewTab": false,
-  "mobilePullAction": "file-explorer:new-file",
+  "mobilePullAction": "command-palette:open",
   "trashOption": "system",
   "alwaysUpdateLinks": true,
   "useMarkdownLinks": true,
@@ -39,5 +39,8 @@
   "newFileLocation": "folder",
   "newFileFolderPath": "posts",
   "newLinkFormat": "relative",
-  "mobileQuickRibbonItem": "command-palette:Open command palette"
+  "mobileQuickRibbonItem": "",
+  "vimMode": false,
+  "readableLineLength": true,
+  "defaultViewMode": "source"
 }

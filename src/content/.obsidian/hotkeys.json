@@ -55,15 +55,6 @@
       "key": "X"
     }
   ],
-  "obsidian-hider:toggle-tab-containers": [
-    {
-      "modifiers": [
-        "Alt",
-        "Mod"
-      ],
-      "key": "S"
-    }
-  ],
   "obsidian-git:push": [
     {
       "modifiers": [
@@ -79,15 +70,6 @@
         "Mod"
       ],
       "key": "'"
-    }
-  ],
-  "obsidian-prozen:zenmode": [
-    {
-      "modifiers": [
-        "Mod",
-        "Shift"
-      ],
-      "key": "Z"
     }
   ],
   "custom-save:save": [],
@@ -152,13 +134,97 @@
       "key": ","
     }
   ],
-  "astro-modular-settings:open-terminal": [
+  "seo:open-global": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "A"
+    }
+  ],
+  "oxygen-settings:toggle-minimal-focus-mode": [
+    {
+      "modifiers": [
+        "Alt",
+        "Mod"
+      ],
+      "key": "F"
+    }
+  ],
+  "zenmode:exit-zen-mode": [],
+  "oxygen-settings:toggle-zen-mode": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "Z"
+    }
+  ],
+  "oxygen-settings:toggle-tab-containers": [
+    {
+      "modifiers": [
+        "Alt",
+        "Mod"
+      ],
+      "key": "S"
+    }
+  ],
+  "app:toggle-ribbon": [
+    {
+      "modifiers": [
+        "Alt",
+        "Mod"
+      ],
+      "key": "A"
+    }
+  ],
+  "zenmode:toggle-zen-mode": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "Z"
+    }
+  ],
+  "app:reload": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "R"
+    }
+  ],
+  "theme:toggle-light-dark": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "M"
+    }
+  ],
+  "astro-composer:open-project-terminal": [
     {
       "modifiers": [
         "Mod",
         "Shift"
       ],
       "key": "D"
+    }
+  ],
+  "editing-toolbar:workplace-fullscreen-focus": [],
+  "editing-toolbar:fullscreen-focus": [],
+  "editing-toolbar:hide-show-menu": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "E"
     }
   ]
 }

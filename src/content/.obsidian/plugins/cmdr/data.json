@@ -1,29 +1,30 @@
 {
   "confirmDeletion": true,
-  "showAddCommand": true,
+  "showAddCommand": false,
   "debug": false,
   "editorMenu": [],
   "fileMenu": [],
   "leftRibbon": [],
   "rightRibbon": [],
   "titleBar": [],
-  "statusBar": [],
-  "pageHeader": [],
-  "macros": [],
-  "explorer": [
+  "statusBar": [
     {
-      "id": "astro-modular-settings:open-terminal",
-      "icon": "terminal-square",
-      "name": "Open terminal",
-      "mode": "any"
-    },
-    {
-      "id": "astro-modular-settings:open-settings",
-      "icon": "settings-2",
-      "name": "Open Astro Modular Settings",
-      "mode": "any"
+      "id": "obsidian-git:push",
+      "icon": "lucide-arrow-up-circle",
+      "name": "Git: Commit-and-sync",
+      "mode": "desktop"
     }
   ],
+  "pageHeader": [
+    {
+      "id": "editing-toolbar:hide-show-menu",
+      "icon": "lucide-chevrons-up-down",
+      "name": "Toggle editing toolbar",
+      "mode": "desktop"
+    }
+  ],
+  "macros": [],
+  "explorer": [],
   "hide": {
     "statusbar": [],
     "leftRibbon": []

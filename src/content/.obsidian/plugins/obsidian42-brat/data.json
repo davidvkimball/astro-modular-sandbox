@@ -1,5 +1,6 @@
 {
   "pluginList": [
+    "davidvkimball/obsidian-bases-cms",
     "davidvkimball/obsidian-astro-modular-settings",
     "davidvkimball/obsidian-oxygen-settings",
     "davidvkimball/obsidian-alias-file-name-history",
@@ -9,6 +10,10 @@
     "davidvkimball/obsidian-astro-composer"
   ],
   "pluginSubListFrozenVersion": [
+    {
+      "repo": "davidvkimball/obsidian-bases-cms",
+      "version": "latest"
+    },
     {
       "repo": "davidvkimball/obsidian-astro-modular-settings",
       "version": "latest"
@@ -41,7 +46,7 @@
   "themesList": [
     {
       "repo": "davidvkimball/obsidian-oxygen",
-      "lastUpdate": "22867559"
+      "lastUpdate": "23704433"
     }
   ],
   "updateAtStartup": true,
@@ -53,5 +58,6 @@
   "debuggingMode": false,
   "notificationsEnabled": true,
   "personalAccessToken": "",
-  "selectLatestPluginVersionByDefault": false
+  "selectLatestPluginVersionByDefault": false,
+  "allowIncompatiblePlugins": false
 }

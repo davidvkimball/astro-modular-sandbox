@@ -28,12 +28,14 @@
 
 .wizard-progress {
 	display: flex;
-	align-items: center;
-	gap: 15px;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 1rem;
+	margin-top: 1rem;
 }
 
 .progress-bar {
-	flex: 1;
+	width: 100%;
 	height: 12px !important;
 	background: var(--background-modifier-border);
 	border-radius: 4px;
@@ -65,6 +67,8 @@
 	font-size: 14px;
 	color: var(--text-muted);
 	font-weight: 500;
+	text-align: center;
+	margin-top: 4px;
 }
 
 .wizard-content {
@@ -91,7 +95,8 @@
 }
 
 .welcome-content h2 {
-	margin-bottom: 15px;
+	margin-bottom: 8px;
+	margin-top: 0;
 	color: var(--text-normal);
 }
 
@@ -142,7 +147,8 @@
 .features-selection h2,
 .plugin-config h2,
 .finalize-step h2 {
-	margin-bottom: 15px;
+	margin-bottom: 8px;
+	margin-top: 0;
 	color: var(--text-normal);
 }
 
@@ -484,6 +490,10 @@
 	border-color: var(--color-red);
 }
 
+.plugin-item.partially-configured {
+	border-color: #f59e0b; /* Orange/amber color */
+}
+
 .plugin-icon {
 	display: flex;
 	align-items: center;
@@ -497,6 +507,10 @@
 
 .plugin-item.missing .plugin-icon {
 	color: var(--text-error);
+}
+
+.plugin-item.partially-configured .plugin-icon {
+	color: #f59e0b; /* Orange/amber color to match border */
 }
 
 .plugin-info h3 {
@@ -545,7 +559,7 @@
 }
 
 /* Finalize Step */
-.config-summary {
+.astro-modular-wizard .config-summary {
 	background: var(--background-secondary);
 	padding: 20px;
 	border-radius: 8px;
@@ -553,17 +567,17 @@
 	margin-bottom: 20px;
 }
 
-.config-summary h3 {
+.astro-modular-wizard .config-summary h3 {
 	margin: 0 0 15px 0;
 	color: var(--text-normal);
 }
 
-.config-item {
+.astro-modular-wizard .config-item {
 	margin-bottom: 8px;
 	color: var(--text-muted);
 }
 
-.config-item:last-child {
+.astro-modular-wizard .config-item:last-child {
 	margin-bottom: 0;
 }
 
@@ -592,14 +606,14 @@
 	overflow: hidden;
 }
 
-/* Vertical Tab Content (Shell Commands style) */
-.vertical-tab-content {
+/* Vertical Tab Content (Shell Commands style) - SCOPED to this plugin only */
+.astro-modular-settings .vertical-tab-content {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
 }
 
-.tab-container {
+.astro-modular-settings .tab-container {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -607,7 +621,7 @@
 	height: 100%;
 }
 
-.tab-nav {
+.astro-modular-settings .tab-nav {
 	display: flex;
 	border-bottom: 1px solid var(--background-modifier-border);
 	margin: 0;
@@ -621,27 +635,28 @@
 	-webkit-overflow-scrolling: touch;
 }
 
-.tab-nav::-webkit-scrollbar {
+.astro-modular-settings .tab-nav::-webkit-scrollbar {
 	height: 6px;
 }
 
-.tab-nav::-webkit-scrollbar-track {
+.astro-modular-settings .tab-nav::-webkit-scrollbar-track {
 	background: transparent;
 }
 
-.tab-nav::-webkit-scrollbar-thumb {
+.astro-modular-settings .tab-nav::-webkit-scrollbar-thumb {
 	background: var(--background-modifier-border);
 	border-radius: 3px;
 }
 
-.tab-nav::-webkit-scrollbar-thumb:hover {
+.astro-modular-settings .tab-nav::-webkit-scrollbar-thumb:hover {
 	background: var(--background-modifier-border-hover);
 }
 
-.tab-button {
+.astro-modular-settings .tab-button {
 	padding: 8px 12px;
 	background: transparent;
 	border: none;
+	border-bottom: 2px solid transparent;
 	color: var(--text-muted);
 	cursor: default;
 	font-size: 14px;
@@ -652,15 +667,20 @@
 	text-align: left;
 	box-shadow: none;
 	position: relative;
+	transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.tab-button.active {
+.astro-modular-settings .tab-button:hover {
 	color: var(--text-normal);
-	font-weight: normal;
-	background: var(--background-primary);
 }
 
-.tab-content {
+.astro-modular-settings .tab-button.active {
+	color: var(--text-normal);
+	background: var(--background-primary);
+	border-bottom: 2px solid var(--interactive-accent);
+}
+
+.astro-modular-settings .tab-content {
 	flex: 1;
 	padding: 20px;
 	margin: 0;
@@ -668,38 +688,38 @@
 	min-height: 0;
 }
 
-.tab-content-container {
+.astro-modular-settings .tab-content-container {
 	flex: 1;
 	padding: 20px;
 	margin: 0;
 }
 
-.SC-tab-content {
+.astro-modular-settings .SC-tab-content {
 	display: none;
 	padding: 0;
 	margin: 0;
 }
 
-.SC-tab-content.SC-tab-active {
+.astro-modular-settings .SC-tab-content.SC-tab-active {
 	display: block;
 }
 
-.settings-section {
+.astro-modular-settings .settings-section {
 	margin-bottom: 30px;
 }
 
-.settings-section h2 {
+.astro-modular-settings .settings-section h2 {
 	margin-bottom: 10px;
 	color: var(--text-normal);
 }
 
-.settings-section p {
+.astro-modular-settings .settings-section p {
 	color: var(--text-muted);
 	margin-bottom: 20px;
 	line-height: 1.6;
 }
 
-.config-display {
+.astro-modular-settings .config-display {
 	background: var(--background-secondary);
 	padding: 20px;
 	border-radius: 8px;
@@ -707,17 +727,17 @@
 	margin: 20px 0;
 }
 
-.config-info h3 {
+.astro-modular-settings .config-info h3 {
 	margin: 0 0 15px 0;
 	color: var(--text-normal);
 }
 
-.config-item {
+.astro-modular-settings .config-item {
 	margin-bottom: 8px;
 	color: var(--text-muted);
 }
 
-.config-item:last-child {
+.astro-modular-settings .config-item:last-child {
 	margin-bottom: 0;
 }
 
@@ -1099,7 +1119,8 @@
 	border-radius: 6px;
 	transition: all 0.2s ease;
 	display: flex;
-	align-items: flex-start;
+	flex-direction: column;
+	align-items: stretch;
 	gap: 12px;
 	cursor: move;
 }
@@ -1121,9 +1142,11 @@
 
 .nav-item-content {
 	display: flex;
+	flex-direction: row;
 	align-items: center;
 	gap: 12px;
 	flex: 1;
+	width: 100%;
 }
 
 .nav-item-fields {
@@ -1131,26 +1154,32 @@
 	flex: 1;
 	gap: 10px;
 	align-items: center;
+	min-width: 0; /* Allow flex items to shrink below their content size */
 }
 
 .nav-item-fields .nav-title {
-	flex: 0 0 100px; /* Fixed width for title */
+	flex: 0 0 120px; /* Fixed width for title */
+	min-width: 0;
+	max-width: 120px;
 	padding: 6px 10px;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 4px;
 	background: var(--background-primary);
 	color: var(--text-normal);
 	font-size: 13px;
+	box-sizing: border-box;
 }
 
 .nav-item-fields .nav-url {
 	flex: 1; /* Takes remaining space */
+	min-width: 0;
 	padding: 6px 10px;
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 4px;
 	background: var(--background-primary);
 	color: var(--text-normal);
 	font-size: 13px;
+	box-sizing: border-box;
 }
 
 .nav-item-fields .nav-title:focus,
@@ -1200,8 +1229,36 @@
 }
 
 .nav-remove {
-	padding: 6px 12px;
+	padding: 6px;
 	font-size: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 28px;
+	height: 28px;
+}
+
+.nav-child-remove {
+	padding: 6px;
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 28px;
+	height: 28px;
+	/* Override Obsidian's global button styles that affect child buttons */
+	--text-color: var(--text-normal);
+	-webkit-app-region: no-drag;
+	color: var(--text-color);
+	border-radius: var(--button-radius);
+	border: 0;
+	height: 28px;
+	font-weight: var(--input-font-weight);
+	cursor: var(--cursor);
+	font-family: inherit;
+	outline: none;
+	user-select: none;
+	white-space: nowrap;
 }
 
 /* Navigation add button uses Obsidian's native styling */
@@ -1224,13 +1281,91 @@
 	text-decoration: underline;
 }
 
-.nav-item {
-	cursor: grab;
+
+/* Navigation children container - appears on new line */
+.nav-children-container {
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid var(--background-modifier-border);
+	width: 100%;
+	display: block;
+	clear: both;
+}
+
+.nav-children-label {
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--text-muted);
+	margin-bottom: 8px;
+}
+
+.nav-children {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-left: 16px;
+	padding-left: 16px;
+	border-left: 2px solid var(--background-modifier-border);
+}
+
+.nav-child-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
 	padding: 8px;
+	background: var(--background-secondary);
 	border: 1px solid var(--background-modifier-border);
 	border-radius: 4px;
-	margin-bottom: 8px;
-	background-color: var(--background-primary);
+}
+
+.nav-child-item .nav-item-fields {
+	display: flex;
+	flex: 1;
+	gap: 10px;
+}
+
+.nav-child-item .nav-child-title,
+.nav-child-item .nav-child-url {
+	padding: 6px 10px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background: var(--background-primary);
+	color: var(--text-normal);
+	font-size: 13px;
+}
+
+.nav-child-item .nav-child-title {
+	flex: 0 0 120px;
+}
+
+.nav-child-item .nav-child-url {
+	flex: 1;
+}
+
+.nav-child-item .nav-child-title:focus,
+.nav-child-item .nav-child-url:focus {
+	outline: none;
+	border-color: var(--interactive-accent);
+	box-shadow: 0 0 0 2px var(--interactive-accent-2);
+}
+
+.nav-item-actions {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	flex-shrink: 0; /* Prevent buttons from shrinking */
+}
+
+.nav-add-child {
+	padding: 6px 12px;
+	font-size: 12px;
+	white-space: nowrap; /* Prevent button text from wrapping */
+}
+
+.nav-add {
+	margin-top: 10px;
+	padding: 8px 16px;
+	font-size: 14px;
 }
 
 .nav-item:hover {
@@ -1504,4 +1639,25 @@
 	.simple-color-input label {
 		min-width: auto;
 	}
+}
+
+/* Fix checkbox checkmark centering - use proper vertical centering */
+input[type=checkbox]:checked:after {
+	content: "";
+	inset-inline-start: -1px;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: var(--checkbox-size);
+	height: var(--checkbox-size);
+	display: block;
+	background-color: var(--checkbox-marker-color);
+	mask-position: 52% 52%;
+	-webkit-mask-position: 52% 52%;
+	mask-size: 65%;
+	-webkit-mask-size: 65%;
+	mask-repeat: no-repeat;
+	-webkit-mask-repeat: no-repeat;
+	mask-image: url("data:image/svg+xml,%3Csvg width='12px' height='10px' viewBox='0 0 12 8' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg transform='translate(-4.000000, -6.000000)' fill='%23000000'%3E%3Cpath d='M8.1043257,14.0367999 L4.52468714,10.5420499 C4.32525014,10.3497722 4.32525014,10.0368095 4.52468714,9.8424863 L5.24777413,9.1439454 C5.44721114,8.95166768 5.77142411,8.95166768 5.97086112,9.1439454 L8.46638057,11.5903727 L14.0291389,6.1442083 C14.2285759,5.95193057 14.5527889,5.95193057 14.7522259,6.1442083 L15.4753129,6.84377194 C15.6747499,7.03604967 15.6747499,7.35003511 15.4753129,7.54129009 L8.82741268,14.0367999 C8.62797568,14.2290777 8.3037627,14.2290777 8.1043257,14.0367999'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg width='12px' height='10px' viewBox='0 0 12 8' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg transform='translate(-4.000000, -6.000000)' fill='%23000000'%3E%3Cpath d='M8.1043257,14.0367999 L4.52468714,10.5420499 C4.32525014,10.3497722 4.32525014,10.0368095 4.52468714,9.8424863 L5.24777413,9.1439454 C5.44721114,8.95166768 5.77142411,8.95166768 5.97086112,9.1439454 L8.46638057,11.5903727 L14.0291389,6.1442083 C14.2285759,5.95193057 14.5527889,5.95193057 14.7522259,6.1442083 L15.4753129,6.84377194 C15.6747499,7.03604967 15.6747499,7.35003511 15.4753129,7.54129009 L8.82741268,14.0367999 C8.62797568,14.2290777 8.3037627,14.2290777 8.1043257,14.0367999'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }

@@ -1,13 +1,14 @@
 # Astro Modular
 
-A flexible blog theme designed for Obsidian users. 
+A flexible [Astro](https://astro.build) blog theme designed for [Obsidian](https://obsidian.md) users. 
 
 [![Alt](https://github.com/user-attachments/assets/612b2171-d141-412b-a891-5b1caa1447b8 "Astro Modular theme shown off in 3 screenshots, with the left screenshot showing the homepage, the top right showing the bottom of a post, and the bottom right showing a minimal homepage")](https://astro.build/themes/details/astro-modular/)
 
-## Use Obsidian as a CMS
+## Made with Vault CMS
 
-![Alt](https://github.com/user-attachments/assets/7bb4cdb9-0680-4776-8a72-c542dd63055b "Astro Modular Obsidian vault")
+Use Obsidian as a CMS with [Vault CMS](https://github.com/davidvkimball/vault-cms).
 
+![Alt](https://github.com/user-attachments/assets/3db459e6-6b9a-4c37-b86d-0f661e88e204 "Astro Modular Obsidian vault")
 
 ## Stats
 
@@ -27,11 +28,11 @@ A flexible blog theme designed for Obsidian users.
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Node.js](https://img.shields.io/badge/Node.js-20.3.0-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-7.1.0-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
-[![Obsidian](https://img.shields.io/badge/Obsidian-1.10.2-7C3AED?logo=obsidian&logoColor=white)](https://obsidian.md/)
+[![Obsidian](https://img.shields.io/badge/Obsidian-1.10.3-7C3AED?logo=obsidian&logoColor=white)](https://obsidian.md/)
 
 ## Why Astro Modular?
 
-- **Obsidian As A CMS**: Works with Obsidian out of the box (built upon [Obsidian Astro Suite](https://github.com/davidvkimball/obsidian-astro-suite)), write and publish instantly
+- **Obsidian As A CMS**: Works with Obsidian out of the box (built upon [Vault CMS](https://github.com/davidvkimball/vault-cms)), write and publish instantly
 - **Highly Customizable**: Every feature can be enabled/disabled independently
 - **Performance-Focused**: Assets are highly optimized for lightning-fast loading
 - **SEO-Ready**: Automatic sitemap, RSS feed, and Open Graph image generation
@@ -65,14 +66,40 @@ A flexible blog theme designed for Obsidian users.
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/davidvkimball/astro-modular)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/davidvkimball/astro-modular)
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://dash.cloudflare.com/?to=/:account/workers-and-pages/create/pages)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/davidvkimball/astro-modular)
+
+### Get the Code
+
+Choose one of the following methods to get started:
+
+#### Option 1: Use GitHub Template (Recommended)
+
+1. Click the **"Use this template"** button on the [repository page](https://github.com/davidvkimball/astro-modular)
+2. Select **"Create a new repository"**
+3. Choose your repository name and settings
+4. Click **"Create repository from template"**
+5. Clone your new repository:
+   ```bash
+   git clone https://github.com/your-username/your-repo-name.git
+   cd your-repo-name
+   ```
+
+#### Option 2: Fork the Repository
+
+1. Click the **"Fork"** button on the [repository page](https://github.com/davidvkimball/astro-modular)
+2. Choose where to fork the repository (your personal account or organization)
+3. Clone your forked repository:
+   ```bash
+   git clone https://github.com/your-username/your-repo-name.git
+   cd your-repo-name
+   ```
 
 ### Prerequisites
 - Node.js 18.20.8
 - pnpm 7.1.0 or npm 9.6.5
 
 > [!NOTE]
-> While this theme works great with any markdown editor, it's specifically optimized for Obsidian use. See the [Astro Suite Vault Guide](src/content/posts/astro-suite-vault-modular-guide.md) for Obsidian-specific features.
+> While this theme works great with any markdown editor, it's specifically optimized for Obsidian use. See the [Astro Suite Vault Guide](src/content/posts/obsidian-vault-guide.md) for Obsidian-specific features.
 
 ### Setup
 
@@ -103,19 +130,7 @@ Edit `src/config.ts` to customize your site - change the theme, enable/disable f
 
 ## Deployment
 
-Set your deployment platform once in `src/config.ts` under `deployment.platform` ("netlify", "vercel", "github-pages", or "cloudflare-pages"). The build process automatically generates the correct configuration files for your chosen platform - no environment variables needed!
-
-**Note:** For Cloudflare Pages, follow these steps:
-1. Fork or create a template based on this repository.
-2. Connect your GitHub account to Cloudflare if you haven't already.
-3. Under Workers & Pages, select "Import an existing Git repository" under the Pages tab.
-4. Select your newly-created repo, give it a name, and then set:
-   - **Framework preset:** `Astro`
-   - **Build command:** `pnpm run build` (not `npm run build`)
-   - **Build output directory:** `dist`
-   - **Deploy command:** Leave empty
-
-**Note:** `wrangler.toml` is optional and not generated by default. Cloudflare Pages works without it. Only create it manually if you need bindings (KV, D1, etc.).
+Set your deployment platform once in `src/config.ts` under `deployment.platform` ("netlify", "vercel", "github-pages", or "cloudflare-workers"). The build process automatically generates the correct configuration files for your chosen platform - no environment variables needed!
 
 ## Documentation
 
