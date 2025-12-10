@@ -1,5 +1,5 @@
 ---
-title: Vault CMS Guide
+title: TESTING Vault CMS Guide
 date: 2025-09-10
 description: How to use this Obsidian vault as a content management system.
 tags:
@@ -19,6 +19,7 @@ aliases:
   - astro-suite-vault-modular-guide
   - astro-suite-obsidian-vault-guide-astro-modular
   - obsidian-vault-guide
+  - vault-cms-guide
 ---
 ![Vault CMS logo](attachments/vault-cms-cover.png)
 
@@ -46,7 +47,7 @@ All plugins, key bindings, and the theme can be customized to your liking, but t
 
 For out-of-the-box customization, [Oxygen](https://github.com/davidvkimball/obsidian-oxygen) theme is used, based on the [Minimal theme system](https://minimal.guide/home). It uses a slick color scheme that's highly customizable. 
 
-The [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings) plugin is also installed by default, giving you complete control over your experience. You can even define your own color scheme presets. More on that [below](vault-cms-guide.md#Oxygen%20Theme%20Settings%20and%20Zen%20Mode).
+The [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings) plugin is also installed by default, giving you complete control over your experience. You can even define your own color scheme presets. More on that [below](testing-vault-cms-guide.md#Oxygen%20Theme%20Settings%20and%20Zen%20Mode).
 
 ## CSS Snippets
 
