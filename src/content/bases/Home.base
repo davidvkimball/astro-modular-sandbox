@@ -38,24 +38,23 @@ properties:
     displayName: File Name
 views:
   - type: bases-cms
-    name: All Content
-    groupBy:
-      property: file.folder
-      direction: ASC
+    name: Guide
+    filters:
+      and:
+        - file.folder == "/"
     order:
       - file.name
     sort:
       - property: file.ctime
         direction: DESC
-    fallbackToEmbeds: if-empty
+    fallbackToEmbeds: never
     propertyDisplay1: file.name
     showTextPreview: true
-    imageFormat: cover
-    showDate: true
+    imageFormat: none
+    showDate: false
     showDraftStatus: false
     propertyLabels: above
     titleProperty: note.title
-    dateProperty: file.ctime
     propertyLayout12SideBySide: false
     propertyLayout34SideBySide: false
     showTags: false
@@ -65,3 +64,5 @@ views:
     imageAspectRatio: 0.55
     maxTagsToShow: 2
     dateIncludeTime: false
+    descriptionProperty: note.description
+    hideQuickEditIcon: true
