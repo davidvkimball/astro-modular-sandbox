@@ -23,7 +23,8 @@
       "indexFileName": "index",
       "ignoreSubfolders": false,
       "enableUnderscorePrefix": false,
-      "collapsed": false
+      "collapsed": false,
+      "useMdxExtension": true
     },
     {
       "id": "pages-1765432337485",
@@ -69,6 +70,7 @@
     "commandId": "astro-modular-settings:open-settings",
     "iconId": "wrench"
   },
+  "showMdxFilesInExplorer": true,
   "linkBasePath": "/posts/",
   "enableAutoRename": true,
   "enableAutoInsertFrontmatter": true,

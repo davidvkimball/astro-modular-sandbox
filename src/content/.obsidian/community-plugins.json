@@ -8,10 +8,8 @@
   "paste-image-into-property",
   "insert-unsplash-image",
   "editing-toolbar",
-  "obsidian-git",
   "iconic",
   "alias-file-name-history",
-  "obsidian42-brat",
   "bases-cms",
   "homepage",
   "new-tab-default-page",
@@ -22,5 +20,6 @@
   "oxygen-settings",
   "ui-tweaker",
   "explorer-focus",
-  "astro-composer"
+  "astro-composer",
+  "obsidian42-brat"
 ]

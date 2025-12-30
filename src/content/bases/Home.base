@@ -1,6 +1,6 @@
 filters:
   and:
-    - file.ext == "md"
+    - file.ext.startsWith("md")
 formulas:
   Slug: |-
     if(file.folder == "posts", "/posts/" + file.name.replace(".md", ""), 
