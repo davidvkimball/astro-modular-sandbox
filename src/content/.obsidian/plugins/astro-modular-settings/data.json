@@ -1,5 +1,5 @@
 {
-  "runWizardOnStartup": false,
+  "runWizardOnStartup": true,
   "currentTemplate": "standard",
   "currentTheme": "oxygen",
   "customThemeFile": "custom",
@@ -163,7 +163,6 @@
   },
   "features": {
     "commandPalette": true,
-    "tableOfContents": true,
     "readingTime": true,
     "linkedMentions": true,
     "linkedMentionsCompact": false,

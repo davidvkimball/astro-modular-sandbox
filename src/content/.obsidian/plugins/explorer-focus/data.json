@@ -2,5 +2,6 @@
   "showRightClickMenu": true,
   "showFileExplorerIcon": true,
   "focusLevel": "parent",
-  "customFolderPath": ""
+  "customFolderPath": "",
+  "hideAncestorFolders": false
 }

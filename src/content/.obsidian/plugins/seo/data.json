@@ -155,102 +155,8 @@
         "externalBrokenLinks": [
           {
             "passed": true,
-            "message": "External link: https://github.com/davidvkimball/obsidian-oxygen",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 47,
-              "searchText": "https://github.com/davidvkimball/obsidian-oxygen",
-              "context": "## Theme\n\nFor out-of-the-box customization, [Oxygen](https://github.com/davidvkimball/obsidian-oxygen) theme is used, based on the [Minimal theme system](https://minimal.guide/home). It uses a slick color scheme that's highly customizable. \n\nThe [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings) plugin is also installed by default, giving you complete control over your experience. You can even define your own color scheme presets. More on that [below](vault-cms-guide.md#Oxygen%20Theme%20Settings%20and%20Zen%20Mode)."
-            }
-          },
-          {
-            "passed": true,
-            "message": "External link: https://minimal.guide/home",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 47,
-              "searchText": "https://minimal.guide/home",
-              "context": "## Theme\n\nFor out-of-the-box customization, [Oxygen](https://github.com/davidvkimball/obsidian-oxygen) theme is used, based on the [Minimal theme system](https://minimal.guide/home). It uses a slick color scheme that's highly customizable. \n\nThe [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings) plugin is also installed by default, giving you complete control over your experience. You can even define your own color scheme presets. More on that [below](vault-cms-guide.md#Oxygen%20Theme%20Settings%20and%20Zen%20Mode)."
-            }
-          },
-          {
-            "passed": true,
-            "message": "External link: https://github.com/davidvkimball/obsidian-oxygen-settings",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 49,
-              "searchText": "https://github.com/davidvkimball/obsidian-oxygen-settings",
-              "context": "For out-of-the-box customization, [Oxygen](https://github.com/davidvkimball/obsidian-oxygen) theme is used, based on the [Minimal theme system](https://minimal.guide/home). It uses a slick color scheme that's highly customizable. \n\nThe [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings) plugin is also installed by default, giving you complete control over your experience. You can even define your own color scheme presets. More on that [below](vault-cms-guide.md#Oxygen%20Theme%20Settings%20and%20Zen%20Mode).\n\n## CSS Snippets"
-            }
-          },
-          {
-            "passed": true,
-            "message": "External link: https://github.com/kepano/obsidian-minimal",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 162,
-              "searchText": "https://github.com/kepano/obsidian-minimal",
-              "context": "The Oxygen Theme Settings plugin helps you customize your experience if you use the provided Oxygen Obsidian theme and can help you focus on writing.\n\nYou'll notice a wide variety of color scheme options, most of which were included in the [Minimal](https://github.com/kepano/obsidian-minimal) theme upon which Oxygen was based.\n\nShould you desire to hide any of the panels, you can use `CTRL + ALT Z` for the left side panel, `CTRL + ALT + X` for the right side panel, or `CTRL + ALT + S` for the tab bar. Pressing it again will reveal it again. "
-            }
-          },
-          {
-            "passed": true,
-            "message": "External link: https://github.com/mgmeyers/obsidian-style-settings",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 170,
-              "searchText": "https://github.com/mgmeyers/obsidian-style-settings",
-              "context": "Zen Mode offers another quick option to focus on your writing. Pressing `CTRL + SHIFT + Z` will enter Zen mode. When activated, all elements removed except for your content. Use the keystroke again to exit. \n\nIf you like, you can install the [Style Settings](https://github.com/mgmeyers/obsidian-style-settings) plugin for even more control over your experience.\n\n#### Using a Theme Other Than Oxygen"
-            }
-          },
-          {
-            "passed": true,
-            "message": "External link: https://github.com/kepano/obsidian-hider",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 174,
-              "searchText": "https://github.com/kepano/obsidian-hider",
-              "context": "#### Using a Theme Other Than Oxygen\n\nIf you're just interested in hiding UI elements and wish to use a theme other than Oxygen, you can install the [Hider](https://github.com/kepano/obsidian-hider) plugin and use the aforementioned Style Settings plugin to hide the Properties heading and the \"Add Property\" button. For that use case specifically, you can also enable the `hide-properties-heading-and-add-properties-button.css` CSS snippet which you'll find under Settings > Appearance without using any plugins at all. \n\n### Paste Image Rename and Paste Image Into Property"
-            }
-          },
-          {
-            "passed": true,
-            "message": "External link: https://obsidian.md/plugins?id=obsidian-git",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 214,
-              "searchText": "https://obsidian.md/plugins?id=obsidian-git",
-              "context": "### Git, Commander, and Status Bar Organizer\n\nWith the [Git](https://obsidian.md/plugins?id=obsidian-git) plugin, you can easily publish to your Astro blog without leaving Obsidian. Simply configure with git to enable it. By default, you'll see your current git status and count of files changed (if any) in the status bar on the bottom right.\n\nTo publish, you can use `CTRL + SHIFT + S` or click the \"commit-and-sync\" button on the status bar (added with the Commander plugin). Your changes will be committed and pushed to your remote repository automatically."
-            }
-          },
-          {
-            "passed": true,
-            "message": "External link: https://github.com/ViscousPot/GitSync",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 234,
-              "searchText": "https://github.com/ViscousPot/GitSync",
-              "context": "### Disabling the Git Plugin\n\nIt's recommended to disable the Git plugin on mobile and use something like [Git Sync](https://github.com/ViscousPot/GitSync) for iOS and Android (or [MGit](https://github.com/maks/MGit) just for Android) instead. The Git plugin is notoriously buggy on mobile so it's better to use something else. \n\nHere's how to disable it: "
-            }
-          },
-          {
-            "passed": true,
-            "message": "External link: https://github.com/maks/MGit",
-            "suggestion": "To find if any of these are broken, use the 'Check external links for 404s' button to trigger it.",
-            "severity": "notice",
-            "position": {
-              "line": 234,
-              "searchText": "https://github.com/maks/MGit",
-              "context": "### Disabling the Git Plugin\n\nIt's recommended to disable the Git plugin on mobile and use something like [Git Sync](https://github.com/ViscousPot/GitSync) for iOS and Android (or [MGit](https://github.com/maks/MGit) just for Android) instead. The Git plugin is notoriously buggy on mobile so it's better to use something else. \n\nHere's how to disable it: "
-            }
+            "message": "Found 9 external link(s), all appear to resolve and are working",
+            "severity": "info"
           }
         ],
         "readingLevel": [
@@ -261,10 +167,10 @@
           }
         ]
       },
-      "overallScore": 66.25,
+      "overallScore": 68.08823529411765,
       "issuesCount": 0,
       "warningsCount": 5,
-      "noticesCount": 9
+      "noticesCount": 0
     },
     {
       "file": "posts/sample-folder-based-post/index.md",
@@ -1098,6 +1004,6 @@
       "noticesCount": 17
     }
   ],
-  "lastScanTimestamp": 1764610887819,
+  "lastScanTimestamp": 1766257224114,
   "showNotices": true
 }
