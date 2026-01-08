@@ -15,11 +15,9 @@
   ],
   "excludeFolders": [],
   "fileExtensions": [
-    "md",
-    "mdx"
+    "md"
   ],
   "trackFolderRenames": "index",
-  "excludePropertyName": "",
   "propertyName": "",
   "propertyValue": true,
   "propertyExcludes": false

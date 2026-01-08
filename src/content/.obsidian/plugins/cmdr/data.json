@@ -20,7 +20,8 @@
       "id": "editing-toolbar:hide-show-menu",
       "icon": "lucide-chevrons-up-down",
       "name": "Toggle editing toolbar",
-      "mode": "desktop"
+      "mode": "desktop",
+      "color": "#000000"
     }
   ],
   "macros": [],

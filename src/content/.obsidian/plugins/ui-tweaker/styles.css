@@ -941,3 +941,306 @@ body.ui-tweaker-hide-sync-button .is-mobile .status-bar > .plugin-sync:not(.ui-t
 .ui-tweaker-sync-replacement svg {
 	margin: 0 !important;
 }
+
+/* Group settings compatibility styling for older Obsidian builds (< 1.11.0) */
+/* Scoped to only this plugin's settings container to avoid affecting other plugins */
+.ui-tweaker-settings-compat .setting-group-heading h3 {
+	margin: 0 0 0.75rem;
+	padding-bottom: 0.5rem;
+	padding-top: 0.5rem;
+	font-size: 1rem;
+	font-weight: 600;
+	border-bottom: none !important;
+}
+
+/* ========================================
+   Tab Navigation - Matching Astro Modular Settings
+   ======================================== */
+
+.ui-tweaker-settings {
+	font-family: var(--font-family);
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.ui-tweaker-settings .tab-container {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	min-height: 0;
+	height: 100%;
+}
+
+.ui-tweaker-settings .tab-nav {
+	display: flex;
+	border-bottom: 1px solid var(--background-modifier-border);
+	margin: 0;
+	padding: 0;
+	gap: 0;
+	background: var(--background-primary);
+	overflow-x: auto;
+	overflow-y: hidden;
+	scrollbar-width: thin;
+	scrollbar-color: var(--background-modifier-border) transparent;
+	-webkit-overflow-scrolling: touch;
+}
+
+.ui-tweaker-settings .tab-nav::-webkit-scrollbar {
+	height: 6px;
+}
+
+.ui-tweaker-settings .tab-nav::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.ui-tweaker-settings .tab-nav::-webkit-scrollbar-thumb {
+	background: var(--background-modifier-border);
+	border-radius: 3px;
+}
+
+.ui-tweaker-settings .tab-nav::-webkit-scrollbar-thumb:hover {
+	background: var(--background-modifier-border-hover);
+}
+
+.ui-tweaker-settings .tab-button {
+	padding: 8px 12px;
+	background: transparent;
+	border: none;
+	border-bottom: 2px solid transparent;
+	color: var(--text-muted);
+	cursor: default;
+	font-size: 14px;
+	margin: 0;
+	border-radius: 0;
+	white-space: nowrap;
+	flex-shrink: 0;
+	text-align: left;
+	box-shadow: none;
+	position: relative;
+	transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.ui-tweaker-settings .tab-button:hover {
+	color: var(--text-normal);
+}
+
+.ui-tweaker-settings .tab-button.active {
+	color: var(--text-normal);
+	background: var(--background-primary);
+	border-bottom: 2px solid var(--interactive-accent);
+}
+
+.ui-tweaker-settings .tab-content {
+	flex: 1;
+	padding: 20px;
+	margin: 0;
+	overflow-y: auto;
+	min-height: 0;
+}
+
+/* ========================================
+   Tab Bar Commands List
+   ======================================== */
+
+.ui-tweaker-commands-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin: 16px 0;
+}
+
+.ui-tweaker-command-item {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	background: var(--background-secondary);
+}
+
+.ui-tweaker-command-info {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.ui-tweaker-icon-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
+}
+
+.ui-tweaker-command-text {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.ui-tweaker-command-name {
+	font-weight: 500;
+	color: var(--text-normal);
+}
+
+.ui-tweaker-command-id {
+	font-size: 12px;
+	color: var(--text-muted);
+	font-family: var(--font-monospace);
+}
+
+.ui-tweaker-command-controls {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.ui-tweaker-command-move,
+.ui-tweaker-command-edit,
+.ui-tweaker-command-delete {
+	padding: 4px 8px;
+	font-size: 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background: var(--background-primary);
+	color: var(--text-normal);
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.ui-tweaker-command-move:hover,
+.ui-tweaker-command-edit:hover {
+	background: var(--background-modifier-hover);
+	border-color: var(--interactive-accent);
+}
+
+.ui-tweaker-command-delete {
+	color: var(--text-error);
+	border-color: var(--text-error);
+}
+
+.ui-tweaker-command-delete:hover {
+	background: var(--text-error);
+	color: var(--text-on-accent);
+}
+
+.ui-tweaker-command-toggle {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.ui-tweaker-command-toggle label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+	font-size: 12px;
+	color: var(--text-normal);
+}
+
+.ui-tweaker-command-toggle input[type="checkbox"] {
+	margin: 0;
+	cursor: pointer;
+}
+
+/* Icon picker - remove background box from icons */
+.suggestion-flair.ui-tweaker-icon-no-bg {
+	background: none !important;
+	background-color: transparent !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: none !important;
+}
+
+/* Status bar hidden items */
+.ui-tweaker-status-bar-hidden {
+	display: none !important;
+}
+
+/* Disabled buttons (grayed out) */
+.ui-tweaker-disabled-button {
+	opacity: 0.3 !important;
+	cursor: not-allowed !important;
+}
+
+/* Name input full width */
+.ui-tweaker-name-input {
+	width: 100% !important;
+}
+
+/* Status bar hidden items */
+.ui-tweaker-status-bar-hidden {
+	display: none !important;
+}
+
+/* Status bar container - use flexbox for ordering */
+.status-bar {
+	display: flex !important;
+	flex-direction: row;
+	align-items: center;
+}
+
+.status-bar > * {
+	order: 0; /* Default order */
+}
+
+/* Editable name styling (like Vault CMS) */
+.ui-tweaker-editable-name {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.ui-tweaker-editable-name input.mod-text-input {
+	border: none;
+	background: transparent;
+	box-shadow: none;
+	padding: 0;
+	margin: 0;
+	font-size: inherit;
+	font-family: inherit;
+	color: inherit;
+	width: auto;
+	min-width: 200px;
+}
+
+.ui-tweaker-editable-name input.mod-text-input:focus {
+	border: none;
+	box-shadow: none;
+	outline: none;
+	background: transparent;
+}
+
+.ui-tweaker-edit-icon {
+	opacity: 0.6;
+	cursor: default;
+	transition: opacity 0.2s;
+}
+
+.ui-tweaker-edit-icon:hover {
+	opacity: 1;
+}
+
+/* Status bar preview (like Status Bar Organizer) */
+.ui-tweaker-status-bar-preview {
+	display: block;
+	border-radius: 0.25em;
+	margin-top: 0.5em;
+	padding: 0.5em !important;
+	font-size: 0.8rem;
+	background: var(--background-secondary-alt);
+	overflow: hidden;
+}
+
+.ui-tweaker-status-bar-preview .status-bar-item {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
