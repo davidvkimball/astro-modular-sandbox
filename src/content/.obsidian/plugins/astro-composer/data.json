@@ -73,6 +73,7 @@
     "iconId": "wrench"
   },
   "showMdxFilesInExplorer": true,
+  "processBackgroundFileChanges": false,
   "integratedTerminalShell": "powershell",
   "newInstanceBehavior": "newHorizontalSplit",
   "createInstanceNearExistingOnes": true,
