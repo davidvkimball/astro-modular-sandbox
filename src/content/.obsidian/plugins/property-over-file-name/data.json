@@ -9,9 +9,9 @@
   "enableForGraphView": true,
   "enableForBacklinks": true,
   "enableForTabs": true,
-  "enableForExplorer": false,
+  "enableForExplorer": true,
   "folderNoteFilename": "index",
   "enableForWindowFrame": true,
-  "enableMdxSupport": true,
-  "enableForWindowTitle": true
+  "enableForBookmarks": true,
+  "enableMdxSupport": true
 }

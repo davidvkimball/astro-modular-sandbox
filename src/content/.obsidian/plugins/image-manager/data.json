@@ -20,6 +20,8 @@
   "autoConvertRemoteImages": false,
   "convertOnNoteOpen": false,
   "convertOnNoteSave": false,
+  "processBackgroundChanges": false,
+  "showRenameDialog": true,
   "autoRename": false,
   "dupNumberDelimiter": "-",
   "dupNumberAtStart": false,
@@ -32,7 +34,9 @@
   "banner": {
     "properties": {
       "imageProperty": "image",
-      "iconProperty": "icon"
+      "iconProperty": "image",
+      "hidePropertyEnabled": true,
+      "hideProperty": "hideCoverImage"
     },
     "desktop": {
       "enabled": true,
@@ -57,7 +61,8 @@
       "iconAlignmentV": "flex-end",
       "iconOffsetX": 0,
       "iconOffsetY": -24,
-      "animation": false
+      "animation": false,
+      "bannerRadiusEnabled": false
     },
     "tablet": {
       "enabled": true,

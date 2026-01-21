@@ -48,21 +48,6 @@ For out-of-the-box customization, [Oxygen](https://github.com/davidvkimball/obsi
 
 The [Oxygen Theme Settings](https://github.com/davidvkimball/obsidian-oxygen-settings) plugin is also installed by default, giving you complete control over your experience. You can even define your own color scheme presets. More on that [below](vault-cms-guide.md#Oxygen%20Theme%20Settings%20and%20Zen%20Mode).
 
-## CSS Snippets
-
-`astro-modular-styling` gives embedded HTML elements a similar look to how the theme handles them on the front end, for example form and button styling.
-
-> [!tip]- Tip: Optional CSS Snippets
-> An optional custom CSS snippet called `custom-draggable-top-area.css` makes moving your window is easier when the window frame is hidden and there's no tab bar. There are also versions specific to Windows and Mac that have OS-specific UI offsets, or just use the base version for no offsets. All can be configured in Settings > Appearance > CSS Snippets. None of these are active in mobile.
-> 
-> `hide-properties-heading-and-add-properties-button.css` is included if you'd rather use a CSS snippet instead of the included Oxygen Theme Settings plugin or something like the Style Settings plugin, mentioned later in this post.
-> 
-> `hide-tabs-icon-mobile.css` removes the tabs icon in the mobile version of Obsidian. If you enable the Disable Tabs plugin, you may want to enable this snippet as well.
-> 
-> Both `hide-longpress-flair-mobile.css` and `hide-header-title-mobile.css` are also related to making the mobile interface more simple. Enable any of these snippets to hide these elements.
-> 
-> There are few more mobile-specific CSS snippets you can check out.
-
 ## Important Hotkeys
 
 Here's a guide for some important hotkeys set especially for this theme:
@@ -77,14 +62,14 @@ Here's a guide for some important hotkeys set especially for this theme:
 - Toggle reading view: `CTRL + E`
 - Toggle Editing toolbar: `CTRL + SHIFT + E`
 - Toggle Zen mode: `CTRL + SHIFT + Z`
-- Insert image: `CTRL + '`
-- Insert image into property: `CTRL + SHIFT + '`
+- Insert remote image: `CTRL + '`
+- Insert remote image into property: `CTRL + SHIFT + '`
 - Insert callout: `CTRL + SHIFT + C`
 - Rename current content: `CTRL + R` 
 - Open SEO audit: `CTRL + SHIFT + A`
 - Open Terminal: `CTRL + SHIFT + D`
 - Open Astro Modular Settings: `CTRL + SHIFT + ,`
-- Git: Commit and Sync `CTRL + SHIFT + S`
+- Commit and sync git: `CTRL + SHIFT + S`
 
 If you're on Mac, `CTRL` = `CMD`.
 
@@ -103,21 +88,18 @@ Community plugins enabled:
 - Astro Composer
 - Astro Modular Settings
 - Bases CMS
-- Default New Tab Page
 - Editing Toolbar
+- Explorer Focus
 - Git
-- Homepage
-- Image Inserter
+- Home Base
+- Iconic
+- Image Manager
 - Oxygen Theme Settings
-- Paste image into property
-- Paste image rename
 - Property Over Filename
 - SEO
 - Settings Search
-- Simple Banner
-- Simple Focus
-- Status Bar Organizer
 - Tag Wrangler
+- UI Tweaker
 - Zen Mode
 
 ### Astro Modular Settings
@@ -127,6 +109,14 @@ The Astro Modular Settings plugin was specifically made for this theme. It has e
 A wizard will open at startup which will lead you through some configuration options. You can disable this pop up if you like. 
 
 Pretty much anything else you'd possible want to customize is in the settings of the plugin. You can also create your own theme, import and export configs, and a bunch more.
+
+### Home Base and Bases CMS
+
+These plugins work together so your default screen is a `.base` file that's a directory of all of your content, listed in reverse-chronological order. A home icon is pinned to your tab bar, which makes it easy to return to. You can turn this off if you'd like in Home Base's settings. 
+
+Bases CMS lets us treat a grid of content like a content management system. You can select multiple items and do bulk edits, rename content right from that view, or toggle the draft status of an item. You're also able to configure the CMS view and even add new views to your liking. 
+
+To edit a view, select the current view on the top left, revealing the list, and then select the right chevron arrow to open up the "configure view" options. Configure your desired properties here. At the very bottom, you can set where new notes are created when the "new" button is clicked on the top right. By default they'll be the same location as the base folder for the content type you're viewing.
 
 ### Astro Composer and Alias Filename History
 
@@ -146,52 +136,49 @@ Astro Composer also has several useful commands. To open terminal quickly, use t
 
 You can also launch the `Edit Astro config` command, which will open your `config.ts` file. You can access this if you want, but it's a bit easier to just launch the `Open Astro Modular Settings` command instead. You can also press `CTRL + SHIFT + ,` to open it, or use the conveniently-placed icon next to the traditional Obsidian settings icon (which can be toggled off in Astro Composer's plugin settings if you don't want it there). 
 
-### Homepage, Default New Tab Page, and Bases CMS
-
-All three of these plugins work together so you're default screen is a `.base` file that's a directory of all of your blog posts, listed in reverse-chronological order. You're able to configure the CMS view and even add new views to your liking. 
-
-I call this "Home Base."
-
-Bases CMS lets us treat a grid of content like a content management system. You can select multiple items and do bulk edits, rename content right from that view, or toggle the draft status of an item.
-
-To edit a view, select the current view on the top left, revealing the list, and then select the right chevron arrow to open up the "configure view" options. Configure your desired properties here. At the very bottom, you can set where new notes are created when the "new" button is clicked on the top right. 
-### Oxygen Theme Settings, Simple Focus, Zen Mode, and Status Bar Organizer
+### Oxygen Theme Settings, UI Tweaker, Explorer Focus, and Zen Mode
 
 The Oxygen Theme Settings plugin helps you customize your experience if you use the provided Oxygen Obsidian theme and can help you focus on writing.
 
-You'll notice a wide variety of color scheme options, most of which were included in the [Minimal](https://github.com/kepano/obsidian-minimal) theme upon which Oxygen was based.
+You'll notice a wide variety of color scheme options, most of which were included in the [Minimal](https://github.com/kepano/obsidian-minimal) theme upon which Oxygen is based.
 
 Should you desire to hide any of the panels, you can use `CTRL + ALT Z` for the left side panel, `CTRL + ALT + X` for the right side panel, or `CTRL + ALT + S` for the tab bar. Pressing it again will reveal it again. 
 
-With the Simple Focus plugin, you can can simplify your file explorer view to just the directory that's immediately relevant to your currently-open file. Just click the toggle focus button or right click a directory in the file explorer pane to pare down on the number of files and folder you're seeing.
+UI Tweaker lets you hide and adjust UI elements as well. Open it up and customize it to your liking. 
+
+With the Explorer Focus plugin, you can can simplify your file explorer view to just the directory that's immediately relevant to your currently-open file. Just click the toggle focus button or right click a directory in the file explorer pane to pare down on the number of files and folder you're seeing.
 
 Zen Mode offers another quick option to focus on your writing. Pressing `CTRL + SHIFT + Z` will enter Zen mode. When activated, all elements removed except for your content. Use the keystroke again to exit. 
 
 If you like, you can install the [Style Settings](https://github.com/mgmeyers/obsidian-style-settings) plugin for even more control over your experience.
 
-#### Using a Theme Other Than Oxygen
+### Git
 
-If you're just interested in hiding UI elements and wish to use a theme other than Oxygen, you can install the [Hider](https://github.com/kepano/obsidian-hider) plugin and use the aforementioned Style Settings plugin to hide the Properties heading and the "Add Property" button. For that use case specifically, you can also enable the `hide-properties-heading-and-add-properties-button.css` CSS snippet which you'll find under Settings > Appearance without using any plugins at all. 
+With the [Git](https://obsidian.md/plugins?id=obsidian-git) plugin, you can easily publish to your Astro blog without leaving Obsidian. Simply configure with git to enable it. By default, you'll see your current git status and count of files changed (if any) in the status bar on the bottom right.
 
-### Paste Image Rename and Paste Image Into Property
+To publish, you can use `CTRL + SHIFT + S` or click the "commit-and-sync" button on the status bar. Your changes will be committed and pushed to your remote repository automatically. By default it's pinned to the far right of the status bar. You can also re-arrange status bar items to your liking using UI Tweaker.
 
-Quickly drag and drop image files or paste directly from your clipboard and give them kebab-case, SEO-friendly names. Both work directly in note content or within properties.
+### Image Manager
 
-### Image Inserter
+Quickly drag and drop image files, insert images with a command, or paste images directly from your clipboard. Each works directly in note content or within properties. Pull in images from Unsplash, Pexels, or Pixabay easily with just a few keystrokes. Just use `CTRL + '` to insert a remote image - and immediately set SEO-friendly alt text and a file name. Insert into the designated property with `CTRL + SHIFT + '` 
 
-Pull in images from Unsplash or other sources easily with just a few keystrokes. Just use `CTRL + '` to insert an image - and immediately set a SEO-friendly filename for it via the Paste Image Rename plugin. Insert into the designated property with `CTRL + SHIFT + '`
+You can also insert local images with a command - which get converted to local images by default.
+
+You can add a nice-looking banner on the top of any Markdown file, as long as a valid `image` property is defined. Matches the cover image used in the Bases CMS view by default.
 
 ### Tag Wrangler
 
 Makes managing tabs more useful. Can easily bulk-rename tags or search your content by tags.
 
-### Property Over Filename
+### Property Over File Name
 
 When linking, searching, or displaying notes, you can use the `title` property as its primary label instead of its file name. Using title properties is more helpful visually and semantically for linking, searching, and displaying content, since note file names are actually page slugs in kebab case instead of traditional titles. 
 
 When you link to another note, its `title` is automatically set as the hyperlinked text, but you can easily change it to something else after it's been inserted. 
 
-Tabs display the note's `title` property instead of the file name as well.
+Tabs display the note's `title` property instead of the file name as well. 
+
+You can adjust this behavior in Property Over File Name settings.
 
 ### Settings Search
 
@@ -201,31 +188,21 @@ Simply provides a global search option for all settings in Obsidian.
 
 Get a snappy audit of your content for search engine rankings and AI parsing. You can get a quick snapshot of your whole vault or drill down into specific posts. You can configure the settings to turn off checks you don't care about or tweak the logic in the calculations.
 
-### Simple Banner
-
-Adds a nice-looking banner on the top of each compatible content, as long as a valid `image` property is defined. Matches the cover image used in the Bases CMS view.
-
 ### Editing Toolbar
 
-This adds a Microsoft Word-style toolbar to Obsidian. Click the "toggle editing toolbar" button on the title bar to show or hide it. It's hidden until revealed and completely disabled on mobile by default.
-
-### Git, Commander, and Status Bar Organizer
-
-With the [Git](https://obsidian.md/plugins?id=obsidian-git) plugin, you can easily publish to your Astro blog without leaving Obsidian. Simply configure with git to enable it. By default, you'll see your current git status and count of files changed (if any) in the status bar on the bottom right.
-
-To publish, you can use `CTRL + SHIFT + S` or click the "commit-and-sync" button on the status bar (added with the Commander plugin). Your changes will be committed and pushed to your remote repository automatically.
-
-Status Bar Organizer ensures the commit-and-sync icon stays on the far right. You can also use it to hide or re-arrange status bar items to your liking.
+This adds a WYSIWYG toolbar to Obsidian. Click the "toggle editing toolbar" button (added with UI Tweaker) on the title bar to show or hide it. It's hidden until revealed and completely disabled on mobile by default..
 
 ### BRAT
 
-Used to load Astro Modular Settings and the beta plugins and themes that aren't included in the community directory yet. Future versions of this vault will remove BRAT versions in favor of the official releases.
+Used to load Astro Modular Settings and the beta plugins that aren't included in the community directory yet. Future versions of this vault will remove BRAT versions in favor of the official releases.
 
 ### Disable Tabs
 
-This is off by default, but if enabled, opening any new tab replaces the current one only. Especially nice for when you're hiding the tab bar and don't want multiple tabs. If you enable this plugin, you'd probably want to use some of those optional CSS snippets mentioned above to make window management easier.
+This is off by default, but if enabled, opening any new tab replaces the current one only. Especially nice for when you're hiding the tab bar and don't want multiple tabs. If you enable this plugin, you might consider disabling the tab button on mobile and adjusting some of the UI Tweaker settings under the Hider > Navigation section.
 
-When combined with the Homepage and New Default Tab plugins, `CTRL + T` and `CTRL + M` essentially do the same thing.
+### Folder Notes
+
+Also off by default, but an option for anyone using a folder-based system of content who might want to simplify their file explorer view. Instead of hunting down the `index.md` or similar file in each folder, each parent folder assumes the name of the content housed within it, and the Markdown file can be opened by simply clicking the folder itself.
 
 ## Mobile 
 
@@ -245,11 +222,11 @@ This method is recommended rather than merely disabling the plugin, since if you
 
 ### Limitations
 
-The Astro Modular Settings plugin, the Paste Image Into Property plugin, and the Commander plugin UI buttons are all disabled on mobile. 
+Aspects of the UI Tweaker plugin and some Image Manager features are disabled on mobile. 
 
 ### Customization 
 
-To tweak the mobile-specific experience, there are two main places to check: Toolbar and Appearance in settings.
+To tweak the mobile-specific experience on the mobile version of Obsidian, you can use the UI Tweaker plugin's settings and also visit Toolbar and Appearance in settings.
 
 #### Toolbar
 
@@ -260,8 +237,6 @@ Below that you can adjust what options are available to you on the mobile toolba
 #### Appearance 
 
 Under the Appearance settings, locate "Interface" and the "Ribbon menu configuration" option's "Manage" button. You can set your preferred quick access item from the list, and customize which items appear on the ribbon menu. 
-
-If you keep scrolling down, you can find some optional mobile-specific CSS snippets, some of which were mentioned earlier.
 
 ### You're All Set
 

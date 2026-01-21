@@ -235,5 +235,22 @@
       ],
       "key": "V"
     }
+  ],
+  "image-manager:search-image": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "'"
+    }
+  ],
+  "image-manager:insert-remote-image-to-property": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "'"
+    }
   ]
 }
